@@ -1,0 +1,467 @@
+<title>Economics &amp; Film Blueprint</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Sibling of StrategyArena's palette — same deep violet-navy ground,
+       but the accent shifts from violet to projector-gold (the film identity). */
+    --bg:#0E0C20; --bg-deep:#0A0818;
+    --surface:rgba(255,255,255,.025); --surface-2:rgba(255,255,255,.045);
+    --border:rgba(255,255,255,.08); --border-2:rgba(255,255,255,.14);
+    --text:#D7D3EC; --bright:#F3F0FB; --muted:rgba(215,211,236,.62); --subtle:rgba(215,211,236,.4);
+    --gold:#F5B841; --gold-deep:#E0972A;
+    --violet:#9B7BFF; --violet-deep:#7C5CFF;
+    --green:#34D399; --rose:#FB7185; --sky:#60A5FA;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(circle at 15% 12%,rgba(124,92,255,.16) 0%,transparent 42%),
+               radial-gradient(circle at 85% 88%,rgba(245,184,65,.08) 0%,transparent 50%),var(--bg-deep)}
+  h1,h2,h3,h4{font-family:'Instrument Serif',Georgia,serif;font-weight:400;color:var(--bright);letter-spacing:.3px;text-wrap:balance;line-height:1.1}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  a{color:var(--gold);text-decoration:none}
+  ::selection{background:rgba(245,184,65,.32);color:#fff}
+  ::-webkit-scrollbar{width:11px;height:11px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:6px}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+
+  /* ---------- Hero / marquee ---------- */
+  header.hero{position:relative;padding:78px 0 56px;border-bottom:1px solid var(--border);overflow:hidden}
+  .filmstrip{position:absolute;top:0;left:0;right:0;height:26px;display:flex;gap:14px;padding:0 12px;opacity:.5}
+  .filmstrip.bottom{top:auto;bottom:0}
+  .perf{flex:0 0 26px;height:14px;margin-top:6px;border-radius:3px;background:rgba(245,184,65,.22)}
+  .hero-inner{position:relative}
+  .hero h1{font-size:clamp(46px,8vw,88px);margin:14px 0 6px}
+  .hero h1 em{font-style:italic;color:var(--gold)}
+  .hero .lead{font-size:clamp(16px,2.2vw,20px);color:var(--muted);max-width:60ch;margin-top:14px}
+  .hero .metaline{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 13px;border-radius:999px;border:1px solid var(--border-2);color:var(--text);background:var(--surface)}
+  .chip b{color:var(--gold);font-weight:600}
+  .chip.v b{color:var(--violet)}
+
+  /* ---------- Section scaffold ---------- */
+  section.blk{padding:56px 0;border-bottom:1px solid var(--border)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:.1em;flex:0 0 auto}
+  h2.sec-title{font-size:clamp(28px,4vw,40px)}
+  .sec-sub{color:var(--muted);font-size:15.5px;max-width:70ch;margin:6px 0 30px}
+  p{max-width:72ch;margin:0 0 15px}
+  p.wide{max-width:none}
+  strong{color:var(--bright);font-weight:600}
+  .lede{font-size:17px;color:var(--text)}
+
+  /* ---------- Cards ---------- */
+  .card{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:22px 24px}
+  .card h3{font-size:22px;margin-bottom:6px}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+  .feat{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--border)}
+  .feat:last-child{border-bottom:none}
+  .feat .fi{flex:0 0 30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px;background:rgba(245,184,65,.14);border:1px solid rgba(245,184,65,.28)}
+  .feat .ft{font-weight:600;color:var(--bright);font-size:14.5px}
+  .feat .fd{font-size:13px;color:var(--muted)}
+
+  /* ---------- Table ---------- */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;margin-top:8px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  thead th{position:sticky;top:0;background:#100d24;color:#C6BEEC;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:500;z-index:1}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.022)}
+  tbody tr:hover{background:rgba(245,184,65,.06)}
+  td .rn{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:600}
+  td .film{color:var(--bright);font-style:italic;font-family:'Instrument Serif',serif;font-size:16px}
+  td .rd{font-size:12px;color:var(--subtle);display:block;margin-top:3px}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+  .tag.gold{background:rgba(245,184,65,.15);color:var(--gold)}
+  .tag.violet{background:rgba(124,92,255,.16);color:var(--violet)}
+  .tag.green{background:rgba(52,211,153,.15);color:#6ee7b7}
+  .tag.rose{background:rgba(251,113,133,.15);color:#fda4af}
+  .tag.sky{background:rgba(96,165,250,.15);color:#93c5fd}
+  .tag.dim{background:rgba(255,255,255,.06);color:var(--subtle)}
+
+  /* ---------- Arena cards ---------- */
+  .arena{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden}
+  .arena::before{content:'';position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--gold),var(--violet))}
+  .arena .a-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+  .arena .a-slug{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--subtle)}
+  .arena h4{font-size:21px;color:var(--bright)}
+  .arena .a-film{font-size:12.5px;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:9px}
+  .arena .a-mech{font-size:13.5px;color:var(--text);margin-bottom:9px}
+  .arena .a-goal{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--border-2);padding-top:9px}
+  .arena .a-goal b{color:var(--violet)}
+
+  /* ---------- Grading bars ---------- */
+  .weights{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  .wrow{display:grid;grid-template-columns:190px 1fr 54px;gap:14px;align-items:center}
+  .wrow .wl{font-size:14px;color:var(--bright)}
+  .wrow .wl small{display:block;color:var(--subtle);font-size:11.5px;font-family:'JetBrains Mono',monospace}
+  .wbar{height:12px;border-radius:6px;background:rgba(255,255,255,.05);overflow:hidden}
+  .wbar span{display:block;height:100%;border-radius:6px}
+  .wval{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);text-align:right;font-weight:600}
+
+  /* ---------- Callout ---------- */
+  .note{border-left:3px solid var(--gold);background:rgba(245,184,65,.06);border-radius:0 12px 12px 0;padding:16px 20px;margin:18px 0}
+  .note.v{border-left-color:var(--violet);background:rgba(124,92,255,.07)}
+  .note.decide{border-left-color:var(--sky);background:rgba(96,165,250,.07)}
+  .note .nt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .note.v .nt{color:var(--violet)} .note.decide .nt{color:var(--sky)}
+  .note p{margin:0;font-size:14px}
+
+  /* ---------- Steps / timeline ---------- */
+  ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  ol.steps li{counter-increment:s;display:grid;grid-template-columns:38px 1fr;gap:16px;align-items:start}
+  ol.steps li::before{content:counter(s);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--gold);width:38px;height:38px;border-radius:10px;border:1px solid rgba(245,184,65,.3);background:rgba(245,184,65,.08);display:grid;place-items:center}
+  ol.steps li .st{font-weight:600;color:var(--bright);font-size:15px}
+  ol.steps li .sd{font-size:13.5px;color:var(--muted)}
+
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:9px;margin:6px 0 15px}
+  ul.clean li{padding-left:22px;position:relative;font-size:14.5px;max-width:72ch}
+  ul.clean li::before{content:'▸';position:absolute;left:0;color:var(--gold)}
+
+  /* ---------- TOC ---------- */
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+  .toc a{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:9px;border:1px solid var(--border);color:var(--muted);background:var(--surface)}
+  .toc a:hover{border-color:var(--gold);color:var(--gold)}
+
+  footer{padding:50px 0 70px;text-align:center;color:var(--subtle);font-size:13px}
+  footer .mono{color:var(--muted)}
+
+  @media(max-width:640px){
+    .wrap{padding:0 18px}
+    .wrow{grid-template-columns:120px 1fr 44px}
+    ol.steps li{grid-template-columns:30px 1fr}
+    ol.steps li::before{width:30px;height:30px}
+  }
+</style>
+
+<header class="hero">
+  <div class="filmstrip"><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Build Blueprint · ECON 383D · Spring 2026 · for approval</div>
+    <h1>Economics&nbsp;&amp;&nbsp;<em>Film</em></h1>
+    <p class="lead">A full digital-textbook &amp; interactive-arena platform for Dr. Sharma's <em>Economics in Film</em> course — built as a sibling of StrategyArena, on the same backend, with its own 13-film curriculum, 13 arenas, quizzes, a final exam, and a paper-driven gradebook.</p>
+    <div class="metaline">
+      <span class="chip"><b>13</b> films / topics</span>
+      <span class="chip"><b>13+1</b> textbook chapters</span>
+      <span class="chip v"><b>13</b> interactive arenas</span>
+      <span class="chip"><b>7</b> papers</span>
+      <span class="chip"><b>1</b> comprehensive final</span>
+      <span class="chip v">same <b>Supabase</b> platform</span>
+    </div>
+    <nav class="toc">
+      <a href="#arch">1 · Architecture</a>
+      <a href="#features">2 · Feature parity</a>
+      <a href="#map">3 · Curriculum map</a>
+      <a href="#textbook">4 · The textbook</a>
+      <a href="#arenas">5 · The arenas</a>
+      <a href="#assess">6 · Quizzes &amp; final</a>
+      <a href="#papers">7 · Papers</a>
+      <a href="#grading">8 · Gradebook</a>
+      <a href="#badges">9 · Gamification</a>
+      <a href="#build">10 · Build plan</a>
+      <a href="#decisions">11 · Your call</a>
+    </nav>
+  </div>
+  <div class="filmstrip bottom"><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span><span class="perf"></span></div>
+</header>
+
+<main>
+<!-- 1 · ARCHITECTURE -->
+<section class="blk" id="arch"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Architecture — how it mirrors StrategyArena</h2></div>
+  <p class="sec-sub">StrategyArena isn't one file — it's a platform: an LMS shell wired to a live Supabase backend, a separate digital-textbook file, and one interactive game file per topic. Economics&nbsp;&amp;&nbsp;Film reproduces that structure exactly, so the two courses look and behave identically and share the same login, gradebook, and grading engine.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow">The pattern we're copying</div>
+      <h3>StrategyArena today</h3>
+      <ul class="clean">
+        <li><b>index.html</b> — the shell: auth, dashboard, textbook launcher, arenas, practice, exams, assignments, gradebook, certificates.</li>
+        <li><b>strategyarena-curriculum.html</b> — the 14-chapter digital textbook, opened per chapter via <span class="mono">#chapter-N</span> anchors.</li>
+        <li><b>strategyarena-&lt;slug&gt;.html</b> ×13 — one interactive arena per topic.</li>
+        <li><b>Supabase</b> project <span class="mono">qgelvmefyexyzpwqupev</span> — ~30 <span class="mono">sa_*</span> server functions handle grading, so quiz/exam answers never reach the browser.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">What we build</div>
+      <h3>Economics &amp; Film</h3>
+      <ul class="clean">
+        <li><b>econfilm-index.html</b> — the same shell, rebranded, pointed at a new course row, with the film curriculum wired in.</li>
+        <li><b>econfilm-curriculum.html</b> — the new 13&#8288;+&#8288;1-chapter textbook (the "very interesting read").</li>
+        <li><b>econfilm-&lt;slug&gt;.html</b> ×13 — one arena per film/topic.</li>
+        <li><b>Same Supabase</b> — a <em>new course</em> added to the existing platform: shared auth &amp; gradebook, its own question banks, exam, papers, and arena slugs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note v">
+    <div class="nt">Why "same backend" is the right call</div>
+    <p>The shell is already multi-course (course picker, join codes, per-course weights, subscriptions). Adding Economics&nbsp;&amp;&nbsp;Film as a new course means students use <em>one</em> account across both courses, you grade from <em>one</em> instructor console, and every server-graded feature works on day one. The only front-end that's course-specific is the chapter/arena wiring and the textbook + game files — which we author fresh.</p>
+  </div>
+
+  <div class="note decide">
+    <div class="nt">One thing I'll confirm with you at build kickoff</div>
+    <p>To seed the new course's question banks, final exam, and 7 paper definitions on the server, I'll need either (a) your <strong>instructor/admin login</strong> to that Supabase platform so I author content through the app's built-in exam/bank editors, or (b) <strong>direct project access</strong> (service key / SQL) to bulk-load them. Either works — the front-end (shell, textbook, all 13 arenas) I can build regardless; this only gates the server-side answer vaults.</p>
+  </div>
+</div></section>
+
+<!-- 2 · FEATURE PARITY -->
+<section class="blk" id="features"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Feature parity — everything StrategyArena has</h2></div>
+  <p class="sec-sub">Every view in the StrategyArena sidebar carries over. Three role tiers — <b>Student</b>, <b>Instructor</b>, <b>Admin</b> — see the same navigation groups: Learn · Track · Teach · Administer.</p>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="eyebrow" style="color:var(--gold)">Learn · student</div>
+      <div class="feat"><div class="fi">&#127909;</div><div><div class="ft">Home &amp; Announcements</div><div class="fd">Course dashboard, instructor notices.</div></div></div>
+      <div class="feat"><div class="fi">&#127916;</div><div><div class="ft">Materials</div><div class="fd">Films, readings (Brightspace links / PDFs), handouts.</div></div></div>
+      <div class="feat"><div class="fi">&#128214;</div><div><div class="ft">Textbook</div><div class="fd">13+1 chapters, opens per-chapter, mark-as-read.</div></div></div>
+      <div class="feat"><div class="fi">&#127918;</div><div><div class="ft">Arenas</div><div class="fd">13 interactive simulations vs AI, results logged.</div></div></div>
+      <div class="feat"><div class="fi">&#9997;</div><div><div class="ft">Practice &amp; Quizzes</div><div class="fd">Server-graded items per chapter + graded quizzes.</div></div></div>
+      <div class="feat"><div class="fi">&#128221;</div><div><div class="ft">Exams &amp; Papers</div><div class="fd">The final exam + 7 paper submissions.</div></div></div>
+      <div class="feat"><div class="fi">&#127891;</div><div><div class="ft">My Grades &amp; Progress</div><div class="fd">Live weighted grade, badges, attempt history.</div></div></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="color:var(--violet)">Teach · instructor</div>
+      <div class="feat"><div class="fi">&#9632;</div><div><div class="ft">Dashboard &amp; Roster</div><div class="fd">Enrollment, join codes, add/remove students.</div></div></div>
+      <div class="feat"><div class="fi">&#128202;</div><div><div class="ft">Gradebook</div><div class="fd">Full class grid, overrides, CSV export.</div></div></div>
+      <div class="feat"><div class="fi">&#128293;</div><div><div class="ft">Analytics</div><div class="fd">Item stats, per-chapter heatmaps, completion.</div></div></div>
+      <div class="feat"><div class="fi">&#128221;</div><div><div class="ft">Exam &amp; Quiz authoring</div><div class="fd">Question banks, assembler, deadlines, reschedule.</div></div></div>
+      <div class="feat"><div class="fi">&#9999;</div><div><div class="ft">Grade written work</div><div class="fd">Read papers, AI-assisted grading, rubric keys.</div></div></div>
+      <div class="feat"><div class="fi">&#128226;</div><div><div class="ft">Announcements &amp; Materials</div><div class="fd">Post notices, upload readings, email students.</div></div></div>
+      <div class="feat"><div class="fi">&#128100;</div><div><div class="ft">Accommodations</div><div class="fd">SSD extended time, overrides per student.</div></div></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="color:var(--sky)">Administer &amp; shared</div>
+      <div class="feat"><div class="fi">&#128179;</div><div><div class="ft">Subscriptions &amp; pricing</div><div class="fd">Access control, free vs paid chapters.</div></div></div>
+      <div class="feat"><div class="fi">&#128081;</div><div><div class="ft">Teaching team</div><div class="fd">Co-instructors, TAs, staff permissions.</div></div></div>
+      <div class="feat"><div class="fi">&#128274;</div><div><div class="ft">Diagnostics</div><div class="fd">Backend health, RLS &amp; answer-vault checks.</div></div></div>
+      <div class="feat"><div class="fi">&#128273;</div><div><div class="ft">Auth &amp; roles</div><div class="fd">Sign-up, academic-email detection, join-by-code.</div></div></div>
+      <div class="feat"><div class="fi">&#128444;&#65039;</div><div><div class="ft">Proctoring</div><div class="fd">Reuses the shared <span class="mono">mn-proctor.js</span> snapshot engine.</div></div></div>
+      <div class="feat"><div class="fi">&#127894;</div><div><div class="ft">Certificate</div><div class="fd">Completion certificate, film-themed crest.</div></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 3 · CURRICULUM MAP -->
+<section class="blk" id="map"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">The curriculum map</h2></div>
+  <p class="sec-sub">Every row is one topic from your syllabus, expanded into a textbook chapter, an interactive arena, and a chapter quiz. Chapter 0 is a short primer on how economists read a film. Readings are exactly those on your Brightspace list.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Ch</th><th>Topic</th><th>Film</th><th>Core reading(s)</th><th>Arena</th><th>Quiz</th></tr></thead>
+    <tbody>
+      <tr><td><span class="rn">0</span></td><td>How Economists Watch Movies</td><td><span class="film">— primer —</span></td><td>Course intro &amp; method<span class="rd">writing the economics paper, Chicago style</span></td><td><span class="tag sky">walkthrough</span></td><td><span class="tag dim">—</span></td></tr>
+      <tr><td><span class="rn">1</span></td><td>Resource Economics</td><td><span class="film">WALL·E</span></td><td>Hardin, <em>Tragedy of the Commons</em> (1968)<span class="rd">Ostrom et al., <em>Revisiting the Commons</em> (1999)</span></td><td><span class="tag gold">Commons Arena</span></td><td><span class="tag violet">Quiz 1</span></td></tr>
+      <tr><td><span class="rn">2</span></td><td>Environmental Economics</td><td><span class="film">A Civil Action</span></td><td>Coase, <em>The Problem of Social Cost</em> (1960)</td><td><span class="tag gold">Coase Court</span></td><td><span class="tag violet">Quiz 2</span></td></tr>
+      <tr><td><span class="rn">3</span></td><td>Game Theory</td><td><span class="film">Dr. Strangelove</span></td><td>Aumann, <em>War and Peace</em> — Nobel Lecture (2005)</td><td><span class="tag gold">Deterrence Arena</span></td><td><span class="tag violet">Quiz 3</span></td></tr>
+      <tr><td><span class="rn">4</span></td><td>Asymmetric Information</td><td><span class="film">Intolerable Cruelty</span></td><td>Akerlof, <em>The Market for Lemons</em> (1970)</td><td><span class="tag gold">Lemons Market</span></td><td><span class="tag violet">Quiz 4</span></td></tr>
+      <tr><td><span class="rn">5</span></td><td>Monetary Systems</td><td><span class="film">Stalag 17</span></td><td>Radford, <em>The Economic Organisation of a P.O.W. Camp</em> (1945)</td><td><span class="tag gold">POW Exchange</span></td><td><span class="tag violet">Quiz 5</span></td></tr>
+      <tr><td><span class="rn">6</span></td><td>The Gold Standard</td><td><span class="film">The Wizard of Oz</span></td><td>Rockoff, <em>The Wizard of Oz as a Monetary Allegory</em> (1990)</td><td><span class="tag gold">Yellow Brick Road</span></td><td><span class="tag violet">Quiz 6</span></td></tr>
+      <tr><td><span class="rn">7</span></td><td>Financial Panics</td><td><span class="film">It's a Wonderful Life</span></td><td>Silber, <em>Why Did FDR's Bank Holiday Succeed?</em> (2009)</td><td><span class="tag gold">Bank Run!</span></td><td><span class="tag violet">Quiz 7</span></td></tr>
+      <tr><td><span class="rn">8</span></td><td>The Great Depression</td><td><span class="film">The Grapes of Wrath</span></td><td>Bernanke, <em>Money, Gold, &amp; the Great Depression</em><span class="rd">Romer, <em>The Nation in Depression</em> (1993)</span></td><td><span class="tag gold">Gold Fetters Lab</span></td><td><span class="tag violet">Quiz 8</span></td></tr>
+      <tr><td><span class="rn">9</span></td><td>Corporate Social Responsibility</td><td><span class="film">Wall Street</span></td><td>Friedman, <em>The Social Responsibility of Business…</em> (1970)<span class="rd">Reinhardt, Stavins &amp; Vietor, <em>CSR through an Economic Lens</em> (2008)</span></td><td><span class="tag gold">The Boardroom</span></td><td><span class="tag violet">Quiz 9</span></td></tr>
+      <tr><td><span class="rn">10</span></td><td>Financial Fraud</td><td><span class="film">The Big Short</span></td><td>Bernanke, <em>Causes of the Recent Financial Crisis</em><span class="rd">Mazar &amp; Ariely, <em>Dishonesty in Everyday Life</em> (2006)</span></td><td><span class="tag gold">Subprime Desk</span></td><td><span class="tag violet">Quiz 10</span></td></tr>
+      <tr><td><span class="rn">11</span></td><td>The Economics of Crime</td><td><span class="film">Blow</span></td><td>Becker, <em>Crime and Punishment</em> (1968)<span class="rd">Friedman, <em>An Open Letter to Bill Bennett</em> (1990)</span></td><td><span class="tag gold">Rational Criminal</span></td><td><span class="tag violet">Quiz 11</span></td></tr>
+      <tr><td><span class="rn">12</span></td><td>Capital Punishment</td><td><span class="film">Dead Man Walking</span></td><td>Mocan &amp; Gittings, <em>Getting off Death Row</em><span class="rd">Levitt, <em>Understanding Why Crime Fell in the 1990s</em> (2004)</span></td><td><span class="tag gold">Deterrence Data Lab</span></td><td><span class="tag violet">Quiz 12</span></td></tr>
+      <tr><td><span class="rn">13</span></td><td>Labor Unions</td><td><span class="film">Norma Rae</span></td><td>Whaples, <em>Winning the Eight-Hour Day, 1909–1919</em> (1990)</td><td><span class="tag gold">Bargaining Line</span></td><td><span class="tag violet">Quiz 13</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><div class="nt">Note on chapter count</div><p>Your syllabus lists 13 films. I've added a short <strong>Chapter 0</strong> primer (how to analyze a film like an economist + how to write the 500–1000-word Chicago-style paper) so students hit the ground running — that gives 14 chapters total, matching StrategyArena's count. If you'd rather keep it to 13, I fold the primer into Chapter 1.</p></div>
+</div></section>
+
+<!-- 4 · TEXTBOOK -->
+<section class="blk" id="textbook"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">The digital textbook — "a very interesting read"</h2></div>
+  <p class="sec-sub">Not a dry summary of the articles. Each chapter is written as an <em>essay that opens on a scene</em>, then pulls the economics out of it — the way a great lecture does. Every chapter follows the same seven-beat template so the book feels like one authored work, not thirteen stitched handouts.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow">Per-chapter template</div>
+      <h3>The seven beats</h3>
+      <ol class="steps">
+        <li><div><div class="st">Cold open</div><div class="sd">A specific moment from the film — WALL·E alone on a trash-planet; Gekko's "greed is good" — that dramatizes the problem.</div></div></li>
+        <li><div><div class="st">The economic idea</div><div class="sd">The core concept in plain language, with an interactive figure (payoff matrix, supply/demand, decision tree — same figure engine StrategyArena uses).</div></div></li>
+        <li><div><div class="st">The reading, unpacked</div><div class="sd">The actual argument of Hardin / Coase / Akerlof / Becker — what they claimed, why it mattered, what the math or model says.</div></div></li>
+        <li><div><div class="st">The film as evidence</div><div class="sd">Where the movie gets the economics right, where it dramatizes, where it's wrong — the critical-thinking core of the course.</div></div></li>
+        <li><div><div class="st">Debate &amp; counterpoint</div><div class="sd">The other side — Ostrom vs Hardin, Friedman vs Reinhardt — so students see live disagreement, not settled dogma.</div></div></li>
+        <li><div><div class="st">Try it &amp; test it</div><div class="sd">Inline links to the chapter's Arena and Quiz.</div></div></li>
+        <li><div><div class="st">Your paper</div><div class="sd">Key terms, 3–4 paper prompts tied to the reading, and a Chicago-citation reminder — feeding the graded paper.</div></div></li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Voice &amp; craft</div>
+      <h3>What makes it a good read</h3>
+      <ul class="clean">
+        <li><b>Narrative hooks</b> — each chapter earns its first sentence. Stalag 17 opens on cigarettes changing hands; It's a Wonderful Life opens mid bank-run.</li>
+        <li><b>Real economics, honestly stated</b> — models and results are correct and cited, not hand-waved. This is a 300-level course.</li>
+        <li><b>Sidebars</b> — "The Money Behind the Scene," "What the Director Got Wrong," short bios (who <em>was</em> Ronald Coase?).</li>
+        <li><b>Interactive figures</b> — the same in-page diagram widgets StrategyArena renders (matrices, trees, curves) so concepts move, not just sit.</li>
+        <li><b>Reading bridges</b> — pull-quotes from the assigned articles with a one-line gloss, so the chapter and the PDF reinforce each other.</li>
+        <li><b>Free vs gated</b> — Ch 0–2 free to preview (matches StrategyArena's free-chapter model); rest unlock on enrollment.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><div class="nt">Scope estimate</div><p>Roughly <strong>2,500–3,500 words per chapter</strong> with 1–2 interactive figures each — a genuine digital textbook of ~35–45k words, written from the assigned readings. Delivered as <span class="mono">econfilm-curriculum.html</span> with <span class="mono">#chapter-N</span> anchors, exactly like StrategyArena's.</p></div>
+</div></section>
+
+<!-- 5 · ARENAS -->
+<section class="blk" id="arenas"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">The 13 interactive arenas</h2></div>
+  <p class="sec-sub">One playable simulation per topic — you against AI agents, exactly like StrategyArena's games. Each teaches its chapter's model by making the student <em>live</em> it, logs a score to the backend, and counts toward the arena progress track. Below: the mechanic and the learning payoff for each.</p>
+
+  <div class="grid g2">
+    <div class="arena"><div class="a-top"><h4>Commons Arena</h4><span class="a-slug">commons</span></div><div class="a-film">Ch 1 · WALL·E · Hardin &amp; Ostrom</div><div class="a-mech">You and 3 AI herders share one pasture (or fishery). Each round you choose how hard to graze. Overuse collapses the resource for everyone — then you unlock Ostrom's tools (quotas, monitoring, sanctions) and watch cooperation re-emerge.</div><div class="a-goal"><b>Payoff:</b> feel the free-rider trap, then see why Ostrom beat Hardin's "only markets or Leviathan" dichotomy.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Coase Court</h4><span class="a-slug">coase</span></div><div class="a-film">Ch 2 · A Civil Action · Coase</div><div class="a-mech">A tannery pollutes; a downstream town is harmed. You set who holds the property right, then let the two parties <em>bargain</em>. Toggle transaction costs from low to high and watch the efficient outcome appear — or fail to.</div><div class="a-goal"><b>Payoff:</b> the Coase Theorem in your hands — rights allocation doesn't change efficiency when bargaining is cheap, but does when it isn't.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Deterrence Arena</h4><span class="a-slug">deterrence</span></div><div class="a-film">Ch 3 · Dr. Strangelove · Aumann</div><div class="a-mech">A repeated nuclear standoff. Build (or bluff) a doomsday device, choose escalate/hold each round against an AI rival. One-shot play tempts defection; repetition and credible commitment sustain an uneasy peace.</div><div class="a-goal"><b>Payoff:</b> Aumann's "War and Peace" — why repeated games make cooperation rational and deterrence stable.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Lemons Market</h4><span class="a-slug">lemons</span></div><div class="a-film">Ch 4 · Intolerable Cruelty · Akerlof</div><div class="a-mech">You buy used cars from AI sellers who know quality you don't. Adverse selection drives good cars out until only lemons remain and the market unravels — then add warranties and signals and watch it heal.</div><div class="a-goal"><b>Payoff:</b> Akerlof's market-for-lemons collapse, and how signaling rebuilds trust.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>POW Exchange</h4><span class="a-slug">pow</span></div><div class="a-film">Ch 5 · Stalag 17 · Radford</div><div class="a-mech">Run a POW-camp economy where cigarettes are money. Trade rations, weather a Red Cross parcel glut (inflation) and a drought (deflation), and watch Gresham's Law bite as prisoners smoke the good cigarettes.</div><div class="a-goal"><b>Payoff:</b> money emerges spontaneously; supply shocks move the price level — Radford's classic made playable.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Yellow Brick Road</h4><span class="a-slug">gold-standard</span></div><div class="a-film">Ch 6 · The Wizard of Oz · Rockoff</div><div class="a-mech">Set the money standard for 1890s America — gold only, or free silver. Watch deflation crush indebted farmers (Dorothy's Kansas) while creditors gain, and replay the 1896 Bryan "Cross of Gold" moment.</div><div class="a-goal"><b>Payoff:</b> decode Rockoff's allegory and see how the money standard redistributes between debtors and creditors.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Bank Run!</h4><span class="a-slug">bank-run</span></div><div class="a-film">Ch 7 · It's a Wonderful Life · Silber</div><div class="a-mech">You're George Bailey. A rumor spreads and depositors line up. Choose your moves — pay out, suspend, plead, invoke deposit insurance, ride out the bank holiday — before the Building &amp; Loan runs dry.</div><div class="a-goal"><b>Payoff:</b> Diamond–Dybvig fragility, and why FDR's 1933 bank holiday (Silber) actually worked.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Gold Fetters Lab</h4><span class="a-slug">depression</span></div><div class="a-film">Ch 8 · The Grapes of Wrath · Bernanke &amp; Romer</div><div class="a-mech">Steer a 1930s central bank on the gold standard. Defend the peg or abandon it; set rates; watch money supply, prices, and output. Countries that left gold early (you can, too) recover faster.</div><div class="a-goal"><b>Payoff:</b> Bernanke's "golden fetters" thesis — the monetary mechanics behind the Depression and the Joads' road west.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>The Boardroom</h4><span class="a-slug">csr</span></div><div class="a-film">Ch 9 · Wall Street · Friedman vs Reinhardt</div><div class="a-mech">You're the CEO. Each quarter, decide on layoffs, pollution controls, and social initiatives. A pure-Friedman path maximizes short-run profit; strategic CSR sometimes pays more. Gekko (AI) is always watching the stock.</div><div class="a-goal"><b>Payoff:</b> the live Friedman-vs-Reinhardt debate — when "the business of business is business," and when CSR is actually profitable.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Subprime Desk</h4><span class="a-slug">subprime</span></div><div class="a-film">Ch 10 · The Big Short · Bernanke &amp; Ariely</div><div class="a-mech">Trade the 2007 housing bubble. Package or short CDOs as home prices climb and ratings stay rosy; time your bet against the crash. A "fudge-factor" dial models how small dishonesties compound (Mazar–Ariely).</div><div class="a-goal"><b>Payoff:</b> the mechanics of the crisis Bernanke testified on, plus the behavioral roots of fraud.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Rational Criminal</h4><span class="a-slug">crime</span></div><div class="a-film">Ch 11 · Blow · Becker &amp; Friedman</div><div class="a-mech">Set enforcement: probability of arrest × severity of punishment. An AI "offender" weighs expected cost against reward and responds at the margin. Then flip on prohibition and watch the black-market price explode.</div><div class="a-goal"><b>Payoff:</b> Becker's crime-as-choice model and Friedman's economic case against the drug war.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Deterrence Data Lab</h4><span class="a-slug">capital</span></div><div class="a-film">Ch 12 · Dead Man Walking · Mocan &amp; Levitt</div><div class="a-mech">A regression sandbox: adjust execution rates across simulated states and see whether murder rates respond — then run Levitt's four real factors behind the 1990s crime drop and see how much capital punishment actually explains.</div><div class="a-goal"><b>Payoff:</b> reading empirical economics critically — correlation, causation, and the limits of the deterrence claim.</div></div>
+
+    <div class="arena"><div class="a-top"><h4>Bargaining Line</h4><span class="a-slug">unions</span></div><div class="a-film">Ch 13 · Norma Rae · Whaples</div><div class="a-mech">Union vs mill. Bargain over wages and the length of the working day; call a strike or settle; a monopsony employer pushes back. Push too hard and the plant closes; too soft and workers stay exploited.</div><div class="a-goal"><b>Payoff:</b> bargaining power, monopsony, and how the 8-hour day (Whaples) was actually won.</div></div>
+  </div>
+</div></section>
+
+<!-- 6 · ASSESSMENT -->
+<section class="blk" id="assess"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title">Quizzes &amp; the final exam</h2></div>
+  <p class="sec-sub">All server-graded through the shared backend — questions are generated per-student and correct answers never travel to the browser, the same integrity model StrategyArena uses.</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Practice &amp; chapter quizzes</h3>
+      <ul class="clean">
+        <li><b>Practice:</b> unlimited server-graded items per chapter — instant feedback, no grade pressure.</li>
+        <li><b>Graded quiz:</b> one short quiz per chapter (≈5–8 items), taken once, answers revealed only after the deadline via "Review missed questions."</li>
+        <li><b>Item types:</b> concept MCQs on the reading + film-application questions ("Which scene illustrates adverse selection?") + a few numeric items (deadweight loss, expected punishment).</li>
+        <li><b>Bank size:</b> ~12–18 authored items per chapter so no two students see the same set.</li>
+      </ul>
+      <div class="note v" style="margin-bottom:0"><div class="nt">Grade weight</div><p>Quizzes are <strong>formative by default</strong> (0% of the official grade, since your syllabus grades papers + final). One toggle makes them count if you ever want them to — the platform supports per-course quiz weight.</p></div>
+    </div>
+    <div class="card">
+      <h3>The comprehensive final — 30%</h3>
+      <ul class="clean">
+        <li>Server-graded exam assembled from all 13 chapters, matching your "comprehensive final" worth 30%.</li>
+        <li>Mix of concept MCQs, film-identification, short numeric, and (optionally) 1–2 written long-answers graded with the instructor's AI-assisted rubric tool.</li>
+        <li>Single attempt, timed, proctored via <span class="mono">mn-proctor.js</span> snapshots; per-student accommodation overrides for SSD extended time.</li>
+        <li>Given on the BU Brain final-exam schedule; <b>no makeup</b>, per your policy — enforced by the deadline engine.</li>
+      </ul>
+      <div class="note" style="margin-bottom:0"><div class="nt">Your syllabus, encoded</div><p>No midterm exists in your course, so the platform's "midterm" weight is set to 0 and only the <strong>final</strong> carries exam weight.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 7 · PAPERS -->
+<section class="blk" id="papers"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2 class="sec-title">The seven papers</h2></div>
+  <p class="sec-sub">These are the graded heart of the course — 60% of the grade. They run through the platform's Assignments feature: written submission + optional file/link, deadline-enforced, graded by you (with the AI-assist rubric tool) in "Grade Written."</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Paper</th><th>Due date</th><th>Anchoring topics / films</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td><span class="rn">1</span></td><td>Feb 6</td><td>Resource &amp; Environmental Econ — WALL·E, A Civil Action</td><td rowspan="7" style="vertical-align:top">500–1000 words · double-spaced · 12pt · Chicago citations · discusses the film's <em>economics</em> (not a review) in light of the readings · uploaded in-app · <b>late = not accepted</b> · no extensions</td></tr>
+      <tr><td><span class="rn">2</span></td><td>Feb 20</td><td>Game Theory &amp; Asymmetric Info — Dr. Strangelove, Intolerable Cruelty</td></tr>
+      <tr><td><span class="rn">3</span></td><td>Mar 9</td><td>Monetary Systems &amp; Gold Standard — Stalag 17, Wizard of Oz</td></tr>
+      <tr><td><span class="rn">4</span></td><td>Mar 23</td><td>Financial Panics &amp; Great Depression — It's a Wonderful Life, Grapes of Wrath</td></tr>
+      <tr><td><span class="rn">5</span></td><td>Apr 15</td><td>CSR &amp; Financial Fraud — Wall Street, The Big Short</td></tr>
+      <tr><td><span class="rn">6</span></td><td>May 1</td><td>Crime &amp; Capital Punishment — Blow, Dead Man Walking</td></tr>
+      <tr><td><span class="rn">7</span></td><td>May 8</td><td>Labor Unions — Norma Rae</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><div class="nt">Drop-the-lowest, encoded</div><p>Each paper is worth 10 points; the gradebook automatically <strong>drops the lowest of the seven</strong>, so the best six count for the full 60% — exactly your rule.</p></div>
+</div></section>
+
+<!-- 8 · GRADING -->
+<section class="blk" id="grading"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2 class="sec-title">The gradebook — your weights, exactly</h2></div>
+  <p class="sec-sub">The platform's weights are configurable per course. Here's your syllabus translated one-to-one. The live "My Grades" view recomputes this for each student in real time.</p>
+  <div class="card">
+    <div class="weights">
+      <div class="wrow"><div class="wl">Papers (best 6 of 7)<small>Assignments feature</small></div><div class="wbar"><span style="width:60%;background:linear-gradient(90deg,var(--gold-deep),var(--gold))"></span></div><div class="wval">60%</div></div>
+      <div class="wrow"><div class="wl">Final Exam<small>Exams feature</small></div><div class="wbar"><span style="width:30%;background:linear-gradient(90deg,var(--violet-deep),var(--violet))"></span></div><div class="wval">30%</div></div>
+      <div class="wrow"><div class="wl">Attendance<small>manual / random check</small></div><div class="wbar"><span style="width:5%;background:var(--sky)"></span></div><div class="wval">5%</div></div>
+      <div class="wrow"><div class="wl">Class Participation<small>manual</small></div><div class="wbar"><span style="width:5%;background:var(--green)"></span></div><div class="wval">5%</div></div>
+      <div class="wrow" style="opacity:.6"><div class="wl">Quizzes &amp; Arenas<small>formative — optional</small></div><div class="wbar"><span style="width:1%;background:var(--subtle)"></span></div><div class="wval">0%</div></div>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="note decide" style="margin:0"><div class="nt">Decision — attendance &amp; participation</div><p>These 10% are inherently manual (you take attendance randomly). I'll add them as two <strong>manual gradebook components</strong> you set per student, or as simple check-in items. Confirm which you prefer at build time.</p></div>
+    <div class="note" style="margin:0"><div class="nt">Grade scale, encoded</div><p>Your A / A- / B+ … / F scale (95–100 = A, down to below 60 = F) is loaded as the course's letter-grade cutoffs, shown on every student's live grade.</p></div>
+  </div>
+</div></section>
+
+<!-- 9 · BADGES -->
+<section class="blk" id="badges"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2 class="sec-title">Gamification — reskinned for film</h2></div>
+  <p class="sec-sub">StrategyArena's badge case and progress tracks carry over, retitled for the cinema theme. Purely motivational — no grade impact.</p>
+  <div class="grid g3">
+    <div class="card"><h3 style="font-size:19px">&#127916; Opening Night</h3><div class="fd" style="font-size:13px;color:var(--muted)">Read your first chapter.</div></div>
+    <div class="card"><h3 style="font-size:19px">&#127871; Double Feature</h3><div class="fd" style="font-size:13px;color:var(--muted)">Finish two chapters in one day.</div></div>
+    <div class="card"><h3 style="font-size:19px">&#127918; Arena Regular</h3><div class="fd" style="font-size:13px;color:var(--muted)">Play 3 arenas.</div></div>
+    <div class="card"><h3 style="font-size:19px">&#127942; Best Picture</h3><div class="fd" style="font-size:13px;color:var(--muted)">Win 5 arena matches.</div></div>
+    <div class="card"><h3 style="font-size:19px">&#9997;&#65039; Critic's Circle</h3><div class="fd" style="font-size:13px;color:var(--muted)">Submit all 7 papers on time.</div></div>
+    <div class="card"><h3 style="font-size:19px">&#127891; Final Cut</h3><div class="fd" style="font-size:13px;color:var(--muted)">Complete the course + certificate.</div></div>
+  </div>
+</div></section>
+
+<!-- 10 · BUILD PLAN -->
+<section class="blk" id="build"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2 class="sec-title">Build plan — "everything at once"</h2></div>
+  <p class="sec-sub">You chose full parity in one build. Here's the order I'd execute once you approve. Every piece is delivered so you can preview it as it lands.</p>
+  <ol class="steps">
+    <li><div><div class="st">Backend course setup</div><div class="sd">Create the Economics&nbsp;&amp;&nbsp;Film course row on the existing Supabase platform: join code, weights, letter-grade scale, arena slugs registered.</div></div></li>
+    <li><div><div class="st">The shell — econfilm-index.html</div><div class="sd">Fork StrategyArena's index, rebrand to Economics&nbsp;&amp;&nbsp;Film (gold/film identity), wire the 13+1 chapters, 13 arenas, and course id.</div></div></li>
+    <li><div><div class="st">The textbook — econfilm-curriculum.html</div><div class="sd">Write all 14 chapters from the assigned readings, with interactive figures. The big writing effort — delivered chapter-batch by chapter-batch for your review.</div></div></li>
+    <li><div><div class="st">The 13 arenas</div><div class="sd">Build each econfilm-&lt;slug&gt;.html interactive game, matching StrategyArena's look, feel, and scoring hooks.</div></div></li>
+    <li><div><div class="st">Question banks + final + papers</div><div class="sd">Author ~12–18 practice/quiz items per chapter, the comprehensive final, and the 7 paper assignments with your due dates — loaded server-side.</div></div></li>
+    <li><div><div class="st">Wire, test, hand off</div><div class="sd">Run the Diagnostics panel, verify grading &amp; the answer vault, test a full student run, and package everything for hosting.</div></div></li>
+  </ol>
+  <div class="note v"><div class="nt">What I need from you to start</div><p>Access to seed the backend (your instructor/admin login <em>or</em> project keys), the reading PDFs if you want them mirrored in-app (otherwise Brightspace links), and a green light on the decisions below.</p></div>
+</div></section>
+
+<!-- 11 · DECISIONS -->
+<section class="blk" id="decisions" style="border-bottom:none"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2 class="sec-title">Your call before we build</h2></div>
+  <p class="sec-sub">Six quick confirmations and we're off. Defaults in <span style="color:var(--gold)">gold</span> are what I'll assume unless you say otherwise.</p>
+  <div class="grid g2">
+    <div class="card"><h3 style="font-size:19px">1 · Chapter 0 primer</h3><p style="font-size:14px;margin:0">Keep the "How Economists Watch Movies" intro as its own chapter <span style="color:var(--gold)">(default: yes, 14 total)</span>, or fold into Ch 1?</p></div>
+    <div class="card"><h3 style="font-size:19px">2 · Quiz &amp; arena weight</h3><p style="font-size:14px;margin:0">Keep quizzes/arenas formative at 0% <span style="color:var(--gold)">(default)</span>, or allocate them a slice of the grade?</p></div>
+    <div class="card"><h3 style="font-size:19px">3 · Attendance / participation</h3><p style="font-size:14px;margin:0">Handle the 10% as manual gradebook components <span style="color:var(--gold)">(default)</span>, or as in-app check-ins?</p></div>
+    <div class="card"><h3 style="font-size:19px">4 · Readings in-app</h3><p style="font-size:14px;margin:0">Link out to Brightspace <span style="color:var(--gold)">(default)</span>, or mirror the article PDFs inside the Materials view?</p></div>
+    <div class="card"><h3 style="font-size:19px">5 · Backend access</h3><p style="font-size:14px;margin:0">How will I seed the server content — your instructor login, or project keys? (Front-end proceeds either way.)</p></div>
+    <div class="card"><h3 style="font-size:19px">6 · Visual identity</h3><p style="font-size:14px;margin:0">Film-gold accent on the shared dark theme <span style="color:var(--gold)">(default)</span>, or keep it visually identical to StrategyArena's violet?</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p style="max-width:none;color:var(--muted)">Blueprint for <strong style="color:var(--bright)">Economics &amp; Film · ECON 383D · Spring 2026</strong> — built to mirror StrategyArena on the same platform.</p>
+  <p class="mono" style="max-width:none;font-size:12px">Approve this schema and I'll build the shell, the 14-chapter textbook, all 13 arenas, quizzes, the final, and the paper-driven gradebook.</p>
+</div></footer>
