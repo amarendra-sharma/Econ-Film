@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economics &amp; Film — The Textbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0C20; --bg-deep:#0A0818; --bg-panel:#14112b;
+    --surface:rgba(255,255,255,.03); --surface-2:rgba(255,255,255,.05);
+    --border:rgba(255,255,255,.08); --border-2:rgba(255,255,255,.15);
+    --text:#D9D5EE; --bright:#F4F1FB; --muted:rgba(217,213,238,.64); --subtle:rgba(217,213,238,.42);
+    --gold:#F5B841; --gold-deep:#E0972A; --gold-soft:rgba(245,184,65,.14);
+    --violet:#9B7BFF; --violet-deep:#7C5CFF; --violet-soft:rgba(124,92,255,.16);
+    --green:#34D399; --rose:#FB7185; --sky:#60A5FA;
+    --read:'Newsreader',Georgia,serif;
+    --measure:68ch;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(circle at 14% 10%,rgba(124,92,255,.15) 0%,transparent 44%),
+               radial-gradient(circle at 88% 92%,rgba(245,184,65,.07) 0%,transparent 52%),var(--bg-deep)}
+  h1,h2,h3,h4{font-family:'Instrument Serif',Georgia,serif;font-weight:400;color:var(--bright);letter-spacing:.3px;line-height:1.12;text-wrap:balance}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  a{color:var(--gold);text-decoration:none}
+  ::selection{background:rgba(245,184,65,.30);color:#fff}
+  ::-webkit-scrollbar{width:11px;height:11px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:6px}
+  img{max-width:100%}
+
+  /* progress + topbar */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--violet));z-index:60;transition:width .1s}
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:12px 22px;background:rgba(10,8,24,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+  .brand{display:flex;align-items:center;gap:11px;cursor:pointer}
+  .brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold-deep),var(--gold));display:grid;place-items:center;font-size:18px;box-shadow:0 6px 20px rgba(245,184,65,.35)}
+  .brand-name{font-family:'Instrument Serif',serif;font-size:21px;color:var(--bright);line-height:1}
+  .brand-name small{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;border:1px solid var(--border-2);background:var(--surface);color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:.13s}
+  .btn:hover{border-color:var(--gold);color:var(--bright)}
+  .btn.gold{background:linear-gradient(135deg,var(--gold-deep),var(--gold));border:none;color:#241a05;font-weight:600}
+  .btn.gold:hover{filter:brightness(1.07)}
+  .btn.ghost{background:transparent}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 26px}
+
+  /* ---------- CONTENTS ---------- */
+  #contents{padding:60px 0 90px}
+  .cover{text-align:center;margin-bottom:14px}
+  .cover .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  .cover h1{font-size:clamp(46px,8.5vw,86px);margin:12px 0 4px}
+  .cover h1 em{font-style:italic;color:var(--gold)}
+  .cover .sub{color:var(--muted);font-size:17px;max-width:60ch;margin:14px auto 0}
+  .cover .credit{margin-top:20px;font-size:13px;color:var(--subtle);font-family:'JetBrains Mono',monospace}
+  .reel-rule{height:22px;margin:34px 0;background-image:repeating-linear-gradient(90deg,transparent 0 12px,rgba(245,184,65,.18) 12px 26px);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .toc-card{position:relative;display:block;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px 18px 16px;cursor:pointer;transition:.15s;overflow:hidden}
+  .toc-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .toc-card .cn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.1em}
+  .toc-card .ct{font-family:'Instrument Serif',serif;font-size:22px;color:var(--bright);margin:5px 0 3px;line-height:1.05}
+  .toc-card .cf{font-size:13px;color:var(--muted);font-style:italic;font-family:var(--read)}
+  .toc-card .cmeta{margin-top:11px;display:flex;gap:7px;flex-wrap:wrap}
+  .mini{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:999px;background:var(--violet-soft);color:var(--violet)}
+  .mini.free{background:var(--gold-soft);color:var(--gold)}
+  .mini.dim{background:rgba(255,255,255,.06);color:var(--subtle)}
+
+  /* ---------- CHAPTER ---------- */
+  .chapter{display:none;padding:0 0 40px}
+  .chapter.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .chead{padding:52px 0 30px;border-bottom:1px solid var(--border);margin-bottom:8px}
+  .chead .ceyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .chead h1{font-size:clamp(38px,6.5vw,66px);margin-bottom:14px}
+  .filmcard{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:20px;padding:15px 18px;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 12px 12px 0}
+  .filmcard .fc-i{font-size:12px;color:var(--subtle);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em}
+  .filmcard .fc-v{font-size:15px;color:var(--bright)}
+  .filmcard .fc-v em{font-style:italic;font-family:var(--read);color:var(--gold)}
+
+  /* reading prose */
+  .prose{font-family:var(--read);font-size:19px;line-height:1.72;color:#E4E0F2}
+  .prose p{max-width:var(--measure);margin:0 0 21px}
+  .prose p.drop::first-letter{font-family:'Instrument Serif',serif;font-size:62px;line-height:.8;float:left;color:var(--gold);padding:6px 12px 0 0}
+  .prose em{color:#fff}
+  .prose strong{color:#fff;font-weight:600}
+  .beat{margin:44px 0 10px;display:flex;align-items:center;gap:14px}
+  .beat .bn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);border:1px solid rgba(245,184,65,.3);border-radius:999px;padding:3px 11px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+  .beat .bl{height:1px;background:var(--border);flex:1}
+  .beat h2{font-size:29px}
+  .prose h3{font-size:24px;margin:30px 0 10px;color:var(--bright)}
+
+  .coldopen{font-family:var(--read);font-style:italic;font-size:22px;line-height:1.6;color:#EDEAF8;border-left:3px solid var(--gold);padding:4px 0 4px 22px;margin:6px 0 26px;max-width:var(--measure)}
+
+  /* sidebars / callouts */
+  aside.side{background:var(--bg-panel);border:1px solid var(--border-2);border-radius:14px;padding:20px 22px;margin:26px 0;font-family:'Inter',sans-serif}
+  aside.side .st{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+  aside.side.v .st{color:var(--violet)}
+  aside.side p{font-size:15px;line-height:1.62;color:var(--text);max-width:none;margin:0 0 10px}
+  aside.side p:last-child{margin-bottom:0}
+  aside.side.v{border-left:3px solid var(--violet)}
+
+  .keyidea{background:var(--gold-soft);border:1px solid rgba(245,184,65,.3);border-radius:14px;padding:18px 22px;margin:26px 0}
+  .keyidea .kt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+  .keyidea p{font-family:'Inter',sans-serif;font-size:16px;color:var(--bright);max-width:none;margin:0}
+
+  .pullquote{margin:30px 0;padding:0 0 0 4px}
+  .pullquote blockquote{font-family:'Instrument Serif',serif;font-size:27px;line-height:1.32;color:var(--bright);max-width:24ch;margin:0 auto;text-align:center;text-wrap:balance}
+  .pullquote cite{display:block;text-align:center;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);margin-top:14px;letter-spacing:.05em}
+
+  .readingref{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px dashed var(--border-2);border-radius:12px;padding:14px 16px;margin:22px 0;font-family:'Inter',sans-serif}
+  .readingref .ri{font-size:20px;flex:0 0 auto}
+  .readingref .rc{font-size:13.5px;color:var(--muted)}
+  .readingref .rc b{color:var(--bright);font-weight:600}
+
+  /* key terms */
+  .terms{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:8px 20px;margin:28px 0;font-family:'Inter',sans-serif}
+  .terms .th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);padding:14px 0 4px}
+  .term{padding:11px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;gap:16px}
+  .term:first-of-type{border-top:none}
+  .term dt{color:var(--bright);font-weight:600;font-size:14.5px}
+  .term dd{color:var(--muted);font-size:14px;margin:0}
+  @media(max-width:620px){.term{grid-template-columns:1fr;gap:3px}}
+
+  /* paper prompts */
+  .prompts{border:1px solid var(--violet);background:var(--violet-soft);border-radius:16px;padding:22px 24px;margin:32px 0;font-family:'Inter',sans-serif}
+  .prompts .ph{font-family:'Instrument Serif',serif;font-size:23px;color:var(--bright);margin-bottom:4px}
+  .prompts .psub{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .prompts ol{list-style:none;counter-reset:pp;display:flex;flex-direction:column;gap:12px}
+  .prompts li{counter-increment:pp;display:grid;grid-template-columns:30px 1fr;gap:13px;font-size:15px;color:var(--text)}
+  .prompts li::before{content:counter(pp);font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--violet);width:30px;height:30px;border-radius:8px;border:1px solid rgba(124,92,255,.4);display:grid;place-items:center;font-size:13px}
+
+  /* actions row (arena/quiz) */
+  .tryit{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}
+  .tryit a{flex:1;min-width:210px;display:flex;gap:13px;align-items:center;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;transition:.14s;cursor:pointer}
+  .tryit a:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .tryit .ti{font-size:24px}
+  .tryit .tt{color:var(--bright);font-weight:600;font-size:15px;font-family:'Inter',sans-serif}
+  .tryit .td{color:var(--muted);font-size:12.5px;font-family:'Inter',sans-serif}
+
+  /* ---------- FIGURES ---------- */
+  figure.fig{margin:30px 0;background:var(--bg-panel);border:1px solid var(--border-2);border-radius:16px;padding:20px 22px;font-family:'Inter',sans-serif}
+  figure.fig .fig-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  figure.fig figcaption{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.55;max-width:none}
+  figure.fig figcaption b{color:var(--bright)}
+  .fig canvas{width:100%;height:auto;display:block;border-radius:8px}
+  .fig-controls{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .fig-controls input[type=range]{flex:1;min-width:160px;accent-color:var(--gold);height:4px}
+  .fig-slider-label{font-size:13px;color:var(--text);min-width:210px}
+  .fig-slider-label b{color:var(--gold);font-family:'JetBrains Mono',monospace}
+  .fig-readout{margin-top:12px;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;line-height:1.55}
+  .fig-readout b{color:var(--bright)} .fig-readout .g{color:var(--gold)} .fig-readout .v{color:var(--violet)} .fig-readout .gr{color:var(--green)} .fig-readout .r{color:var(--rose)}
+
+  /* payoff matrix */
+  .matrix{--cell:1fr;display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;font-family:'Inter',sans-serif;max-width:520px}
+  .mx-corner{}
+  .mx-colhead,.mx-rowhead{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;font-size:12.5px;color:var(--bright);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s}
+  .mx-colhead:hover,.mx-rowhead:hover{border-color:var(--gold)}
+  .mx-colhead.sel,.mx-rowhead.sel{background:var(--gold-soft);border-color:var(--gold);color:var(--gold)}
+  .mx-cell{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 8px;text-align:center;min-height:58px;display:flex;flex-direction:column;justify-content:center;gap:2px;transition:.12s}
+  .mx-cell .pr{font-family:'JetBrains Mono',monospace;font-size:15px}
+  .mx-cell .pr .a{color:var(--gold)} .mx-cell .pr .b{color:var(--violet)}
+  .mx-cell.hot{background:rgba(245,184,65,.10);border-color:var(--gold)}
+  .mx-cell.nash{outline:2px solid var(--green);outline-offset:-2px}
+  .mx-cell .nlab{font-size:9.5px;color:var(--green);font-family:'JetBrains Mono',monospace;letter-spacing:.08em}
+  .mx-legend{font-size:12px;color:var(--muted);margin-top:12px}
+  .mx-legend .a{color:var(--gold);font-weight:600}.mx-legend .b{color:var(--violet);font-weight:600}
+
+  /* chapter nav */
+  .chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:46px;padding-top:26px;border-top:1px solid var(--border)}
+  .chapnav a{flex:1;max-width:48%;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.14s}
+  .chapnav a:hover{border-color:var(--gold)}
+  .chapnav .cd{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--subtle);text-transform:uppercase;letter-spacing:.1em}
+  .chapnav .cx{font-family:'Instrument Serif',serif;font-size:18px;color:var(--bright);margin-top:3px}
+  .chapnav a.next{text-align:right}
+  .chapnav a.disabled{opacity:.35;pointer-events:none}
+
+  .locked{text-align:center;padding:40px 20px;color:var(--muted)}
+  .locked .lk{font-size:34px;margin-bottom:10px}
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--subtle);font-size:12.5px;border-top:1px solid var(--border);margin-top:30px}
+
+  @media(max-width:640px){
+    .prose{font-size:17.5px}
+    .matrix{grid-template-columns:88px 1fr 1fr}
+    .fig-slider-label{min-width:100%}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="topbar">
+  <div class="brand" onclick="go('')">
+    <div class="brand-mark">&#127916;</div>
+    <div class="brand-name">Economics &amp; Film<small>ECON 383D · The Textbook</small></div>
+  </div>
+  <div class="tb-right">
+    <button class="btn ghost" onclick="go('')">&#9776; Contents</button>
+    <button class="btn" id="prevBtnTop" onclick="relCh(-1)">&#8592;</button>
+    <button class="btn" id="nextBtnTop" onclick="relCh(1)">&#8594;</button>
+  </div>
+</div>
+
+<main>
+  <!-- CONTENTS -->
+  <section id="contents"><div class="wrap">
+    <div class="cover">
+      <div class="eyebrow">Binghamton University · Spring 2026</div>
+      <h1>Economics&nbsp;&amp;&nbsp;<em>Film</em></h1>
+      <p class="sub">Thirteen films, thirteen economic ideas, and the classic papers behind them. A companion reader for Dr. Sharma's <em>Economics in Film</em>. Read the chapter before the screening — you'll know what to look for.</p>
+      <div class="credit">Prof. Amarendra Sharma · Department of Economics</div>
+    </div>
+    <div class="reel-rule"></div>
+    <div class="toc-grid" id="tocGrid"></div>
+  </div></section>
+
+  <!-- CHAPTERS host -->
+  <div id="chapterHost"></div>
+</main>
+
+<footer><div class="wrap">
+  <span class="mono">Economics &amp; Film · a digital textbook · built to accompany the course readings on Brightspace.</span>
+</div></footer>
+
+<script>
+/* ============================ CHAPTER META ============================ */
+var CH = [
+  {n:0, title:"How Economists Watch Movies", film:"— course primer —", year:"", run:"", read:"Course method &amp; the economics paper", slug:"", free:true},
+  {n:1, title:"Resource Economics", film:"WALL·E", year:"2008", run:"98 min", read:"Hardin (1968) · Ostrom et&nbsp;al. (1999)", slug:"commons", free:true},
+  {n:2, title:"Environmental Economics", film:"A Civil Action", year:"1998", run:"115 min", read:"Coase (1960)", slug:"coase", free:true},
+  {n:3, title:"Game Theory", film:"Dr. Strangelove", year:"1964", run:"93 min", read:"Aumann, Nobel Lecture (2005)", slug:"deterrence", free:false},
+  {n:4, title:"Asymmetric Information", film:"Intolerable Cruelty", year:"2003", run:"100 min", read:"Akerlof (1970)", slug:"lemons", free:false},
+  {n:5, title:"Monetary Systems", film:"Stalag 17", year:"1953", run:"120 min", read:"Radford (1945)", slug:"pow", free:false},
+  {n:6, title:"The Gold Standard", film:"The Wizard of Oz", year:"1939", run:"101 min", read:"Rockoff (1990)", slug:"gold-standard", free:false},
+  {n:7, title:"Financial Panics", film:"It's a Wonderful Life", year:"1946", run:"129 min", read:"Silber (2009)", slug:"bank-run", free:false},
+  {n:8, title:"The Great Depression", film:"The Grapes of Wrath", year:"1940", run:"120 min", read:"Bernanke · Romer (1993)", slug:"depression", free:false},
+  {n:9, title:"Corporate Social Responsibility", film:"Wall Street", year:"1987", run:"124 min", read:"Friedman (1970) · Reinhardt et&nbsp;al. (2008)", slug:"csr", free:false},
+  {n:10, title:"Financial Fraud", film:"The Big Short", year:"2015", run:"130 min", read:"Bernanke · Mazar &amp; Ariely (2006)", slug:"subprime", free:false},
+  {n:11, title:"The Economics of Crime", film:"Blow", year:"2001", run:"124 min", read:"Becker (1968) · Friedman (1990)", slug:"crime", free:false},
+  {n:12, title:"Capital Punishment", film:"Dead Man Walking", year:"1995", run:"122 min", read:"Mocan &amp; Gittings · Levitt (2004)", slug:"capital", free:false},
+  {n:13, title:"Labor Unions", film:"Norma Rae", year:"1979", run:"113 min", read:"Whaples (1990)", slug:"unions", free:false}
+];
+
+/* ============================ CONTENTS ============================ */
+function buildTOC(){
+  var g=document.getElementById('tocGrid'), h='';
+  CH.forEach(function(c){
+    h+='<div class="toc-card" onclick="go(\'chapter-'+c.n+'\')">'+
+       '<div class="cn">Chapter '+c.n+'</div>'+
+       '<div class="ct">'+c.title+'</div>'+
+       '<div class="cf">'+(c.film==='— course primer —'?'A short primer':'<em>'+c.film+'</em>'+(c.year?' · '+c.year:''))+'</div>'+
+       '<div class="cmeta">'+
+         (c.free?'<span class="mini free">Free preview</span>':'<span class="mini dim">Enrolled</span>')+
+         (c.run?'<span class="mini">'+c.run+'</span>':'')+
+       '</div></div>';
+  });
+  g.innerHTML=h;
+}
+
+/* ============================ ROUTER ============================ */
+function go(hash){ location.hash=hash; }
+function relCh(d){
+  var cur=curChapter(); if(cur===null){ if(d>0) go('chapter-0'); return; }
+  var t=cur+d; if(t<0||t>13) return; go('chapter-'+t);
+}
+function curChapter(){
+  var m=(location.hash||'').match(/chapter-(\d+)/); return m?parseInt(m[1],10):null;
+}
+function route(){
+  var n=curChapter();
+  var contents=document.getElementById('contents');
+  var arts=document.querySelectorAll('.chapter');
+  arts.forEach(function(a){a.classList.remove('active');});
+  if(n===null){
+    contents.style.display='';
+    document.getElementById('prevBtnTop').style.visibility='hidden';
+    document.getElementById('nextBtnTop').style.visibility='hidden';
+    window.scrollTo(0,0); updateProgress(); return;
+  }
+  contents.style.display='none';
+  document.getElementById('prevBtnTop').style.visibility='';
+  document.getElementById('nextBtnTop').style.visibility='';
+  var art=document.getElementById('chapter-'+n);
+  if(art){ art.classList.add('active'); renderFigures(art); }
+  window.scrollTo(0,0); updateProgress();
+}
+function updateProgress(){
+  var n=curChapter();
+  var p= n===null?0:((n)/(CH.length-1))*100;
+  document.getElementById('progress').style.width=p+'%';
+}
+window.addEventListener('hashchange',route);
+
+/* append prev/next nav + tryit block to each chapter automatically */
+function decorateChapters(){
+  document.querySelectorAll('.chapter').forEach(function(a){
+    var n=parseInt(a.getAttribute('data-ch'),10);
+    var c=CH[n];
+    // tryit (arena + quiz) — only for content chapters with a slug
+    if(c.slug){
+      var body=a.querySelector('.prose')||a;
+      var tw=document.createElement('div'); tw.className='tryit';
+      tw.innerHTML='<a onclick="alert(\'Launches the '+c.title+' arena in the app.\')"><span class="ti">&#127918;</span><span><span class="tt">Play the '+arenaName(c.slug)+'</span><br><span class="td">Live the model against AI opponents.</span></span></a>'+
+        '<a onclick="alert(\'Opens Quiz '+n+' in the app.\')"><span class="ti">&#9997;&#65039;</span><span><span class="tt">Take Quiz '+n+'</span><br><span class="td">Server-graded. Check what stuck.</span></span></a>';
+      a.appendChild(tw);
+    }
+    // chapter nav
+    var nav=document.createElement('div'); nav.className='chapnav';
+    var prev = n>0 ? '<a class="prev" onclick="go(\'chapter-'+(n-1)+'\')"><div class="cd">&#8592; Previous</div><div class="cx">'+CH[n-1].title+'</div></a>' : '<a class="prev disabled"></a>';
+    var next = n<13 ? '<a class="next" onclick="go(\'chapter-'+(n+1)+'\')"><div class="cd">Next &#8594;</div><div class="cx">'+CH[n+1].title+'</div></a>' : '<a class="next" onclick="go(\'\')"><div class="cd">Finish &#8594;</div><div class="cx">Back to contents</div></a>';
+    nav.innerHTML=prev+next;
+    a.appendChild(nav);
+  });
+}
+function arenaName(slug){
+  var m={commons:'Commons Arena',coase:'Coase Court',deterrence:'Deterrence Arena',lemons:'Lemons Market',pow:'POW Exchange','gold-standard':'Yellow Brick Road','bank-run':'Bank Run',depression:'Gold Fetters Lab',csr:'Boardroom',subprime:'Subprime Desk',crime:'Rational Criminal',capital:'Deterrence Data Lab',unions:'Bargaining Line'};
+  return m[slug]||'arena';
+}
+
+/* ============================ FIGURE ENGINE ============================ */
+var CSSV=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();};
+
+/* --- parametric models: series are functions of the slider variable x --- */
+var MODELS={
+  commons:{
+    title:"The commons: total catch vs. the stock",
+    x:{min:0,max:100,step:2,init:50,label:"Total fishing effort (boats on the water)",unit:""},
+    yLabel:"index",
+    series:[
+      {label:"Total catch (the pie)",color:'--gold',f:function(E){return E*(100-E)/25;}},
+      {label:"Fish stock remaining",color:'--green',f:function(E){return Math.max(0,100-E);}}
+    ],
+    readout:function(E){
+      var T=E*(100-E)/25, per=E>0?(T/E).toFixed(2):'0';
+      var msg = E<=50 ? '<span class="gr">Below the social optimum — more boats still add to the total catch.</span>'
+              : E<=80 ? '<span class="g">Past the optimum (E=50): each new boat now shrinks everyone\'s catch.</span>'
+              : '<span class="r">Overfished. The stock is collapsing toward zero — WALL·E\'s empty ocean.</span>';
+      return 'At <b>'+E+' boats</b>, total catch is <b>'+T.toFixed(1)+'</b> and each boat lands <b>'+per+'</b>. '+
+             'The single owner would stop at <b class="g">E=50</b> (peak catch). But no herder owns the sea, so effort keeps rising. '+msg;
+    }
+  },
+  repeated:{
+    title:"When does peace hold? Cooperation vs. one-time betrayal",
+    x:{min:0,max:95,step:1,init:50,label:"How much players value the future (patience δ, %)",unit:"%"},
+    yLabel:"lifetime payoff",
+    series:[
+      {label:"Keep cooperating forever",color:'--green',f:function(d){d/=100;return Math.min(60,3/(1-d));}},
+      {label:"Betray once, then punished",color:'--rose',f:function(d){d/=100;return Math.min(60,5+d*1/(1-d));}}
+    ],
+    readout:function(d){
+      var D=d/100, hold=D>=0.5;
+      return 'With patience δ = <b>'+d+'%</b>, cooperating is worth <b class="gr">'+Math.min(60,3/(1-D)).toFixed(1)+'</b> and betraying is worth <b class="r">'+Math.min(60,5+D/(1-D)).toFixed(1)+'</b>. '+
+        (hold?'<span class="gr">Peace is self-enforcing</span> — the future is valuable enough that no one wants to grab the one-time gain from a first strike.'
+             :'<span class="r">Deterrence fails</span> — players discount the future so heavily that a first strike pays. This is the razor\'s edge Strangelove sits on.')+
+        ' The knife-edge is δ = <b class="g">50%</b>.';
+    }
+  },
+  lemons:{
+    title:"The market for lemons: does the good car survive?",
+    x:{min:0,max:100,step:1,init:60,label:"Share of the used-car lot that are 'peaches' (%)",unit:"%"},
+    yLabel:"dollars",
+    series:[
+      {label:"Price a buyer will offer",color:'--gold',f:function(q){q/=100;return q*1200+(1-q)*400;}},
+      {label:"What a peach owner must get",color:'--violet',f:function(q){return 1000;}}
+    ],
+    readout:function(q){
+      var Q=q/100, P=Q*1200+(1-Q)*400, sell=P>=1000;
+      return 'If <b>'+q+'%</b> of cars are peaches, a rational buyer — who can\'t tell peach from lemon — offers the average value, <b class="g">$'+P.toFixed(0)+'</b>. '+
+        'A peach owner won\'t sell below <b class="v">$1000</b>. '+
+        (sell?'<span class="gr">Peaches stay on the lot</span> — the market holds together.'
+             :'<span class="r">Peaches withdraw</span>. Only lemons remain, the average quality drops, the offer falls further… the market unravels. Below <b>60%</b> peaches, good cars vanish.');
+    }
+  },
+  inflation:{
+    title:"Cigarette money: supply and the price level in the camp",
+    x:{min:40,max:220,step:5,init:100,label:"Cigarettes in circulation (Red Cross parcels index)",unit:""},
+    yLabel:"price (cigarettes)",
+    series:[
+      {label:"Price of a bread ration",color:'--gold',f:function(M){return M/100*6;}},
+      {label:"Price of a chocolate bar",color:'--violet',f:function(M){return M/100*12;}}
+    ],
+    readout:function(M){
+      var bread=(M/100*6).toFixed(1);
+      var st = M<80?'<span class="v">A parcel drought — cigarettes are scarce, prices fall (deflation). Traders hoard; the good cigarettes disappear (Gresham\'s Law).</span>'
+             : M>150?'<span class="r">Parcels just arrived — a flood of cigarette-money. Every price jumps (inflation) even though there\'s no more bread.</span>'
+             :'<span class="gr">A settled camp economy — stable cigarette prices.</span>';
+      return 'With the cigarette supply at <b>'+M+'</b>, a bread ration costs <b class="g">'+bread+' cigarettes</b>. '+
+             'Notice: the amount of bread never changed — only the quantity of money did. '+st;
+    }
+  },
+  deflation:{
+    title:"The gold standard's squeeze: falling prices, rising real debt",
+    x:{min:0,max:45,step:1,init:0,label:"Cumulative fall in crop prices (deflation, %)",unit:"%"},
+    yLabel:"real burden index",
+    series:[
+      {label:"Real weight of a $1,000 mortgage",color:'--gold',f:function(d){return 1000/(1-d/100)/10;}},
+      {label:"Bushels of wheat to pay it",color:'--violet',f:function(d){return (1000/(1-d/100))/ (1*(1-d/100)) /10;}}
+    ],
+    readout:function(d){
+      var real=1000/(1-d/100);
+      var bushels = real/ (1*(1-d/100)); // price per bushel falls with deflation from $1
+      return 'After <b>'+d+'%</b> deflation, the farmer\'s <b>$1,000</b> mortgage is unchanged in dollars — but each dollar now buys more, so its real weight is <b class="g">$'+real.toFixed(0)+'</b> in today\'s goods. '+
+        'With wheat prices down too, it takes <b class="v">'+bushels.toFixed(0)+' bushels</b> to pay it, versus 1,000 before. '+
+        (d>=15?'<span class="r">This is Dorothy\'s Kansas: debtors crushed, creditors enriched — and why farmers marched behind Bryan for "free silver."</span>':'<span class="gr">Mild so far — but gold\'s fixed money supply meant deflation was chronic.</span>');
+    }
+  },
+  crime:{
+    title:"Becker's calculus: enforcement and the amount of crime",
+    x:{min:0,max:100,step:1,init:25,label:"Chance of being caught & punished (%)",unit:"%"},
+    yLabel:"crimes committed",
+    series:[
+      {label:"Crimes committed",color:'--rose',f:function(p){return Math.max(0,100*(1-p/100));}},
+      {label:"Expected punishment felt",color:'--gold',f:function(p){return p;}}
+    ],
+    readout:function(p){
+      var crime=Math.max(0,100*(1-p/100));
+      return 'When the chance of punishment is <b>'+p+'%</b> (severity held fixed), the expected cost of a crime rises, so the number of would-be offenders who still find it "worth it" falls to <b class="r">'+crime.toFixed(0)+'</b>. '+
+        'Becker\'s insight: crime responds to <b class="g">probability × severity</b>, not morality alone. '+
+        (p<20?'<span class="r">Weak enforcement — crime pays for many.</span>':p>70?'<span class="gr">Heavy enforcement deters most — but catching everyone is enormously costly.</span>':'<span class="g">Society picks the point where the cost of more enforcement equals the harm it prevents.</span>');
+    }
+  },
+  monopsony:{
+    title:"The company town: one employer sets the wage",
+    x:{min:0,max:20,step:0.5,init:6,label:"Hourly wage offered ($)",unit:"$"},
+    yLabel:"workers",
+    series:[
+      {label:"Workers willing to work (supply)",color:'--gold',f:function(w){return Math.min(20,w);}},
+      {label:"Workers the mill will hire (demand)",color:'--violet',f:function(w){return Math.max(0,20-w);}}
+    ],
+    readout:function(w){
+      var comp=10;
+      var s=Math.min(20,w), d=Math.max(0,20-w);
+      return 'At <b>$'+w.toFixed(1)+'/hr</b>, <b class="g">'+s.toFixed(0)+'</b> workers would take the job but the mill wants <b class="v">'+d.toFixed(0)+'</b>. '+
+        'A single-employer town (a monopsony) sets the wage <b>below</b> the competitive $'+comp+' to hold down its wage bill — leaving workers underpaid. '+
+        (w<comp?'<span class="r">Below the competitive wage: this is Norma Rae\'s mill. A union pushing the wage up toward $'+comp+' can raise pay <em>without</em> costing jobs.</span>':'<span class="gr">At or above the competitive wage — workers are paid their value.</span>');
+    }
+  },
+  bubble:{
+    title:"The housing bubble: price, then the reckoning",
+    x:{min:2000,max:2010,step:1,init:2004,label:"Year",unit:""},
+    yLabel:"home-price index",
+    series:[
+      {label:"National home prices",color:'--gold',f:function(t){return t<=2006?100+18*(t-2000):100+18*6-45*(t-2006);}},
+      {label:"Value of 'The Big Short' (your CDS)",color:'--green',f:function(t){return t<=2006?5:5+55*(t-2006);}}
+    ],
+    readout:function(t){
+      var price=t<=2006?100+18*(t-2000):100+18*6-45*(t-2006);
+      return 'In <b>'+t+'</b>, the home-price index sits at <b class="g">'+price.toFixed(0)+'</b>. '+
+        (t<2006?'<span class="g">The boom: prices only ever go up, ratings stay AAA, and betting against housing looks insane — so the bet is cheap.</span>'
+         :t===2006?'<span class="v">The peak. Burry, Baum and the others have quietly bought insurance (credit-default swaps) on bonds everyone else calls safe.</span>'
+         :'<span class="r">The crash. Prices fall, subprime bonds default, and the cheap insurance pays off enormously — the Big Short.</span>');
+    }
+  }
+};
+
+function drawModel(fig){
+  var name=fig.getAttribute('data-model'); var M=MODELS[name]; if(!M) return;
+  var canvas=fig.querySelector('canvas'); var slider=fig.querySelector('input[type=range]');
+  var lab=fig.querySelector('.fig-slider-label'); var out=fig.querySelector('.fig-readout');
+  var ctx=canvas.getContext('2d');
+  function paint(){
+    var xv=parseFloat(slider.value);
+    var W=canvas.width=canvas.clientWidth*2, H=canvas.height=440; canvas.style.height=(H/2)+'px';
+    ctx.setTransform(2,0,0,2,0,0); var w=canvas.clientWidth, h=H/2;
+    ctx.clearRect(0,0,w,h);
+    var padL=46,padR=14,padT=16,padB=40;
+    var x0=M.x.min,x1=M.x.max;
+    // y-range: sample all series
+    var ymax=0;
+    for(var s=0;s<M.series.length;s++){for(var xi=x0;xi<=x1;xi+=(x1-x0)/120){var yv=M.series[s].f(xi); if(isFinite(yv)&&yv>ymax)ymax=yv;}}
+    ymax=ymax*1.12||1;
+    function X(v){return padL+(v-x0)/(x1-x0)*(w-padL-padR);}
+    function Y(v){return h-padB-(v/ymax)*(h-padT-padB);}
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;ctx.font='10px JetBrains Mono, monospace';ctx.fillStyle=CSSV('--subtle');
+    for(var gy=0;gy<=4;gy++){var yy=padT+(h-padT-padB)*gy/4;ctx.beginPath();ctx.moveTo(padL,yy);ctx.lineTo(w-padR,yy);ctx.stroke();
+      ctx.textAlign='right';ctx.fillText((ymax*(4-gy)/4).toFixed(0),padL-6,yy+3);}
+    // axes labels
+    ctx.textAlign='center';ctx.fillStyle=CSSV('--muted');ctx.font='10px Inter, sans-serif';
+    ctx.fillText(M.x.label, (padL+w-padR)/2, h-8);
+    // series
+    for(var s2=0;s2<M.series.length;s2++){
+      var col=CSSV(M.series[s2].color); ctx.strokeStyle=col;ctx.lineWidth=2.4;ctx.beginPath();var first=true;
+      for(var xx=x0;xx<=x1+0.0001;xx+=(x1-x0)/240){var yy2=M.series[s2].f(xx);if(!isFinite(yy2))continue;var px=X(xx),py=Y(Math.max(0,yy2));if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py);}
+      ctx.stroke();
+      // marker dot at current x
+      var my=M.series[s2].f(xv); if(isFinite(my)){ctx.fillStyle=col;ctx.beginPath();ctx.arc(X(xv),Y(Math.max(0,my)),4,0,7);ctx.fill();}
+    }
+    // vertical marker line
+    ctx.strokeStyle='rgba(245,184,65,.5)';ctx.setLineDash([4,4]);ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(X(xv),padT);ctx.lineTo(X(xv),h-padB);ctx.stroke();ctx.setLineDash([]);
+    // legend
+    var lx=padL+6,ly=padT+4;ctx.textAlign='left';ctx.font='10px Inter, sans-serif';
+    for(var s3=0;s3<M.series.length;s3++){var col2=CSSV(M.series[s3].color);ctx.fillStyle=col2;ctx.fillRect(lx,ly-7,10,3);ctx.fillStyle=CSSV('--muted');ctx.fillText(M.series[s3].label,lx+15,ly);ly+=15;}
+    // labels + readout
+    var shown = M.x.unit==='%'?xv+'%':(M.x.unit==='$'?'$'+xv:xv);
+    lab.innerHTML=M.x.label.replace(/\(.*?\)/,'')+': <b>'+shown+'</b>';
+    out.innerHTML=M.readout(xv);
+  }
+  slider.min=M.x.min;slider.max=M.x.max;slider.step=M.x.step;slider.value=M.x.init;
+  slider.oninput=paint; paint();
+  fig.setAttribute('data-rendered','1');
+  window.addEventListener('resize',function(){ if(fig.classList.contains('fig')&&fig.offsetParent) paint(); });
+}
+
+/* --- payoff matrix --- */
+function drawMatrix(fig){
+  var rows=JSON.parse(fig.getAttribute('data-rows'));      // ["Cooperate","Defect"] (row player = A, gold)
+  var cols=JSON.parse(fig.getAttribute('data-cols'));      // col player = B, violet
+  var pay=JSON.parse(fig.getAttribute('data-pay'));        // [[[a,b],[a,b]],[[a,b],[a,b]]]
+  var nash=JSON.parse(fig.getAttribute('data-nash')||'[]');// ["1,1"]
+  var rlab=fig.getAttribute('data-rlab')||'You';
+  var clab=fig.getAttribute('data-clab')||'Rival';
+  var host=fig.querySelector('.matrix');
+  var selR=-1, selC=-1, showN=false;
+  function render(){
+    var h='<div class="mx-corner"></div>';
+    cols.forEach(function(c,j){h+='<div class="mx-colhead'+(selC===j?' sel':'')+'" onclick="__mx['+figIdx+'](\'c\','+j+')">'+c+'</div>';});
+    rows.forEach(function(r,i){
+      h+='<div class="mx-rowhead'+(selR===i?' sel':'')+'" onclick="__mx['+figIdx+'](\'r\','+i+')">'+r+'</div>';
+      cols.forEach(function(c,j){
+        var p=pay[i][j];var isN=nash.indexOf(i+','+j)>=0;
+        var hot=(selR===i&&selC===j);
+        h+='<div class="mx-cell'+(hot?' hot':'')+(showN&&isN?' nash':'')+'"><div class="pr"><span class="a">'+p[0]+'</span>, <span class="b">'+p[1]+'</span></div>'+(showN&&isN?'<div class="nlab">NASH</div>':'')+'</div>';
+      });
+    });
+    host.innerHTML=h;
+  }
+  window.__mx=window.__mx||[];
+  window.__mx[figIdx]=function(t,i){ if(t==='r')selR=(selR===i?-1:i); else selC=(selC===i?-1:i); render(); };
+  var btn=fig.querySelector('.mx-nash-btn');
+  if(btn) btn.onclick=function(){showN=!showN;btn.textContent=showN?'Hide equilibrium':'Reveal Nash equilibrium';render();};
+  render();
+  fig.setAttribute('data-rendered','1');
+}
+
+var figIdx=0;
+function renderFigures(scope){
+  var figs=scope.querySelectorAll('figure.fig[data-model], figure.fig[data-matrix]');
+  figs.forEach(function(fig){
+    if(fig.getAttribute('data-rendered'))return;
+    figIdx++;
+    if(fig.hasAttribute('data-model')) drawModel(fig);
+    else if(fig.hasAttribute('data-matrix')) drawMatrix(fig);
+  });
+}
+
+/* ============================ BOOT ============================ */
+buildTOC();
+/* chapters get injected below this script tag in the DOM; decorate + route after load */
+window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); route(); });
+</script>
+<article class="chapter" id="chapter-0" data-ch="0">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 0 · The Primer</div>
+    <h1>How Economists Watch Movies</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">This chapter</div><div class="fc-v">The method &amp; the paper</div></div>
+      <div><div class="fc-i">Before you screen anything</div><div class="fc-v">Read this first</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">A physicist, a psychologist, and an economist walk out of the same two-hour film. The physicist noticed the space station spun at the wrong speed. The psychologist watched a marriage quietly fall apart. The economist? She spent the whole film asking one question — <em>who wanted what, and what were they willing to give up to get it?</em></div>
+
+    <p class="drop">That question is the entire course in miniature. Economics is not, at its heart, about money. It is about <strong>choice under scarcity</strong>: how people decide when they cannot have everything, how those decisions collide, and what happens to all of us as a result. Money is just the most convenient place to watch the drama unfold. A film, it turns out, is another.</p>
+
+    <p>Over the next thirteen chapters you will watch thirteen movies — a Pixar romance set on a garbage planet, a Cold War satire, a 1930s dust-bowl migration, a Wall Street morality play — and behind each one you will find a piece of the professional economics literature: a Nobel lecture, a paper that reshaped a field, an argument economists still have at conferences. The films are the hook. The papers are the substance. This course lives in the space between them.</p>
+
+    <div class="beat"><span class="bn">Why film</span><h2>The movie is a laboratory you can't build</h2><span class="bl"></span></div>
+    <p>Economists face a frustrating problem: they cannot run experiments the way a chemist can. You cannot put a whole economy in a test tube, take the gold standard away from one copy and leave it in another, and watch what happens. So economists reach for the next best things — history, data, mathematical models, and, when they are lucky, a vivid story that makes an abstract force visible.</p>
+
+    <p>A good film does something a supply-and-demand diagram cannot: it makes you <em>feel</em> the incentive. When you watch a bank run in <em>It's a Wonderful Life</em>, you understand in your gut why a depositor sprints to the teller window even though the sprint is exactly what dooms the bank. That gut understanding is the beginning of economic reasoning. The paper then gives you the machinery to explain it precisely.</p>
+
+    <div class="keyidea"><div class="kt">The core move of this course</div><p>For every film, ask: <strong>What is the economic problem here?</strong> Then reach for the assigned reading, which names that problem, models it, and tells you what economists have learned about it. The film supplies the intuition; the paper supplies the rigor.</p></div>
+
+    <div class="beat"><span class="bn">The toolkit</span><h2>Five ideas you'll use again and again</h2><span class="bl"></span></div>
+    <p>You do not need advanced mathematics for this course — you need a handful of concepts and the discipline to apply them honestly. Five will carry you a long way:</p>
+
+    <div class="terms">
+      <div class="th">The recurring toolkit</div>
+      <div class="term"><dt>Incentives</dt><dd>People respond to costs and benefits at the margin. Change the payoff and you change the behavior — usually in ways the well-meaning planner didn't intend.</dd></div>
+      <div class="term"><dt>Opportunity cost</dt><dd>The true cost of anything is what you gave up to get it. Every "yes" is a "no" to something else.</dd></div>
+      <div class="term"><dt>Externalities</dt><dd>When my choice spills a cost or benefit onto you that no price accounts for — pollution, vaccination, a neighbor's garden — markets misfire.</dd></div>
+      <div class="term"><dt>Information</dt><dd>Who knows what matters enormously. When one side of a deal knows more than the other, ordinary markets can break.</dd></div>
+      <div class="term"><dt>Strategic interaction</dt><dd>When your best move depends on my move and mine on yours, we're in a <em>game</em> — and the outcome can be bad for everyone even when everyone plays smart.</dd></div>
+    </div>
+
+    <p>Every film in this course is a stress test of one or more of these ideas. WALL·E is externalities and the commons. Dr. Strangelove is strategic interaction. The Big Short is information and incentives gone rotten. Keep the toolkit in your pocket; you will reach for it constantly.</p>
+
+    <div class="beat"><span class="bn">Watch like an economist</span><h2>Read the article <em>before</em> the screening</h2><span class="bl"></span></div>
+    <p>This is the single most important piece of advice in the chapter, so it gets its own paragraph. <strong>Read the assigned article before you watch the film.</strong> The reason is simple: once you know what an economist is looking for, you see it everywhere on screen. Watch <em>Intolerable Cruelty</em> after reading Akerlof and every scene becomes a study in who is hiding what. Watch it cold and it is merely a screwball comedy about divorce lawyers.</p>
+
+    <p>As you watch, keep a running list of moments where the economics is <em>right</em>, where it is <em>dramatized</em> (bent for the sake of story), and where it is simply <em>wrong</em>. That list is the raw material for your paper. Directors are not economists; part of your job is to referee the difference, generously but honestly.</p>
+
+    <aside class="side v"><div class="st">&#9998; The assignment that runs the course</div><p>Your grade rests mostly on <strong>seven short papers</strong> — each 500 to 1,000 words, one per pair of topics, the lowest dropped. A paper discusses the <em>economic content</em> of a film in light of the reading and our class discussion. It is <strong>not</strong> a movie review. "The acting was wooden" earns nothing; "the film gets the mechanics of a bank run right but wrongly implies deposit insurance would have saved the Bailey Building &amp; Loan in 1932" is the whole game.</p></aside>
+
+    <div class="beat"><span class="bn">Craft</span><h2>What a strong paper actually does</h2><span class="bl"></span></div>
+    <p>The best papers in this course share a shape. They open by naming the economic problem the film dramatizes. They explain the relevant model or argument from the reading in the student's own words — briefly, correctly, with the key term used precisely. They then point to specific scenes as evidence, and they take a position: does the film illuminate the economics, distort it, or quietly assume something the economist would challenge? They close with a claim worth making.</p>
+
+    <p>Weak papers, by contrast, retell the plot, praise the cinematography, or summarize the article without ever connecting it to a frame of film. Avoid all three. Your reader has seen the movie and read the paper; your job is to say something about the <em>relationship</em> between them that they hadn't quite noticed.</p>
+
+    <div class="terms">
+      <div class="th">Paper mechanics (from the syllabus)</div>
+      <div class="term"><dt>Length</dt><dd>500–1,000 words. Tight and argued beats long and loose.</dd></div>
+      <div class="term"><dt>Format</dt><dd>Double-spaced, 12-point, your choice of font. Upload on Brightspace.</dd></div>
+      <div class="term"><dt>Citations</dt><dd>Chicago style. Cite the article whenever you lean on it. Spelling and grammar count.</dd></div>
+      <div class="term"><dt>Deadlines</dt><dd>Hard. Late papers are not accepted — no extensions, no accommodations on the due dates. Plan your calendar now.</dd></div>
+      <div class="term"><dt>Integrity</dt><dd>Your analysis must be yours. Cite sources; unauthorized generative-AI use is a violation of the University's Academic Honesty Code.</dd></div>
+    </div>
+
+    <div class="pullquote"><blockquote>The film gives you the intuition. The paper gives you the proof. Your essay lives in between.</blockquote><cite>The method of this course</cite></div>
+
+    <p>One last thing before the lights go down. Economics has a reputation for cynicism — the "dismal science," always reducing human beings to calculating machines. You will feel that tension in this course, never more than when we reach crime, capital punishment, and the social responsibility of business. Hold onto the discomfort. The most interesting papers you will write are the ones where the economic logic and your moral intuition pull in different directions, and you have to decide, carefully, what to make of the gap.</p>
+
+    <p>Now — Chapter 1. A little robot is alone on an abandoned Earth, compacting the trash we left behind. The question that opens the whole course is waiting in the rubble: <em>how did it come to this, and could anything have stopped it?</em></p>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-1" data-ch="1">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 1 · Resource Economics</div>
+    <h1>The Tragedy of the Commons</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>WALL·E</em> · 2008 · 98 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Hardin (1968) · Ostrom et al. (1999)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">The camera drifts over a dead city. Skyscrapers turn out to be towers of compacted garbage, stacked by a single rusting robot who has been tidying an abandoned planet for 700 years. Nobody meant to bury the Earth. Everybody, doing exactly what made sense for themselves, did it together.</div>
+
+    <p class="drop">WALL·E never mentions economics, but its opening twenty minutes are the most beautiful illustration of a single idea that anyone has ever animated: the <strong>tragedy of the commons</strong>. A resource that belongs to everyone — the atmosphere, the oceans, an empty planet's capacity to absorb our waste — tends to be used until it is destroyed, not because people are wicked, but because each person's share of the damage is tiny while their share of the benefit is whole.</p>
+
+    <p>The humans of WALL·E are not villains. They are comfortable, distracted passengers on the starship Axiom, each having made a perfectly reasonable series of small choices — buy the convenient thing, discard the used thing, let the megacorporation handle it — that added up to a ruined home. That gap between sensible individual choices and a catastrophic collective outcome is where this chapter lives.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Why shared resources get destroyed</h2><span class="bl"></span></div>
+    <p>Imagine a pasture open to all. Each herder gains the full value of every animal they add to the herd, but the cost of overgrazing — the thinning grass — is spread across every herder who uses the field. So each herder, reasoning honestly, concludes: add another animal. The benefit is mine; the cost is ours. Every herder reasons the same way. The grass dies. This is Garrett Hardin's parable, and its engine is not greed but <strong>arithmetic</strong>: private benefit, socialized cost.</p>
+
+    <p>The fishery below is the same story in water. Drag the slider and watch what happens as more boats join a shared sea. Up to a point, more effort means more fish for everyone. Past that point, the boats are competing for a shrinking stock — and because no one owns the sea, no one has any reason to stop.</p>
+
+    <figure class="fig" data-model="commons">
+      <div class="fig-title">&#9673; Interactive figure 1.1 — the shared fishery</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>The <b>total catch</b> peaks when effort is at the social optimum, then falls as crowding sets in. A single owner would stop at the peak. A commons doesn't stop — each boat keeps fishing as long as <em>its own</em> catch beats staying home, and the stock collapses. Move the slider past the peak to watch the tragedy.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Hardin's warning — and its blind spot</h2><span class="bl"></span></div>
+    <p>Garrett Hardin published "The Tragedy of the Commons" in <em>Science</em> in 1968, and it became one of the most cited papers in the history of the journal. His argument was stark. In a world of finite resources and growing population, any commons — grazing land, fisheries, the air, the planet itself — is doomed to ruin if left open to unrestricted use. "Freedom in a commons," he wrote, "brings ruin to all." His proposed remedies were equally stark: either convert the commons into <strong>private property</strong> (give someone a reason to conserve it) or subject it to <strong>government control</strong> ("mutual coercion, mutually agreed upon").</p>
+
+    <p>Hardin's diagnosis was powerful and largely right. His menu of cures, it turned out, was too short — and that is where the second reading comes in.</p>
+
+    <aside class="side"><div class="st">&#9432; The Money Behind the Scene</div><p>The Axiom is run by Buy n Large, a single megacorporation that has absorbed governments and privatized nearly everything. Notice the irony: WALL·E's Earth is not a lawless free-for-all — it is the <em>opposite</em>, a world where one owner controlled the commons and still destroyed it, because its incentive was quarterly convenience, not centuries-long stewardship. Privatization is not a magic fix if the private owner's horizon is short.</p></aside>
+
+    <div class="beat"><span class="bn">The counterpoint</span><h2>Ostrom: the commons that governed themselves</h2><span class="bl"></span></div>
+    <p>In 1999, Elinor Ostrom and her colleagues published "Revisiting the Commons" in <em>Science</em> — a direct, evidence-based reply to Hardin. Ostrom had spent her career doing something Hardin never did: <strong>looking at actual commons</strong>. Swiss alpine pastures managed continuously for 500 years. Japanese village forests. Spanish irrigation districts. Maine lobster fisheries. In case after case, she found communities that had <em>not</em> destroyed their shared resources, and had not needed either full privatization or a distant government to do it.</p>
+
+    <p>They had governed themselves. Ostrom identified the design principles that made it work: clearly defined boundaries about who may use the resource; rules matched to local conditions; the users themselves participating in making those rules; <strong>monitoring</strong>; graduated <strong>sanctions</strong> for those who break the rules; cheap ways to resolve conflicts. In 2009 she became the first woman to win the Nobel Prize in Economics, largely for this work. Her message: Hardin's tragedy is a real danger, but it is a <em>possibility</em>, not a law of nature. Human beings can and do build institutions to escape it.</p>
+
+    <div class="pullquote"><blockquote>Freedom in a commons brings ruin to all.</blockquote><cite>Garrett Hardin, 1968 — the sentence Ostrom spent her life complicating</cite></div>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>What WALL·E gets right — and what it skips</h2><span class="bl"></span></div>
+    <p>WALL·E is Hardin animated. The dead Earth is the ruined commons; the humans' cheerful obliviousness is the "private benefit, socialized cost" logic playing out over generations. The film even nods at Hardin's warning about how comfort and technology can numb us to the accumulating damage.</p>
+
+    <p>But watch for what the film leaves out — and this is exactly the kind of observation a strong paper is built on. There is no Ostrom in WALL·E. There are no communities negotiating rules, no monitoring, no graduated sanctions, no messy democratic self-governance. The film offers only two futures: passive ruin, or a single redemptive act (a plant, a captain's change of heart). Ostrom's whole point is that the interesting solutions live in the vast middle ground the film skips — the boring, durable institutions that ordinary people build to manage what they share. Is the film's pessimism about collective action earned, or is it a failure of imagination? That question is a paper.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Commons</dt><dd>A resource open to use by many, from which it is hard to exclude anyone (a fishery, the atmosphere).</dd></div>
+      <div class="term"><dt>Rivalry</dt><dd>One person's use subtracts from what's left for others — the feature that makes a commons vulnerable.</dd></div>
+      <div class="term"><dt>Free-rider</dt><dd>Someone who takes the benefit of a shared resource while dodging the cost of maintaining it.</dd></div>
+      <div class="term"><dt>Externality</dt><dd>A cost (or benefit) of a choice that falls on people who had no say in it.</dd></div>
+      <div class="term"><dt>Design principles</dt><dd>Ostrom's checklist — boundaries, monitoring, graduated sanctions — for commons that govern themselves.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Pick one, or let it spark your own. 500–1,000 words, Chicago citations, on the economics — not a review.</div>
+      <ol>
+        <li>WALL·E dramatizes Hardin but never Ostrom. Using specific scenes, argue whether the film's fatalism about the commons is justified or whether it ignores the self-governance Ostrom documented.</li>
+        <li>Buy n Large privatized nearly everything and still ruined the Earth. Does the film support or undercut Hardin's claim that private property protects a commons? Bring in the idea of the owner's time horizon.</li>
+        <li>Identify the "commons" in the film precisely — is it the Earth, the atmosphere, or the Axiom's own resources? How does your choice change which of Hardin's or Ostrom's remedies would apply?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-2" data-ch="2">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 2 · Environmental Economics</div>
+    <h1>The Problem of Social Cost</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>A Civil Action</em> · 1998 · 115 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Coase (1960)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">Two children are dead in Woburn, Massachusetts, and a hotshot personal-injury lawyer thinks he smells a payday. What he finds instead is trichloroethylene in the town wells, two corporate giants upstream, and a legal system trying to answer a question economists had been circling for decades: when one party's activity harms another, who should pay — and does it even matter who we blame?</div>
+
+    <p class="drop">A Civil Action is a courtroom drama about pollution, but underneath the depositions it is dramatizing the central puzzle of environmental economics. A tannery and a food-products plant put solvents into the ground. The solvents reach the water. Children get leukemia. The activity that created value for the companies imposed a devastating cost on the families — a cost that appeared nowhere in the price of leather or food. Economists call that uncounted cost an <strong>externality</strong>, and the question of what to do about it produced one of the most influential — and most misunderstood — papers in the history of the field.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Externalities and the reciprocal nature of harm</h2><span class="bl"></span></div>
+    <p>The old, intuitive view — associated with the economist A.C. Pigou — was simple: a factory that pollutes imposes a cost on others, so the government should tax the factory by the amount of the harm. Make the polluter pay, and the market price will finally tell the truth. Pigou's logic still underlies carbon taxes today, and it is not wrong.</p>
+
+    <p>Ronald Coase, writing in 1960, made a disorienting observation that reframed the whole problem. Harm, he insisted, is <strong>reciprocal</strong>. We say the factory harms the residents — but to stop the factory is to harm the factory (and its workers, and its customers). The rancher's cattle trample the farmer's crops; but fencing the cattle harms the rancher. The real economic question is not "who is the villain?" It is "which use of the resource is more valuable, and how do we get there at the lowest cost?"</p>
+
+    <div class="keyidea"><div class="kt">The Coase Theorem</div><p>If property rights are clearly defined and people can bargain at low cost, they will negotiate their way to the <strong>efficient</strong> outcome — the one that maximizes total value — <em>regardless of who was initially assigned the right</em>. The initial allocation determines who pays whom; it does not determine what ultimately happens.</p></div>
+
+    <div class="beat"><span class="bn">See it work</span><h2>Bargaining to efficiency — when it's cheap</h2><span class="bl"></span></div>
+    <p>Suppose a factory's production is worth $100 to the factory but its pollution costs a downstream laundry $60. The efficient outcome is that the factory keeps operating (society nets $40). Coase's claim: the parties reach that outcome by bargaining whether the law gives the factory a right to pollute or gives the laundry a right to clean water. What changes is only <em>who writes whom a check</em>. The catch is buried in a phrase easy to miss: "at low cost."</p>
+
+    <figure class="fig" data-matrix
+      data-rows='["Factory holds the right","Laundry holds the right"]'
+      data-cols='["Low bargaining cost","High bargaining cost"]'
+      data-pay='[[[100,0],[100,0]],[[100,-60],[40,0]]]'
+      data-nash='[]'>
+      <div class="fig-title">&#9673; Interactive figure 2.1 — does the outcome depend on who holds the right?</div>
+      <div class="matrix"></div>
+      <div class="mx-legend">Reading each cell as <span class="a">total social value</span>, <span class="b">extra transaction cost</span>. Click a row and a column to compare.</div>
+      <figcaption>When bargaining is cheap (left column), the efficient result — the factory runs, value $100 — emerges <b>no matter who holds the right</b>. That's Coase. But when bargaining is costly (right column), the initial assignment suddenly matters: give the laundry the right and the deal may never get struck. <b>Transaction costs are the whole ballgame.</b></figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>What Coase actually argued</h2><span class="bl"></span></div>
+    <p>Here is the irony that trips up most readers. "The Problem of Social Cost" is usually remembered for the frictionless-bargaining result — the "Coase Theorem" — as if Coase believed the world worked that way. He did not. Coase used the zero-transaction-cost world as a <em>foil</em>. His real message was the opposite: in the actual world, transaction costs are everywhere and often enormous — the cost of finding all the affected parties, negotiating with them, writing and enforcing agreements. Because bargaining is costly, <strong>the initial assignment of rights, and the design of legal rules, genuinely matters</strong>. The law should try to place rights where they will do the most good, because parties often cannot cheaply rearrange them.</p>
+
+    <p>Coase's deeper contribution was to make economists take <strong>institutions</strong> — laws, courts, firms, contracts — seriously as the machinery that determines whether resources reach their highest-value use. He won the 1991 Nobel Prize for this and related work. Read him carefully and you find not a libertarian fantasy of costless markets but a sober argument that the friction is the point.</p>
+
+    <aside class="side v"><div class="st">&#9998; What the film gets right about transaction costs</div><p>A Civil Action is, in effect, a two-hour illustration of transaction costs devouring everyone. The families cannot simply "bargain" with W.R. Grace and Beatrice Foods — the harm is diffuse, causation is scientifically murky, the parties are wildly unequal in resources, and the only forum is ruinously expensive litigation. Jan Schlichtmann bankrupts his firm just to <em>establish who caused what</em>. Coase would recognize this instantly: when transaction costs are this high, the tidy theorem is useless and the legal rules — burden of proof, liability standards — decide everything.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Litigation as the most expensive bargain of all</h2><span class="bl"></span></div>
+    <p>Watch the film with Coase in mind and a strong essay almost writes itself. The lawsuit <em>is</em> the bargaining process — a monstrously costly one. Every obstacle Schlichtmann hits (the cost of expert hydrogeologists, the asymmetry between his small firm and corporate defense teams, the difficulty of proving the solvents caused these specific cancers) is a transaction cost standing between the town and the efficient, just outcome. The film's tragedy is not that the villains escaped a Pigouvian tax; it is that the frictions were so large the right outcome was never reachable through the mechanism available.</p>
+
+    <p>A subtler paper might ask: would a Pigovian pollution tax, set in advance, have served Woburn better than the tort system's after-the-fact bargaining? Or would deterrence through liability have worked if proof were cheaper? These are live debates in environmental economics, and the film hands you the case study.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Externality</dt><dd>A cost or benefit imposed on a third party not reflected in prices.</dd></div>
+      <div class="term"><dt>Transaction costs</dt><dd>The costs of reaching, writing, and enforcing an agreement — search, negotiation, litigation.</dd></div>
+      <div class="term"><dt>Coase Theorem</dt><dd>With clear rights and costless bargaining, efficiency results regardless of the initial allocation.</dd></div>
+      <div class="term"><dt>Property rights</dt><dd>The legally recognized entitlement to use, exclude from, or transfer a resource.</dd></div>
+      <div class="term"><dt>Pigovian tax</dt><dd>A tax equal to the external harm, meant to make the price tell the truth.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Pick one. Discuss the economics of the film in light of Coase — not the courtroom tactics.</div>
+      <ol>
+        <li>A Civil Action is often read as a story about corporate villainy. Reframe it, using Coase, as a story about transaction costs. Which reading better explains the outcome?</li>
+        <li>Coase argued the initial assignment of rights matters most when bargaining is costly. Trace how the legal rules in the film (burden of proof, causation standards) allocated de facto rights — and shaped the result.</li>
+        <li>Would a Pigovian tax on solvent use have protected Woburn better than the tort system? Argue the trade-off between taxing pollution up front and litigating harm after the fact.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-3" data-ch="3">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 3 · Game Theory</div>
+    <h1>War, Peace, and the Logic of Deterrence</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Dr. Strangelove</em> · 1964 · 93 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Aumann, Nobel Lecture (2005)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">"Gentlemen, you can't fight in here — this is the War Room." A single deranged general has launched the bombers. The Soviets, it emerges, have built a Doomsday Machine that will automatically end all life if attacked — but forgot to tell anyone. A deterrent nobody knows about deters nothing. The world ends on a technicality of game theory.</div>
+
+    <p class="drop">Stanley Kubrick's <em>Dr. Strangelove</em> is the funniest film ever made about the end of the world, and it is also a remarkably precise seminar in strategic thinking. Every catastrophe in the film flows from a failure of the logic of <strong>deterrence</strong> — the branch of game theory that asks how rational adversaries, each able to destroy the other, might nonetheless keep the peace. Robert Aumann spent a career on exactly that question and won the 2005 Nobel Prize for it. His lecture, "War and Peace," is your reading, and its conclusions are more hopeful — and stranger — than the film's mushroom cloud suggests.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>When my best move depends on yours</h2><span class="bl"></span></div>
+    <p>Game theory is the study of strategic interaction: situations where your best choice depends on what I do, and mine on what you do. Its most famous scenario is the <strong>Prisoner's Dilemma</strong>, and the Cold War arms race is its most consequential real-world instance. Two superpowers each choose to <em>arm</em> or <em>disarm</em>. Whatever the other does, each is individually better off arming — and so both arm, both spend fortunes, both end up less safe than if they had both disarmed. Rational individual choices, collectively disastrous.</p>
+
+    <figure class="fig" data-matrix
+      data-rows='["Disarm","Arm"]'
+      data-cols='["Disarm","Arm"]'
+      data-pay='[[[3,3],[0,5]],[[5,0],[1,1]]]'
+      data-nash='["1,1"]'
+      data-rlab='USA' data-clab='USSR'>
+      <div class="fig-title">&#9673; Interactive figure 3.1 — the arms race as a Prisoner's Dilemma</div>
+      <div class="matrix"></div>
+      <div class="mx-legend"><span class="a">Your payoff</span>, <span class="b">rival's payoff</span>. Click a row and column, then reveal the equilibrium.</div>
+      <button class="btn mx-nash-btn" style="margin-top:12px">Reveal Nash equilibrium</button>
+      <figcaption>Both would prefer mutual disarmament (3,3) to mutual arming (1,1). But whatever the rival does, each does better by arming — so both arm. The only <b>Nash equilibrium</b> is the worst joint outcome. This is the trap the superpowers were in — and the trap the film's generals never escape.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Aumann: repetition changes everything</h2><span class="bl"></span></div>
+    <p>If the game is played once, the Prisoner's Dilemma is grim: defection is inescapable. Robert Aumann's great contribution was to study what happens when the same players face each other <strong>again and again</strong>, with no known final round. His "Folk Theorem" results show that repetition can rescue cooperation. If both sides value the future enough, mutual restraint becomes self-enforcing: I refrain from attacking you not out of goodwill but because I know that an attack today buys me a lifetime of retaliation tomorrow. Peace, in this view, is not the absence of conflict but a <strong>stable equilibrium sustained by the threat of future punishment</strong>.</p>
+
+    <p>The slider below makes the knife-edge visible. When players weigh the future heavily (high patience), cooperation pays more than a one-time betrayal, and peace holds. When they discount the future steeply — because they are reckless, or because a first strike might be decisive — the temptation to defect wins, and deterrence collapses.</p>
+
+    <figure class="fig" data-model="repeated">
+      <div class="fig-title">&#9673; Interactive figure 3.2 — the patience threshold for peace</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>Peace is self-enforcing only when the value of endless cooperation exceeds the one-time prize from betrayal. Below the threshold, deterrence fails. Aumann's insight: whether adversaries make war or peace can turn on <b>how much they value tomorrow</b>.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The Nobel argument</span><h2>"War and Peace" and the paradox of deterrence</h2><span class="bl"></span></div>
+    <p>Aumann's lecture delivers a conclusion many find uncomfortable. Repeated-game theory implies that lasting peace may require <strong>credible</strong> commitments to retaliate — sometimes even the willingness to build weapons you devoutly hope never to use. A disarmament that removes the capacity to punish defection can, paradoxically, make war <em>more</em> likely by removing the threat that held it in check. Aumann pointedly argued that a naïve, one-sided rush to peace can be destabilizing, and that the durable Cold War peace rested on mutual, credible deterrence — mutually assured destruction, coldly rational.</p>
+
+    <div class="pullquote"><blockquote>Repeated games… the great engine that turns the prisoner's dilemma of the moment into the possibility of peace.</blockquote><cite>after Robert Aumann, Nobel Lecture, 2005</cite></div>
+
+    <aside class="side"><div class="st">&#9432; Credibility is everything</div><p>The Doomsday Machine is a masterclass in one word: <strong>credibility</strong>. A deterrent works only if the adversary knows it exists and believes it will fire. The Soviets built an automatic, un-recallable retaliation — brilliant, in theory, because it removes the human hesitation that might make a threat hollow. Then they kept it secret. Dr. Strangelove himself delivers the verdict: "The whole point of a Doomsday Machine is lost if you keep it a secret! Why didn't you tell the world?!" A credible threat unannounced is the strategic equivalent of a lock with no keyhole.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Every disaster is a game-theory failure</h2><span class="bl"></span></div>
+    <p>Dr. Strangelove is a catalogue of the ways deterrence breaks. The un-recallable order (a commitment device that removes flexibility and becomes a liability). The secret deterrent (a threat that can't deter because it isn't known). The single rogue actor able to trigger catastrophe (a failure of what economists call <em>command and control</em> over the retaliation mechanism). The film argues that the rational architecture of MAD is only as safe as its weakest human and mechanical link — a critique that runs <em>against</em> Aumann's confidence in equilibrium.</p>
+
+    <p>The richest papers on this chapter live in that tension. Aumann says credible mutual deterrence keeps the peace; Kubrick says the machinery of credible deterrence is so brittle that it will eventually, absurdly, kill us all. Both are arguments about the same equilibrium. Which one does the twentieth century's actual record support? You now have the tools to take a side.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Nash equilibrium</dt><dd>A set of strategies where no player can do better by changing theirs alone.</dd></div>
+      <div class="term"><dt>Prisoner's Dilemma</dt><dd>A game where individually rational defection yields a collectively worse outcome.</dd></div>
+      <div class="term"><dt>Repeated game</dt><dd>The same game played many times, enabling cooperation through future rewards and punishments.</dd></div>
+      <div class="term"><dt>Credible commitment</dt><dd>A threat or promise an adversary believes will actually be carried out.</dd></div>
+      <div class="term"><dt>Deterrence (MAD)</dt><dd>Preventing attack by guaranteeing unacceptable retaliation.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Discuss the strategic logic — not the satire's jokes, except as evidence.</div>
+      <ol>
+        <li>Aumann argues credible deterrence sustains peace; the film argues the machinery of deterrence is fatally brittle. Using specific scenes, judge whose model the Cold War record vindicates.</li>
+        <li>Analyze the Doomsday Machine as a commitment device. Why does removing your own ability to back down sometimes strengthen a deterrent — and when does it backfire?</li>
+        <li>Map the arms race onto the repeated Prisoner's Dilemma. What real feature of nuclear conflict most threatens the "value the future enough" condition that makes cooperation possible?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-4" data-ch="4">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 4 · Asymmetric Information</div>
+    <h1>The Market for Lemons</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Intolerable Cruelty</em> · 2003 · 100 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Akerlof (1970)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">Miles Massey is the most feared divorce attorney in Los Angeles, author of an ironclad prenuptial agreement no one has ever broken. Marylin Rexroth is a professional divorcée who marries wealth for a living. Each is certain they know the other's game. Neither knows the other's real information. The entire film is a courtship conducted in the dark — a screwball comedy about the economics of not knowing what your partner is worth.</div>
+
+    <p class="drop">The Coen Brothers made <em>Intolerable Cruelty</em> as a battle of wits between two people who lie for a living, and in doing so they built a near-perfect illustration of the problem that won George Akerlof a Nobel Prize: what happens to a market when one side knows something the other doesn't. In the film it is marriage, prenups, and hidden motives. In Akerlof's 1970 paper it is used cars. The mechanism is identical, and once you see it you will find it everywhere — in insurance, in hiring, in finance, in love.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>When one side knows more than the other</h2><span class="bl"></span></div>
+    <p>Standard economics often assumes buyers and sellers are equally informed. Drop that assumption and markets can misbehave badly. <strong>Asymmetric information</strong> is the condition where one party to a transaction knows something relevant that the other cannot verify — the seller knows the car is a wreck; the applicant knows they are a reckless driver; the spouse knows they married for money. The danger this creates is called <strong>adverse selection</strong>: the very people you least want to trade with are the ones most eager to trade.</p>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Akerlof and the unraveling market</h2><span class="bl"></span></div>
+    <p>George Akerlof's "The Market for Lemons" (1970) was rejected by three journals before it was published — editors thought it was either trivial or wrong. It is now one of the most cited papers in economics. Its argument is a small, devastating piece of logic. Suppose used cars come in two kinds: good ones ("peaches") and bad ones ("lemons"). Sellers know which they have; buyers cannot tell them apart. A buyer, unable to distinguish, will only pay the price for an <em>average</em> car. But at an average price, the owners of peaches — whose cars are worth more than average — withdraw from the market. Now only lemons are left. The average quality drops, so the price a buyer will pay drops, so the next-best cars withdraw… The market can <strong>unravel</strong> until only the worst goods trade, or until it disappears entirely.</p>
+
+    <p>Drag the slider to watch it happen. As the share of good cars falls, the price a rational buyer offers falls below what a peach owner will accept — and the good cars vanish.</p>
+
+    <figure class="fig" data-model="lemons">
+      <div class="fig-title">&#9673; Interactive figure 4.1 — the market unravels</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>The buyer offers the average value; the peach owner has a floor below which they won't sell. When the two lines cross, good cars exit. Asymmetric information doesn't just raise prices or lower them — it can make honest sellers unable to trade at all. <b>Quality collapses even though nobody did anything dishonest.</b></figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The cures</span><h2>Signals, screening, and warranties</h2><span class="bl"></span></div>
+    <p>Akerlof's paper launched a whole field devoted to how markets fight back against the lemons problem. The informed party can <strong>signal</strong> quality with a costly, credible action — a used-car dealer offers a warranty (cheap to give on a peach, ruinous on a lemon, so only peach-sellers offer it). The uninformed party can <strong>screen</strong>, designing choices that make the other side reveal what they know (an insurer offers a menu of deductibles; safe drivers pick the high deductible). Reputation, certification, brands, licenses, inspections — a huge share of the modern economy exists precisely to fix the problem Akerlof identified. Michael Spence and Joseph Stiglitz shared the 2001 Nobel with Akerlof for working out signaling and screening; Chapter 7 of your course, on signaling in StrategyArena's sibling curriculum, extends this directly.</p>
+
+    <aside class="side v"><div class="st">&#9998; The prenup as a screening device</div><p>Watch Massey's famous "Massey Prenup" through Akerlof's eyes. A prenuptial agreement is a <strong>screening mechanism</strong>: it changes the payoff to marrying for money, so it separates partners who want the person from partners who want the estate. When Massey tears up the prenup as a declaration of love, he is doing something an economist finds thrilling — deliberately destroying his own information protection to send an unfakeable <em>signal</em> of sincerity. It's costly (it exposes him to exactly the predation he built his career defending against), which is precisely what makes it credible.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Two experts trapped in each other's information</h2><span class="bl"></span></div>
+    <p>Intolerable Cruelty is asymmetric information dramatized as romance. Every major turn is a move in an information game: a hidden motive revealed, a fake identity, a bluff about wealth, a signal that may or may not be sincere. Both leads are professionals at exploiting what others don't know — which makes them uniquely unable to trust each other, because each knows exactly how the con is run. The comedy comes from two people who cannot take any signal at face value, because they both manufacture false signals for a living. That is adverse selection in the marriage market: the people most skilled at the game are the ones you'd least want to play it with.</p>
+
+    <p>A sharp paper will pick a single scene — the prenup destruction, a staged seduction, a bluff about assets — and analyze it precisely as signaling or screening, asking whether the "signal" is credible in Akerlof's technical sense (is it genuinely too costly to fake?). The film is generous with material; your job is to bring the model to the frame.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Asymmetric information</dt><dd>One party knows something relevant the other cannot verify.</dd></div>
+      <div class="term"><dt>Adverse selection</dt><dd>Hidden quality drives good types out of the market, leaving the worst.</dd></div>
+      <div class="term"><dt>Signaling</dt><dd>The informed side takes a costly action credible only for good types (a warranty, a degree).</dd></div>
+      <div class="term"><dt>Screening</dt><dd>The uninformed side offers choices that make the other reveal their type.</dd></div>
+      <div class="term"><dt>Moral hazard</dt><dd>Hidden <em>action</em> (vs. hidden type): once insured, people take more risk.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Analyze a scene as an information problem — not the romance for its own sake.</div>
+      <ol>
+        <li>Read the "Massey Prenup" and its destruction as, respectively, a screening device and a signal. Is the signal credible in Akerlof's sense? What makes it costly enough to be believed?</li>
+        <li>Does the marriage market in the film exhibit adverse selection? Identify who the "peaches" and "lemons" are and whether the good types are driven out.</li>
+        <li>Compare the lemons problem in used cars to the trust problem between the two leads. What "warranties" or reputational signals do the characters use to trade despite mutual suspicion?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-5" data-ch="5">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 5 · Monetary Systems</div>
+    <h1>How Money Is Born</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Stalag 17</em> · 1953 · 120 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Radford (1945)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">In a German POW camp, a barracks of American airmen runs a black market, a betting ring, and a distillery. Sergeant Sefton, the barracks cynic, trades cigarettes for eggs, eggs for silk, and information for whatever it's worth — and everyone hates him for being good at it. Nobody printed a single dollar. Yet the camp has a currency, prices, inflation, and a class structure. Where did the money come from?</div>
+
+    <p class="drop"><em>Stalag 17</em> is a prisoner-of-war thriller, but it is also, almost accidentally, a documentary about the spontaneous birth of money. The men have no government, no central bank, no legal tender — and within weeks they have all the machinery of a monetary economy. That is not a Hollywood invention. It is precisely what a young British economist named R.A. Radford lived through and then described, in 1945, in one of the most beloved short papers in the discipline: "The Economic Organisation of a P.O.W. Camp."</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>What money actually is</h2><span class="bl"></span></div>
+    <p>Money is not the paper. Money is anything that reliably performs three jobs: a <strong>medium of exchange</strong> (everyone will accept it, so you don't need to barter), a <strong>unit of account</strong> (you can quote prices in it), and a <strong>store of value</strong> (it holds worth between the time you earn it and the time you spend it). Anything that does those three jobs <em>is</em> money, whether it's gold, dollars, or — in Radford's camp — cigarettes.</p>
+
+    <p>Why cigarettes? They were durable, roughly uniform in quality, easily divisible (down to a single cigarette, or even fractions), portable, and in limited supply. They had intrinsic value to smokers, which bootstrapped their acceptance, but they quickly became valuable to <em>non</em>-smokers too, purely because everyone else would take them. That last step — value arising from universal acceptance rather than intrinsic use — is the moment a commodity becomes money.</p>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Radford's camp: a whole economy in miniature</h2><span class="bl"></span></div>
+    <p>Radford observed that the camp economy developed every feature of the outside world. Prices for coffee, chocolate, and jam settled into stable exchange rates quoted in cigarettes, posted on a bulletin board and arbitraged across barracks. A middleman class emerged (Sefton, exactly). Credit appeared. There was even a shop that issued paper receipts backed by a cigarette reserve — a primitive central bank. And, crucially, the camp suffered <strong>inflation and deflation</strong> driven entirely by the money supply.</p>
+
+    <p>When a Red Cross parcel delivery arrived, the camp was suddenly flooded with cigarettes: prices of everything (in cigarettes) jumped — inflation, with no more actual goods to buy. In the lean days before the next delivery, cigarettes grew scarce, prices fell, and trade slowed — deflation. Move the slider and watch the price level track the money supply, exactly as the quantity theory of money predicts.</p>
+
+    <figure class="fig" data-model="inflation">
+      <div class="fig-title">&#9673; Interactive figure 5.1 — cigarette supply and the price level</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>The quantity of bread never changes — only the quantity of money. When cigarettes flood in, every price rises; when they grow scarce, prices fall and the good cigarettes get hoarded or smoked. <b>Inflation is a monetary phenomenon</b>, and Radford's camp proves it in a setting small enough to see whole.</figcaption>
+    </figure>
+
+    <aside class="side"><div class="st">&#9432; Gresham's Law in the barracks</div><p>Watch what happens to quality. When cigarettes are money, people pay with the <em>worst</em> cigarettes and smoke or hoard the best — "bad money drives out good," Gresham's Law. Machine-rolled brands circulated as currency while hand-rolled or premium smokes disappeared into private stashes. Radford noticed this; so can you, in any scene where a prisoner sorts his cigarettes into "to spend" and "to keep."</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Sefton, the man who understood money</h2><span class="bl"></span></div>
+    <p>Sefton is the film's most interesting economic character precisely because the other prisoners despise him for behavior that is, economically, rational and even socially useful. He arbitrages (buys where cheap, sells where dear), he provides liquidity (he'll always make a market), he extends credit, and he prices risk (his betting operation). The barracks reads this as collaboration and greed; an economist reads it as the ordinary, unglamorous work of a functioning market. The film invites you to judge him morally — and a strong paper will ask whether the moral judgment and the economic function can be separated.</p>
+
+    <p>The deeper point for your essay: the camp had no state, no coercion behind its money, no legal tender laws — and money emerged anyway, because the men needed to trade and barter is unbearably inefficient. That is a profound argument about the <em>origins</em> of money, and it cuts against the idea that money requires a government to create it. Then again, the camp's "central bank" collapsed in a bank run when confidence failed. What does that tell you about how much money depends on trust?</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Medium of exchange</dt><dd>Something widely accepted in trade, eliminating the need for barter.</dd></div>
+      <div class="term"><dt>Commodity money</dt><dd>Money that is also a useful good (cigarettes, gold, salt).</dd></div>
+      <div class="term"><dt>Quantity theory of money</dt><dd>Other things equal, the price level moves with the money supply.</dd></div>
+      <div class="term"><dt>Gresham's Law</dt><dd>When two monies circulate, people spend the inferior and hoard the superior.</dd></div>
+      <div class="term"><dt>Liquidity</dt><dd>How easily an asset can be exchanged for goods without losing value.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Analyze the camp as a monetary economy — Radford in your pocket.</div>
+      <ol>
+        <li>Using the three functions of money, argue whether cigarettes in the film are "real" money. Where does the film show each function — and where does it show money failing at one of them?</li>
+        <li>Sefton behaves like a rational market-maker and is hated for it. Can the economic value of his role be separated from the moral judgment the barracks passes? Defend a position.</li>
+        <li>Radford's camp shows money arising without a state. Does the film support the view that money is a spontaneous market institution, or does the collapse of confidence show it still needs trust and enforcement?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-6" data-ch="6">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 6 · The Gold Standard</div>
+    <h1>The Wonderful Wizard of the Gold Standard</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>The Wizard of Oz</em> · 1939 · 101 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Rockoff (1990)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">A girl from Kansas follows a road of yellow brick, in silver shoes (they were silver in the book, before Technicolor turned them ruby), toward an Emerald City where a Wizard rules by illusion. She is joined by a brainless farmer, a heartless industrial worker, and a cowardly politician. It is a children's fairy tale. It may also be the most elaborate monetary allegory in American literature.</div>
+
+    <p class="drop">In 1990, the economic historian Hugh Rockoff published "The Wizard of Oz as a Monetary Allegory" in the <em>Journal of Political Economy</em>, reviving a reading first suggested decades earlier: that L. Frank Baum's 1900 novel is a coded parable about the fiercest economic debate of its era — whether the United States should stay on the <strong>gold standard</strong> or expand the money supply by coining <strong>silver</strong>. Whether or not Baum intended every symbol, the film gives us an unbeatable vehicle for understanding what a gold standard is and why it can quietly grind a farming nation into revolt.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Why the money standard matters</h2><span class="bl"></span></div>
+    <p>Under a <strong>gold standard</strong>, the dollar is defined as a fixed weight of gold, and the money supply can grow only as fast as the gold stock. That has a great virtue — it ties the government's hands, preventing it from printing money and creating inflation. But it has a cruel flaw. If the economy grows faster than the gold supply, there is too little money chasing too many goods, and prices must <em>fall</em>. Persistent <strong>deflation</strong> follows. And deflation is not neutral: it is a massive, silent transfer of wealth from debtors to creditors.</p>
+
+    <p>Here is why. A farmer borrows $1,000 to buy land, expecting to repay it by selling crops. If crop prices fall 30% through deflation, the $1,000 debt hasn't changed — but the farmer now needs far more bushels of wheat to earn each dollar. The real burden of the debt has ballooned, while the banker who lent the money is repaid in dollars worth more than the ones he lent. Drag the slider and feel the squeeze.</p>
+
+    <figure class="fig" data-model="deflation">
+      <div class="fig-title">&#9673; Interactive figure 6.1 — deflation and the debtor's real burden</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>The dollar amount of the debt never moves. But as prices fall, each dollar buys more, so the <b>real</b> weight of the debt rises and it takes ever more crops to pay it. Gold's fixed money supply made this deflation chronic in the 1880s–90s — and turned Midwestern farmers into a political army.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Rockoff decodes the fairy tale</h2><span class="bl"></span></div>
+    <p>Rockoff maps the story onto the politics of the 1890s, when William Jennings Bryan thundered that mankind should not be "crucified upon a cross of gold" and demanded free coinage of silver to inflate the money supply and relieve debtors. In Rockoff's reading: <strong>Dorothy</strong> is the everyman American; <strong>Kansas</strong> is the drought- and debt-stricken heartland; the <strong>Scarecrow</strong> is the farmer (wrongly thought stupid, actually shrewd); the <strong>Tin Woodman</strong> is the industrial worker (dehumanized, "rusted" into unemployment); the <strong>Cowardly Lion</strong> is Bryan himself (a mighty roar, faint follow-through). The <strong>Yellow Brick Road</strong> is the gold standard; the <strong>silver shoes</strong> are the silver solution; the <strong>Emerald City</strong> is Washington, green as paper money; and the <strong>Wizard</strong> is the political establishment ruling by illusion. Dorothy's power was in the silver shoes all along — the money question, hiding in plain sight.</p>
+
+    <div class="pullquote"><blockquote>You had the power all along — it was in the silver shoes.</blockquote><cite>Rockoff's reading of the money question in Baum's fairy tale</cite></div>
+
+    <aside class="side v"><div class="st">&#9998; Did Baum mean it?</div><p>Be honest in your paper about a real scholarly dispute: many literary historians doubt Baum intended a monetary allegory at all, and Rockoff himself is careful. This is a feature, not a bug, for an economics essay. The interesting question isn't "did Baum secretly encode silver policy?" but "does the allegory, intended or not, accurately capture the <em>economics</em> of the gold-standard debate?" You can grant that the symbolism may be coincidental and still use it to explain deflation, debt burdens, and the politics of the money supply with perfect rigor.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Reading the road, the shoes, and the humbug</h2><span class="bl"></span></div>
+    <p>The film changes one crucial symbol: MGM made the silver slippers <em>ruby</em> because red popped against the yellow road in Technicolor. An allegory about silver, filmed without the silver — there is a paper in that irony alone. Beyond it, the film hands you the whole 1890s in images: a road of gold that leads only to a fraud, a heartland desperate for rain (and for easier credit), a wizard whose authority evaporates the moment the curtain is pulled. Whether or not Baum was a monetary cryptographer, the story dramatizes the core truth of the era — that the choice of monetary standard is never technical and never neutral. It decides who prospers and who is crushed.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Gold standard</dt><dd>A monetary system fixing the currency to a set weight of gold.</dd></div>
+      <div class="term"><dt>Deflation</dt><dd>A sustained fall in the general price level.</dd></div>
+      <div class="term"><dt>Bimetallism / free silver</dt><dd>Coining silver alongside gold to expand the money supply.</dd></div>
+      <div class="term"><dt>Real vs. nominal</dt><dd>Nominal = stated in current dollars; real = adjusted for changing prices.</dd></div>
+      <div class="term"><dt>Debtor–creditor transfer</dt><dd>Deflation enriches lenders and burdens borrowers; inflation does the reverse.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Use the allegory to explain the economics — and weigh whether it holds up.</div>
+      <ol>
+        <li>Grant that Baum may not have intended the allegory. Does the story nonetheless capture the real economics of the gold-standard debate? Test three of Rockoff's symbols against the actual history.</li>
+        <li>Explain, using the film's characters, why the same deflation that devastated farmers benefited creditors — and why this made the money standard a moral and political issue, not just a technical one.</li>
+        <li>The film turned the silver slippers ruby. Argue what is lost — economically and symbolically — when the silver disappears from a story about silver.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-7" data-ch="7">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 7 · Financial Panics</div>
+    <h1>Why Banks Run</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>It's a Wonderful Life</em> · 1946 · 129 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Silber (2009)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">On what should be his wedding day, George Bailey stands between a panicked crowd and the door of the Bailey Building &amp; Loan. "You're thinking of this place all wrong," he pleads. "The money's not here. Your money's in Joe's house, and in the Kennedy house, and a hundred others." He is explaining fractional-reserve banking to a mob that wants its cash <em>now</em>. It is the best lecture on financial panics ever put on film.</div>
+
+    <p class="drop">The run on the Bailey Building &amp; Loan is a two-minute masterclass in why banks are simultaneously essential and fragile. George is right: a bank does not keep your deposits in a drawer. It lends them out. That is its entire social purpose — turning idle savings into houses and businesses. But it means no bank on earth can pay all its depositors at once. A bank is solvent and useful right up until the moment everyone believes it isn't — and then the belief makes itself true.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>The self-fulfilling panic</h2><span class="bl"></span></div>
+    <p>Banks perform <strong>maturity transformation</strong>: they borrow short (deposits you can withdraw any time) and lend long (30-year mortgages). This creates enormous value but leaves the bank exposed to a <strong>coordination problem</strong> among depositors. If everyone stays calm, the bank is fine and everyone earns interest. If everyone panics and withdraws, the bank must dump its long-term loans at fire-sale prices, goes under, and the last people in line lose everything. The nightmare: even a perfectly healthy bank can be destroyed purely by the <em>fear</em> that others will run. There are two equilibria, and the bad one is a prophecy that fulfills itself.</p>
+
+    <p>The matrix below strips it to two depositors. Notice there is no single "right" answer — your best move depends entirely on what you expect the other to do.</p>
+
+    <figure class="fig" data-matrix
+      data-rows='["Keep your money in","Run to withdraw"]'
+      data-cols='["Keep in","Run"]'
+      data-pay='[[[2,2],[-1,1]],[[1,-1],[0,0]]]'
+      data-nash='["0,0","1,1"]'
+      data-rlab='You' data-clab='Other depositor'>
+      <div class="fig-title">&#9673; Interactive figure 7.1 — the depositor's coordination game</div>
+      <div class="matrix"></div>
+      <div class="mx-legend"><span class="a">Your payoff</span>, <span class="b">their payoff</span>. Click a row and column, then reveal the equilibria.</div>
+      <button class="btn mx-nash-btn" style="margin-top:12px">Reveal Nash equilibria</button>
+      <figcaption>Unlike the arms race, this game has <b>two</b> equilibria: both keep their money in (2,2) — calm and prosperous — and both run (0,0) — the panic. Both are self-enforcing. Which one you land in depends only on <b>what everyone expects everyone else to do</b>. That is why a rumor can topple a solvent bank.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Silber: why the 1933 Bank Holiday worked</h2><span class="bl"></span></div>
+    <p>If panics are self-fulfilling, how do you stop one? William Silber's 2009 paper, "Why Did FDR's Bank Holiday Succeed?", answers with one of history's most dramatic examples. By March 1933, a nationwide run had shuttered the American banking system. Newly inaugurated, Franklin Roosevelt declared a <strong>bank holiday</strong> — he closed <em>every</em> bank for a week. Then, crucially, federal examiners inspected each bank and reopened only those judged sound, and Roosevelt used his first Fireside Chat to tell Americans, plainly, that the reopened banks were safe. Silber's insight: the holiday worked not merely as a pause but as a <strong>credible signal</strong>. The government put its own guarantee behind the surviving banks — and, backed by new emergency powers to supply currency, it changed what depositors expected everyone else to do. Deposits flowed <em>back in</em>. The bad equilibrium was broken by shifting beliefs.</p>
+
+    <aside class="side"><div class="st">&#9432; What actually saves a bank</div><p>The film shows George stopping the run with his own honeymoon cash and sheer force of personality — a beautiful story, and a fragile fix. Silber points to the durable solutions: a <strong>lender of last resort</strong> (a central bank that can supply cash in a pinch, which the Fed failed to do adequately before 1933) and <strong>deposit insurance</strong> (the FDIC, created that same year), which removes any reason to run because your deposit is guaranteed. After 1934, the classic contagious bank run largely vanished from America — not because banks got safer, but because the coordination problem was solved.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>George Bailey vs. the FDIC</h2><span class="bl"></span></div>
+    <p>Here is where a careful paper earns its keep. The film is set partly in the early 1930s, and George's run is stopped by personal heroism. But the real historical fix arrived precisely then — federal deposit insurance — and it would have protected his depositors far more reliably than his wedding money. The film celebrates the individual moral solution; the economics points to the institutional one. Is <em>It's a Wonderful Life</em> quietly nostalgic for a world of trustworthy local bankers that deposit insurance made obsolete? Does its emotional logic obscure the policy lesson Silber draws? That gap between the film's heart and the economist's ledger is exactly the kind of tension this course wants you to sit with.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Fractional-reserve banking</dt><dd>Banks lend out most deposits, keeping only a fraction as reserves.</dd></div>
+      <div class="term"><dt>Maturity transformation</dt><dd>Borrowing short-term (deposits) to lend long-term (mortgages).</dd></div>
+      <div class="term"><dt>Bank run</dt><dd>A self-reinforcing rush to withdraw that can sink a solvent bank.</dd></div>
+      <div class="term"><dt>Lender of last resort</dt><dd>A central bank that supplies emergency cash to halt a panic.</dd></div>
+      <div class="term"><dt>Deposit insurance</dt><dd>A government guarantee of deposits (the FDIC) that removes the reason to run.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Explain the run, then weigh the film's fix against Silber's.</div>
+      <ol>
+        <li>Model the Bailey run as a coordination game with two equilibria. Using specific dialogue, show how George tries to shift depositors' expectations — and why that's a fragile solution compared with deposit insurance.</li>
+        <li>Silber argues the 1933 Bank Holiday worked as a credible signal. Compare it to George's personal intervention: what makes one durable and the other a one-off?</li>
+        <li>Does the film's celebration of the trustworthy local banker obscure the economic case for the institutional fixes (FDIC, lender of last resort) that arrived in the same era? Argue a position.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-8" data-ch="8">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 8 · The Great Depression</div>
+    <h1>Golden Fetters</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>The Grapes of Wrath</em> · 1940 · 120 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Bernanke · Romer (1993)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">The Joads load everything they own onto a broken-down truck and drive west, chasing a handbill's promise of work in California. Behind them, the Oklahoma soil is blowing away; ahead, the promised land is already crowded with the desperate. Tom Joad wants to know who to be angry at, and the film never quite gives him a face — because the force that uprooted his family wasn't a villain. It was a collapse in the money supply.</div>
+
+    <p class="drop"><em>The Grapes of Wrath</em> shows the Great Depression from the bottom — the human wreckage of the worst economic catastrophe in modern history. Your readings supply what the film cannot: the machinery. Ben Bernanke (a scholar of the Depression long before he chaired the Federal Reserve through the 2008 crisis) and Christina Romer explain <em>how</em> a stock-market crash became a decade-long global collapse, and their answer puts an old villain back on the stand — the gold standard from Chapter 6.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>How a recession becomes a depression</h2><span class="bl"></span></div>
+    <p>Recessions are normal. What turned the 1929 downturn into the Great Depression — a 25% unemployment rate, a 30% fall in output, thousands of bank failures — was a catastrophic contraction of the <strong>money supply</strong>, roughly a third of it, between 1929 and 1933. As banks failed, deposits vanished; as people hoarded cash, money stopped circulating; and the Federal Reserve, which could have flooded the system with liquidity, largely stood by. Less money chasing goods meant falling prices — <strong>deflation</strong> — which (as you saw in Chapter 6) crushed every debtor, including farmers like the Joads, and set off more defaults and more bank failures in a vicious spiral.</p>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Bernanke, Romer, and the golden fetters</h2><span class="bl"></span></div>
+    <p>Why didn't central banks simply print more money? Because most were chained to the <strong>gold standard</strong>. To hold the gold peg, a country facing gold outflows had to <em>raise</em> interest rates and contract credit — exactly the opposite of what a collapsing economy needed. Economists (Barry Eichengreen coined the phrase "golden fetters," and Bernanke built on it) found a striking pattern: the sooner a country <strong>abandoned gold</strong>, the sooner it could expand its money supply, halt the deflation, and begin to recover. Britain left in 1931 and recovered early; the United States left in 1933; France clung to gold until 1936 and suffered longest. Romer's work, meanwhile, emphasized how monetary expansion after 1933 — not the New Deal's spending alone — powered the American recovery, and how a premature tightening in 1937 caused a brutal relapse.</p>
+
+    <figure class="fig">
+      <div class="fig-title">&#9673; Figure 8.1 — leave gold sooner, recover sooner</div>
+      <div style="display:flex;flex-direction:column;gap:12px;font-family:'Inter',sans-serif;margin-top:6px">
+        <div style="display:grid;grid-template-columns:130px 1fr 92px;gap:12px;align-items:center"><span style="font-size:13.5px;color:var(--bright)">Britain <small style="color:var(--subtle)">off gold 1931</small></span><div style="height:20px;background:rgba(255,255,255,.05);border-radius:5px;overflow:hidden"><span style="display:block;height:100%;width:32%;background:linear-gradient(90deg,var(--green),#6ee7b7);border-radius:5px"></span></div><span class="mono" style="font-size:12px;color:var(--green);text-align:right">earliest</span></div>
+        <div style="display:grid;grid-template-columns:130px 1fr 92px;gap:12px;align-items:center"><span style="font-size:13.5px;color:var(--bright)">United States <small style="color:var(--subtle)">off gold 1933</small></span><div style="height:20px;background:rgba(255,255,255,.05);border-radius:5px;overflow:hidden"><span style="display:block;height:100%;width:56%;background:linear-gradient(90deg,var(--gold-deep),var(--gold));border-radius:5px"></span></div><span class="mono" style="font-size:12px;color:var(--gold);text-align:right">mid</span></div>
+        <div style="display:grid;grid-template-columns:130px 1fr 92px;gap:12px;align-items:center"><span style="font-size:13.5px;color:var(--bright)">France <small style="color:var(--subtle)">off gold 1936</small></span><div style="height:20px;background:rgba(255,255,255,.05);border-radius:5px;overflow:hidden"><span style="display:block;height:100%;width:92%;background:linear-gradient(90deg,#b45309,var(--rose));border-radius:5px"></span></div><span class="mono" style="font-size:12px;color:var(--rose);text-align:right">latest</span></div>
+      </div>
+      <figcaption>Bars show, schematically, how long each economy stayed mired in depression. The pattern economists found is consistent: <b>the golden fetters had to come off before recovery could begin.</b> The gold standard that promised stability instead exported deflation around the world.</figcaption>
+    </figure>
+
+    <aside class="side v"><div class="st">&#9998; The dust and the debt</div><p>The film layers two disasters that are easy to confuse. The Dust Bowl was an <em>ecological</em> catastrophe — drought and ruinous farming practices (a resource-economics story from Chapter 1). But what turned ruined harvests into <em>dispossession</em> was <em>financial</em>: mortgaged farms, collapsing crop prices, and banks foreclosing to survive their own crisis. The tractor that levels the Joads' house is sent by a bank that is itself desperate. A strong paper keeps the ecological and monetary threads distinct — and shows how they braided together to put the family on the road.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>The faceless system</h2><span class="bl"></span></div>
+    <p>The Joads' great frustration — there is no one to shoot, no single villain — is, economically, exactly right. Deflation and monetary contraction are <em>systemic</em> forces with no face. The landowner blames the bank; the bank manager blames the eastern investors; the investors blame the market. Steinbeck and director John Ford dramatize the diffuse, impersonal nature of a monetary collapse better than any textbook. Where the film is weaker, for the economist, is on causes: it renders the Depression as a story of greed and injustice, when Bernanke and Romer show it was substantially a story of <em>policy failure</em> — a preventable contraction of money that better central banking, unshackled from gold, could have softened. The suffering is real and moral; the cause was technical and monetary. Reconciling those two truths is your paper.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Money supply</dt><dd>The total stock of money in an economy; its collapse deepened the Depression.</dd></div>
+      <div class="term"><dt>Deflationary spiral</dt><dd>Falling prices raise real debt, causing defaults, bank failures, and more deflation.</dd></div>
+      <div class="term"><dt>Golden fetters</dt><dd>The gold standard's constraint forcing contraction just when expansion was needed.</dd></div>
+      <div class="term"><dt>Lender of last resort</dt><dd>The role the Fed failed to play adequately from 1930–33.</dd></div>
+      <div class="term"><dt>Debt-deflation</dt><dd>Irving Fisher's mechanism linking falling prices to cascading insolvency.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Bring Bernanke and Romer to Steinbeck's road.</div>
+      <ol>
+        <li>The Joads can find no villain. Using Bernanke and Romer, explain why the Depression's causes were "faceless" — and argue whether the film's focus on greed and injustice illuminates or obscures the monetary story.</li>
+        <li>Separate the ecological disaster (Dust Bowl) from the financial one (deflation, foreclosure) in the film. Show how each contributed to the Joads' dispossession.</li>
+        <li>Romer stresses that monetary expansion drove recovery. What would a "golden fetters" reading predict the Joads' fate should be once the U.S. left gold in 1933 — and does the film's timeframe let us see it?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-9" data-ch="9">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 9 · Corporate Social Responsibility</div>
+    <h1>Greed, Good, and the Business of Business</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Wall Street</em> · 1987 · 124 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Friedman (1970) · Reinhardt, Stavins &amp; Vietor (2008)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">"Greed, for lack of a better word, is good. Greed is right. Greed works." Gordon Gekko addresses a shareholders' meeting in a silk suit, and a generation of business students took notes. The line was meant as an indictment. It became, for many, a creed. Underneath the theatrics sits a genuine and unresolved question: what, exactly, is a corporation <em>for</em>?</div>
+
+    <p class="drop">Oliver Stone made <em>Wall Street</em> to condemn the 1980s culture of the corporate raider, but the film accidentally stages one of the most important debates in economics — the debate between Milton Friedman and the advocates of corporate social responsibility (CSR). Gekko is a grotesque, but he is mouthing a serious position with a serious pedigree, and your two readings are the two sides of the argument he embodies and violates.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Whose interests should a firm serve?</h2><span class="bl"></span></div>
+    <p>A corporation sits at the center of competing claims: shareholders who own it, workers who staff it, customers who buy from it, communities it affects. <strong>Shareholder theory</strong> says the firm's managers are agents of the owners and owe their loyalty to maximizing owner value, within the law. <strong>Stakeholder theory</strong> says the firm owes duties to all who are affected. The CSR debate is a fight over which view is correct — and, more subtly, over whether "doing good" and "doing well" are enemies or allies.</p>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Friedman vs. Reinhardt, Stavins &amp; Vietor</h2><span class="bl"></span></div>
+    <p>In a famous 1970 <em>New York Times Magazine</em> essay, Milton Friedman argued bluntly that "the social responsibility of business is to increase its profits." His reasoning is not the caricature. A corporate executive, Friedman said, is an <em>agent</em> spending other people's (shareholders') money. When a manager sacrifices profit for a social cause, they are effectively imposing a tax and spending it by their own lights — an unelected official deciding social priorities. Better, he argued, that the firm maximize profit lawfully and ethically, and that citizens and governments handle social goals directly. Crucially, Friedman assumed the firm plays "within the rules of the game" — open, honest competition without fraud.</p>
+
+    <p>Reinhardt, Stavins, and Vietor (2008), writing for the Harvard Kennedy School, examine CSR "through an economic lens" and reach a more nuanced verdict. They ask a sharp question: does it ever make economic sense for a firm to sacrifice profits for social ends? Sometimes, yes — when CSR is really disguised profit-seeking (green branding that lifts sales, good labor practices that cut turnover, getting ahead of coming regulation). But genuine, costly CSR that reduces profit is hard to sustain in competitive markets, because it puts the firm at a disadvantage to rivals who don't bother. Their careful conclusion sits between Friedman's absolutism and the boosters' optimism.</p>
+
+    <figure class="fig">
+      <div class="fig-title">&#9673; Figure 9.1 — two answers to "what is a firm for?"</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-family:'Inter',sans-serif;margin-top:4px">
+        <div style="background:var(--surface);border:1px solid var(--gold);border-radius:12px;padding:16px"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Friedman (1970)</div><div style="font-size:14px;color:var(--text);line-height:1.55">Maximize shareholder value, <em>within the law and ethical custom</em>. Managers spending profits on social causes are taxing owners without a mandate. Let government and citizens set social priorities.</div></div>
+        <div style="background:var(--surface);border:1px solid var(--violet);border-radius:12px;padding:16px"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);margin-bottom:8px">Reinhardt, Stavins &amp; Vietor (2008)</div><div style="font-size:14px;color:var(--text);line-height:1.55">CSR pays when it's disguised profit-seeking (brand, talent, pre-empting regulation). <em>Costly</em> CSR that truly cuts profit is hard to sustain against rivals who don't do it. The answer is "it depends."</div></div>
+      </div>
+      <figcaption>Both readings share Friedman's premise that firms respond to incentives. They differ on whether markets ever <b>reward</b> social responsibility on their own. Gekko violates the one condition both sides require: <b>playing within the rules.</b></figcaption>
+    </figure>
+
+    <aside class="side"><div class="st">&#9432; Gekko isn't Friedman's hero — he's Friedman's nightmare</div><p>Students often misread Gekko as the embodiment of Friedman's philosophy. He is the opposite. Friedman's entire argument depends on the firm competing <em>honestly, within the rules of the game, without deception or fraud.</em> Gekko trades on inside information, lies, and loots companies to strip them for parts. He is not a profit-maximizer operating in a fair market; he is a criminal. A precise paper distinguishes lawful shareholder-value maximization (Friedman's actual position) from the fraud the film depicts — and notes that Friedman would want Gekko prosecuted.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Bluestar Airlines and the raider's calculus</h2><span class="bl"></span></div>
+    <p>The film's moral center is the fate of Bluestar Airlines, where Bud Fox's father is a union man. Gekko plans to buy the airline and liquidate it — selling the assets for more than the company is worth as a going concern, and gutting the workers' pensions. This is the sharpest CSR case in the film: is "creating shareholder value" by breaking up a functioning company and its community a triumph of efficient markets (assets moving to higher-value uses) or a failure that ignores stakeholders and social cost? Reinhardt and colleagues would ask whether the raid genuinely reallocates resources productively or merely transfers wealth from workers to financiers. Friedman would ask whether it was done lawfully. The film asks whether it was <em>right</em>. Your paper gets to hold all three questions at once.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Shareholder theory</dt><dd>Managers should maximize owner value within the law (Friedman).</dd></div>
+      <div class="term"><dt>Stakeholder theory</dt><dd>Firms owe duties to all parties they affect, not just owners.</dd></div>
+      <div class="term"><dt>Strategic CSR</dt><dd>Social action that also raises profit (branding, retention, regulatory pre-emption).</dd></div>
+      <div class="term"><dt>Agency problem</dt><dd>Conflicts of interest when managers (agents) act for owners (principals).</dd></div>
+      <div class="term"><dt>Principal–agent</dt><dd>The relationship Friedman invokes: executives spend owners' money, not their own.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Take the debate seriously — Gekko is the provocation, not the argument.</div>
+      <ol>
+        <li>Many read Gekko as Friedman's philosophy in action. Argue, using Friedman's actual text, why Gekko instead violates the conditions Friedman's position requires.</li>
+        <li>Analyze the Bluestar liquidation using Reinhardt, Stavins &amp; Vietor. Is it efficient reallocation or a wealth transfer from workers to financiers? What evidence in the film supports your read?</li>
+        <li>Under what conditions do Friedman and the CSR economists actually agree? Use the film to identify a case where "doing good" and "doing well" coincide — and one where they collide.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-10" data-ch="10">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 10 · Financial Fraud</div>
+    <h1>The Big Short</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>The Big Short</em> · 2015 · 130 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Bernanke · Mazar &amp; Ariely (2006)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">A one-eyed doctor turned hedge-fund manager sits alone, reading thousands of pages of mortgage documents nobody else bothered to open. What he finds is that the foundation of the American economy — the home mortgage — has quietly rotted. He does something that everyone tells him is insane: he bets billions that the housing market will collapse. Then he waits, while the world calls him a fool.</div>
+
+    <p class="drop"><em>The Big Short</em> is the rare film that tries to <em>teach</em> — pausing to have a celebrity explain a collateralized debt obligation from a bubble bath. It dramatizes the 2007–08 financial crisis, the worst since the Great Depression, and your readings come at it from two levels. Ben Bernanke, then chairing the Federal Reserve, testified on the crisis's <em>structural</em> causes. Nina Mazar and Dan Ariely dig into its <em>human</em> foundation: the ordinary psychology of dishonesty that let millions of small lies add up to a catastrophe.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Bubbles, leverage, and misaligned incentives</h2><span class="bl"></span></div>
+    <p>An <strong>asset bubble</strong> forms when prices rise far above fundamental value because everyone expects them to keep rising. Housing in the 2000s was a textbook case, supercharged by three things. <strong>Leverage</strong>: banks and households borrowed enormously, so small price moves meant huge gains or ruin. <strong>Securitization</strong>: mortgages were bundled into bonds (and bonds into CDOs), scattering risk so widely that no one felt responsible for any single bad loan. And <strong>misaligned incentives</strong> at every link — the mortgage broker paid per loan regardless of quality, the bank that sold the loan off its books, the rating agency paid by the very firms whose bonds it graded. Everyone was rewarded for volume, no one for prudence.</p>
+
+    <p>Scrub the slider through the years to watch the bubble inflate on cheap optimism — and the contrarian bet, worthless for years, pay off spectacularly when reality arrives.</p>
+
+    <figure class="fig" data-model="bubble">
+      <div class="fig-title">&#9673; Interactive figure 10.1 — the bubble and the bet</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>While prices climb, insurance against a crash (a credit-default swap) is dirt cheap, because everyone "knows" housing never falls nationally. The Big Short is buying that cheap insurance and enduring years of ridicule and losses before the reckoning. <b>Being right too early looks exactly like being wrong.</b></figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Bernanke's structure, Ariely's fudge factor</h2><span class="bl"></span></div>
+    <p>Bernanke's account, in his testimony before the Financial Crisis Inquiry Commission, is the view from 30,000 feet: a global savings glut and low rates fueled a housing boom; financial innovation spread mortgage risk in ways regulators and firms failed to understand; excessive leverage and short-term funding made institutions fragile; and when housing turned, the interconnected system seized up, requiring extraordinary intervention to prevent a second Depression. It is a story of systemic risk and regulatory blind spots more than of cartoon villains.</p>
+
+    <p>Mazar and Ariely supply the missing human layer. In "Dishonesty in Everyday Life," they show experimentally that most people cheat — but only a <em>little</em>, and only when they can still think of themselves as honest. There's a "fudge factor": the amount we'll fib is limited less by the odds of getting caught (Becker's calculus, next chapter) than by our need to maintain a moral self-image. Crucially, dishonesty rises when the lie is one step removed from cash, when "everyone's doing it," and when we can rationalize it. A subprime crisis is built from exactly these conditions: a broker shading an applicant's income, an appraiser nudging a number, a banker not looking too hard — each a small fudge, none feeling like grand theft, all compounding into ruin.</p>
+
+    <aside class="side v"><div class="st">&#9998; Two theories of cheating</div><p>Hold this chapter and the next in tension. Becker (Chapter 11) models dishonesty as cold cost-benefit: people cheat when expected gain beats expected punishment. Mazar and Ariely show that's incomplete — people leave money on the table because their <em>self-image</em> constrains them more than the police do. The 2008 crisis needed both: structures that made small lies profitable and low-risk (Becker), and a culture that let millions rationalize those lies as normal (Ariely). Which mattered more is a genuine open question — and a paper.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Who understood, and who chose not to</h2><span class="bl"></span></div>
+    <p>The film's heroes share one trait: they actually <em>read the documents</em> and did the arithmetic that everyone else was incentivized to skip. That is the deepest economic point in the movie — the crisis was less a failure of information than a failure of <em>incentive to use</em> information. When a Florida mortgage broker cheerfully explains he writes loans to strippers with no income because he's paid either way, you are watching Mazar-Ariely's rationalization and Bernanke's misaligned incentives in the same breath. The film's weakness, worth naming, is that its clean hero-villain framing can obscure Bernanke's less satisfying truth: much of the damage came not from evil but from a diffuse system in which prudent behavior was individually unrewarded. Sorting the fraud from the folly is your job.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Asset bubble</dt><dd>Prices driven far above fundamentals by self-fulfilling expectations.</dd></div>
+      <div class="term"><dt>Leverage</dt><dd>Using borrowed money to amplify returns — and losses.</dd></div>
+      <div class="term"><dt>Securitization</dt><dd>Bundling loans into tradable securities, dispersing (and hiding) risk.</dd></div>
+      <div class="term"><dt>Moral hazard</dt><dd>Taking more risk because someone else bears the consequences.</dd></div>
+      <div class="term"><dt>Fudge factor</dt><dd>Ariely's limited, self-image-preserving dishonesty most people indulge.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Connect the structural (Bernanke) and the psychological (Ariely).</div>
+      <ol>
+        <li>Pick one scene of everyday dishonesty in the film and analyze it with Mazar and Ariely's "fudge factor." Was the behavior driven by cost-benefit calculation or self-image — and how could you tell?</li>
+        <li>Bernanke frames the crisis as systemic and incentive-driven; the film frames it as heroes vs. fraudsters. Which better explains what happened, and what does each framing miss?</li>
+        <li>The film's protagonists profited by reading what others ignored. Argue what this reveals about whether the crisis was a failure of <em>information</em> or of the <em>incentive to use</em> it.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-11" data-ch="11">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 11 · The Economics of Crime</div>
+    <h1>Crime and Punishment, by the Numbers</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Blow</em> · 2001 · 124 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Becker (1968) · Friedman (1990)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">George Jung starts by smuggling a little marijuana to sun-struck friends in California. Within a decade he is moving most of the cocaine that enters the United States, partnered with the Medellín cartel, richer than he can count. The film watches him rise and fall with a kind of awe — and never quite asks the economist's question: if the product were legal, would any of this have happened?</div>
+
+    <p class="drop"><em>Blow</em> is the true story of a drug trafficker, and it is a perfect case study for the most provocative idea in this course: that crime can be analyzed as a <em>rational choice</em>, and that drug prohibition, in particular, produces the very violence and wealth it aims to prevent. Gary Becker's 1968 paper made crime a subject for economics; Milton Friedman's 1990 open letter turned that analysis into a blistering argument against the war on drugs. Together they will change how you watch every frame.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>The criminal as a rational actor</h2><span class="bl"></span></div>
+    <p>Becker's radical premise: most criminals are not fundamentally different from the rest of us. They respond to costs and benefits. A person commits a crime when its expected benefit exceeds its expected cost — where the expected cost is the <strong>probability of being caught and convicted, multiplied by the severity of the punishment</strong>. This yields concrete predictions. To deter crime, society can raise either the probability of punishment (more police, better detection) or its severity (longer sentences). And because catching people is expensive while writing harsher laws is cheap, governments are perpetually tempted to substitute severity for certainty — even though evidence suggests <em>certainty</em> deters more reliably.</p>
+
+    <p>Move the slider to see the trade-off. As the chance of punishment rises, the number of people for whom crime still "pays" falls — but driving crime to zero would require a police state no society would tolerate or afford.</p>
+
+    <figure class="fig" data-model="crime">
+      <div class="fig-title">&#9673; Interactive figure 11.1 — Becker's deterrence calculus</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>Crime responds to <b>expected punishment = probability × severity</b>. Society doesn't want zero crime at any cost; it wants the point where the cost of more enforcement equals the harm prevented. Becker's uncomfortable implication: the "optimal" amount of crime is not zero.</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Friedman: prohibition is the problem</h2><span class="bl"></span></div>
+    <p>Now apply the model to drugs, and Friedman's argument snaps into focus. Prohibition doesn't eliminate demand; it drives the market underground. There, the risk of arrest and violence becomes a <strong>cost of doing business</strong> that suppliers must be compensated for — so prohibition acts like an enormous tax that inflates the price and hence the profit. The higher the enforcement, the higher the price, the greater the reward for the traffickers willing to bear the risk. Because contracts can't be enforced in court, disputes are settled with violence, and because the profits are astronomical, they corrupt police, judges, and governments. Friedman's conclusion, in his 1990 open letter to drug czar William Bennett, was that the drug war's harms — violence, mass incarceration, corruption, empowered cartels — are largely <em>created by prohibition itself</em>, and that the humane and effective policy is legalization with regulation and treatment.</p>
+
+    <div class="pullquote"><blockquote>The harm done by drugs is predominantly caused not by the drugs themselves but by the fact that they are illegal.</blockquote><cite>after Milton Friedman, open letter to William Bennett, 1990</cite></div>
+
+    <aside class="side"><div class="st">&#9432; The prohibition premium</div><p>The single most important number in <em>Blow</em> is never stated: the markup. Cocaine costs little to produce; George Jung's fortune is almost entirely the <strong>prohibition premium</strong> — the price of bearing the risk of arrest and violence. Legalize the product and that premium evaporates, and with it the incentive to build cartels, corrupt officials, and murder rivals. Every helicopter, mansion, and gun in the film is, economically, a monument to the policy of prohibition, not to the pharmacology of the drug.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>A market, not a morality tale</h2><span class="bl"></span></div>
+    <p>Watch <em>Blow</em> as the story of a <em>supply chain</em> and it transforms. Jung is an entrepreneur exploiting a market with sky-high margins created by the risk of illegality. The violence isn't incidental to the business — it's the enforcement mechanism a black market uses because it can't call the police. Becker would note that Jung keeps operating because, for years, the probability of serious punishment times its severity stayed below his expected haul; his eventual fall comes when that calculus finally flips. Friedman would note that everything terrible in the story — the cartels, the murders, the corruption — is a predictable product of prohibition's economics, not of the substance. The film invites moral judgment of a man; the readings invite economic judgment of a policy. The best papers refuse to collapse one into the other.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Expected punishment</dt><dd>Probability of being caught × severity of the sentence.</dd></div>
+      <div class="term"><dt>Deterrence</dt><dd>Preventing crime by raising its expected cost.</dd></div>
+      <div class="term"><dt>Certainty vs. severity</dt><dd>Evidence suggests the odds of punishment deter more than harshness.</dd></div>
+      <div class="term"><dt>Black market</dt><dd>An illegal market where prohibition inflates prices and violence enforces deals.</dd></div>
+      <div class="term"><dt>Prohibition premium</dt><dd>The extra price (and profit) created purely by a product's illegality.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Analyze the market and the policy, not just the man.</div>
+      <ol>
+        <li>Use Becker's model to explain George Jung's career: identify the probability, severity, and payoff terms, and pinpoint where the film shows his calculus finally flipping.</li>
+        <li>Apply Friedman's argument to a specific instance of violence or corruption in the film. Show how it follows from prohibition's economics rather than from the drug itself.</li>
+        <li>Becker treats crime as rational choice; the film treats it partly as addiction and fate. Where does the rational-actor model illuminate the story, and where does it fall short?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-12" data-ch="12">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 12 · Capital Punishment</div>
+    <h1>Does the Death Penalty Deter?</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Dead Man Walking</em> · 1995 · 122 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Mocan &amp; Gittings · Levitt (2004)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">Sister Helen Prejean becomes the spiritual advisor to a man on death row for a brutal double murder. The film refuses to make it easy: the crime is real and horrifying, the condemned man is neither wholly monster nor wholly innocent, and the victims' families carry a grief no verdict can touch. Into this moral storm, economics asks a cold, narrow, unavoidable question — <em>does killing him prevent other killings?</em></div>
+
+    <p class="drop"><em>Dead Man Walking</em> is a film about the morality of capital punishment, and it earns its ambivalence honestly. But this course asks you to add a dimension the film mostly leaves out: the <strong>empirical</strong> one. Whatever you believe about the ethics, there is a factual question — does the death penalty <em>deter</em> murder? — and it turns out to be one of the hardest questions in all of empirical economics to answer. Your readings are a lesson in how economists argue with data, and in how much humility the arguing requires.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Deterrence meets the limits of data</h2><span class="bl"></span></div>
+    <p>Becker's logic (Chapter 11) predicts that raising the severity of punishment should reduce crime. The death penalty is the maximum severity, so the model predicts <em>some</em> deterrent effect. But turning that prediction into a measured number is fiendishly hard. You cannot run the experiment. You only observe that states or years with executions also differ in a hundred other ways — poverty, policing, demographics, drug markets. Disentangling the effect of executions from everything else is a problem of <strong>causal inference</strong>, and reasonable economists, using the same data, have reached opposite conclusions.</p>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Mocan & Gittings vs. the skeptics</h2><span class="bl"></span></div>
+    <p>Mocan and Gittings ("Getting Off Death Row," 2003) exploit a clever source of variation: not just executions, but <strong>commutations</strong> and <strong>removals</strong> from death row. Their reasoning is that if the death penalty deters, then commuting sentences (reducing the expected punishment) should be associated with <em>more</em> murders. Analyzing state data, they report that each execution is associated with several fewer homicides, while commutations and removals are associated with more — a result consistent with a deterrent effect. Other economists (notably in critiques led by John Donohue and Justin Wolfers) argue such findings are fragile: tiny changes in the statistical specification, the sample of states, or the handful of states that do most executing can flip the result, sometimes even to a "brutalization" effect where executions <em>raise</em> murder. The honest scholarly consensus is that the deterrent effect of capital punishment cannot be reliably measured — the data are too noisy and executions too rare to settle it.</p>
+
+    <div class="beat"><span class="bn">Levitt's lesson</span><h2>Why crime actually fell in the 1990s</h2><span class="bl"></span></div>
+    <p>Steven Levitt's "Understanding Why Crime Fell in the 1990s" (2004) is your model of how to do this carefully. American crime plunged in the 1990s, and everyone had a pet explanation. Levitt tested them. He credited <strong>four</strong> factors with real evidence behind them — more police, rising prison populations, the waning of the crack epidemic, and (controversially) legalized abortion — and dismissed <strong>six</strong> popular explanations that the data don't support, including the strong economy, gun laws, and, notably, <em>capital punishment</em>. His verdict on the death penalty was blunt: executions are so rare relative to murders that even a real deterrent effect would be far too small to explain the crime drop. The figure below shows the shape of his conclusion.</p>
+
+    <figure class="fig">
+      <div class="fig-title">&#9673; Figure 12.1 — Levitt's ledger of the 1990s crime drop</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-family:'Inter',sans-serif;margin-top:4px">
+        <div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:9px">Supported by the data</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--bright)">More police</div>
+            <div style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--bright)">Rising incarceration</div>
+            <div style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--bright)">Decline of crack markets</div>
+            <div style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--bright)">Legalized abortion (contested)</div>
+          </div>
+        </div>
+        <div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:9px">Not supported</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.28);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--muted)">The strong 1990s economy</div>
+            <div style="background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.28);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--muted)">Gun-control laws</div>
+            <div style="background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.28);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--muted)">Concealed-carry laws</div>
+            <div style="background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.28);border-radius:8px;padding:9px 12px;font-size:13.5px;color:var(--bright);border-color:var(--rose)">Capital punishment</div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Levitt found the death penalty far too rarely applied to have moved the murder rate: by his estimate, even granting a deterrent effect, it could explain a negligible share of the decline. <b>The maximum punishment, applied almost never, deters almost nothing measurable.</b></figcaption>
+    </figure>
+
+    <aside class="side v"><div class="st">&#9998; Certainty beats severity — again</div><p>Notice the through-line from Chapter 11. What deters, in Levitt's data, is <em>certainty</em> — more police and more incarceration raise the probability of punishment for many crimes. The death penalty is the opposite: maximum severity, near-zero probability (a tiny fraction of murderers are ever executed, often decades later). Becker's own model predicts that a punishment applied this rarely can't deter much, because expected punishment is probability <em>times</em> severity, and one of those terms is almost zero.</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>What economics can and cannot settle</h2><span class="bl"></span></div>
+    <p><em>Dead Man Walking</em> is wise enough to know that the death-penalty debate is not fundamentally about deterrence — it is about justice, retribution, mercy, and the meaning of a life. Economics cannot resolve those questions and shouldn't pretend to. What it <em>can</em> do is remove one common argument from the table: if the empirical case for deterrence is as weak as Levitt and the skeptics suggest, then "it saves innocent lives by deterring murder" is a much shakier justification than its proponents believe. That narrows the debate to the moral core the film so carefully explores. A strong paper draws exactly that line — using the readings to say what economics settles, and where it must fall silent and let ethics speak.</p>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Causal inference</dt><dd>The problem of isolating a true cause from confounding factors in observational data.</dd></div>
+      <div class="term"><dt>Deterrent effect</dt><dd>The reduction in crime caused by the expected punishment.</dd></div>
+      <div class="term"><dt>Robustness</dt><dd>Whether a result survives changes in data, method, or specification.</dd></div>
+      <div class="term"><dt>Brutalization hypothesis</dt><dd>The claim that executions may <em>raise</em> homicide by modeling violence.</dd></div>
+      <div class="term"><dt>Confounding</dt><dd>When an unobserved variable drives both the "cause" and the "effect."</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">Separate what the data can settle from what it cannot.</div>
+      <ol>
+        <li>Mocan &amp; Gittings find deterrence; skeptics find fragility. Explain why the same data yield opposite conclusions, and what that says about using econometrics to decide policy.</li>
+        <li>Using Levitt and Becker's probability-times-severity logic, argue why the death penalty is unlikely to be a major deterrent even if capital punishment "works" in principle.</li>
+        <li>The film sidesteps deterrence for morality. Argue what economics legitimately contributes to the capital-punishment debate — and where it must defer to ethics.</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+<article class="chapter" id="chapter-13" data-ch="13">
+  <div class="chead">
+    <div class="ceyebrow">Chapter 13 · Labor Unions</div>
+    <h1>The Price of an Hour</h1>
+    <div class="filmcard">
+      <div><div class="fc-i">Film</div><div class="fc-v"><em>Norma Rae</em> · 1979 · 113 min</div></div>
+      <div><div class="fc-i">Reading</div><div class="fc-v">Whaples (1990)</div></div>
+    </div>
+  </div>
+  <div class="prose">
+    <div class="coldopen">A textile worker climbs onto her table on the mill floor and holds up a hand-lettered sign that says, simply, UNION. One by one, the machines go silent as her coworkers stop to read it. It is one of the great images in American film — and it is a picture of workers solving a coordination problem that no single one of them could solve alone.</div>
+
+    <p class="drop"><em>Norma Rae</em> tells the story of a Southern textile worker who risks everything to organize her mill. It is a labor drama, but underneath it lies the economics of the labor market: why wages are what they are, whether a single dominant employer can suppress them, and how collective bargaining changes the arithmetic of work. Robert Whaples's study of "Winning the Eight-Hour Day" grounds the film in the long, concrete history of how workers actually won the conditions we now take for granted.</p>
+
+    <div class="beat"><span class="bn">The economic idea</span><h2>Monopsony: when there's only one buyer of labor</h2><span class="bl"></span></div>
+    <p>In a competitive labor market, many employers bid for workers, and the wage is pushed up to the value a worker adds. But a mill town often has effectively <em>one</em> major employer — a condition economists call <strong>monopsony</strong> (a single buyer, the mirror image of monopoly). A monopsonist can pay <em>below</em> the competitive wage, because workers have nowhere else to go. This is the classic economic case where a union — or a minimum wage — can raise pay <em>without</em> destroying jobs, because it simply claws back the wage the employer was suppressing. It is one of the few places in economics where "intervene in the market" and "efficiency" can point the same direction.</p>
+
+    <p>Move the slider through possible wages and watch the gap between how many want to work and how many the mill will hire — and see where a union could push without costing jobs.</p>
+
+    <figure class="fig" data-model="monopsony">
+      <div class="fig-title">&#9673; Interactive figure 13.1 — the company town's wage</div>
+      <canvas></canvas>
+      <div class="fig-controls"><span class="fig-slider-label"></span><input type="range"></div>
+      <div class="fig-readout"></div>
+      <figcaption>A single-employer town sets the wage below the competitive level to hold down its wage bill. Because the employer has been suppressing pay, a union pushing the wage <em>up toward</em> the competitive point can raise workers' incomes without reducing employment — the monopsony exception to "minimum wages cost jobs."</figcaption>
+    </figure>
+
+    <div class="beat"><span class="bn">The reading, unpacked</span><h2>Whaples: how the eight-hour day was won</h2><span class="bl"></span></div>
+    <p>Robert Whaples's "Winning the Eight-Hour Day, 1909–1919" examines one of labor's signature achievements — the reduction of the standard workday — and asks <em>why it happened when it did</em>. His analysis untangles the forces: rising productivity and incomes (as workers grew richer, they "bought" more leisure), tight wartime labor markets that raised workers' bargaining power, union pressure and strikes, and government action. The lesson for the film is that improvements in working conditions were not simply handed down by enlightened employers, nor won by heroism alone. They emerged from <strong>bargaining power</strong> — shifting with the economy, the labor supply, and the ability of workers to act collectively. Norma Rae's mill is a snapshot of that struggle at a moment and place where workers' power was still being fought for.</p>
+
+    <aside class="side"><div class="st">&#9432; Why one worker can't bargain</div><p>The economic heart of the film is a <strong>collective-action problem</strong>. Any single worker who demands better pay is simply fired and replaced — the employer holds all the power in a one-on-one negotiation. Workers gain leverage only by acting together, credibly threatening to withhold their labor <em>as a group</em>. But organizing is dangerous and costly, and each worker is tempted to let others take the risk (free-riding, Chapter 1 again). Norma Rae's sign on the table is the moment the coordination problem is solved — a single visible act that lets everyone see that everyone else is ready to act too. It is Chapter 7's bank-run logic run in reverse: shifting the equilibrium from "everyone stays silent" to "everyone stands up."</p></aside>
+
+    <div class="beat"><span class="bn">The film as evidence</span><h2>Power, not just principle</h2><span class="bl"></span></div>
+    <p>Watch <em>Norma Rae</em> for its economics and you'll notice it gets the power dynamics exactly right. The mill uses every tool of a monopsonist and a determined employer: surveillance, the threat of firing, stoking division among workers (including along racial lines), and speed-ups. The union's strategy is precisely to change the workers' bargaining power by solving their coordination problem. Whaples reminds us that the outcome of such struggles has always depended on the surrounding economics — how tight the labor market is, how productive the industry, whether the law protects organizing. The film's triumphant ending is real, but Whaples's history warns against romanticizing it: the eight-hour day and the union contract were won and sometimes lost as economic conditions shifted. A fine paper honors the courage on screen while insisting on the economic forces that made that courage effective — or that could just as easily have defeated it.</p>
+
+    <div class="pullquote"><blockquote>The improvements were won, not granted — and won when the economics of bargaining power turned in labor's favor.</blockquote><cite>the lesson of Whaples's history, applied to Norma Rae's mill</cite></div>
+
+    <div class="terms">
+      <div class="th">Key terms</div>
+      <div class="term"><dt>Monopsony</dt><dd>A market with a single (or dominant) buyer — here, one employer of labor.</dd></div>
+      <div class="term"><dt>Bargaining power</dt><dd>Each side's ability to obtain favorable terms, shifting with market conditions.</dd></div>
+      <div class="term"><dt>Collective action</dt><dd>Coordinated behavior by a group to achieve what individuals cannot alone.</dd></div>
+      <div class="term"><dt>Free-rider problem</dt><dd>The temptation to enjoy the union's gains without sharing its risks.</dd></div>
+      <div class="term"><dt>Competitive wage</dt><dd>The wage that would prevail if many employers bid for workers.</dd></div>
+    </div>
+
+    <div class="prompts">
+      <div class="ph">Prompts for your paper</div>
+      <div class="psub">The final paper of the course — make it count.</div>
+      <ol>
+        <li>Analyze the mill as a monopsony. Where does the film show the employer suppressing wages, and how does collective bargaining change the economic outcome? Use the figure's logic.</li>
+        <li>Frame Norma Rae's organizing as solving a collective-action problem. What makes the "UNION sign" moment economically pivotal, and how does it relate to free-riding?</li>
+        <li>Whaples argues labor's gains tracked bargaining power and economic conditions. Does the film's triumphant ending respect that complexity, or does it romanticize a victory that history shows was contingent?</li>
+      </ol>
+    </div>
+  </div>
+</article>
+
+</body>
+</html>
