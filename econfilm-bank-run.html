@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bank Run — Economics &amp; Film Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0C20;--bg-deep:#0A0818;--panel:#14112b;--surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.16);--text:#D9D5EE;--bright:#F4F1FB;--muted:rgba(217,213,238,.64);--subtle:rgba(217,213,238,.42);
+--gold:#F5B841;--gold2:#E0972A;--violet:#9B7BFF;--violet2:#7C5CFF;--green:#34D399;--rose:#FB7185;--sky:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 12% 8%,rgba(124,92,255,.16),transparent 42%),radial-gradient(circle at 88% 92%,rgba(245,184,65,.08),transparent 50%),var(--bg-deep)}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400;color:var(--bright);letter-spacing:.3px;line-height:1.1}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:860px;margin:0 auto;padding:22px 22px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(245,184,65,.35)}
+.bname{font-family:'Instrument Serif',serif;font-size:19px;color:var(--bright);line-height:1}
+.bname small{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 11px;border-radius:999px;border:1px solid var(--border2);color:var(--muted)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.arena-title{font-size:clamp(30px,6vw,46px);margin:8px 0 6px}
+.film{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);margin-bottom:14px}
+.lead{color:var(--muted);font-size:15.5px;max-width:64ch;margin-bottom:6px}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:20px 22px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;border:none;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:600;transition:.13s}
+.btn:active{transform:translateY(1px)}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#241a05}
+.btn.gold:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--bright)}
+.scoreboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:4px 0 6px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px}
+.stat .sv{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--bright);font-weight:600}
+.stat .sl{font-size:11px;color:var(--muted);margin-top:2px}
+.stat.g .sv{color:var(--gold)} .stat.v .sv{color:var(--violet)} .stat.gr .sv{color:var(--green)} .stat.r .sv{color:var(--rose)}
+.roundbar{display:flex;align-items:center;gap:10px;margin:2px 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.roundbar .track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.roundbar .fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--violet));border-radius:4px;transition:width .3s}
+.scenario{font-size:16px;color:var(--bright);line-height:1.55;margin-bottom:8px}
+.scenario b{color:var(--gold)}
+.subtle{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.options{display:grid;gap:11px;grid-template-columns:1fr}
+.opt{text-align:left;padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--border2);color:var(--text);cursor:pointer;font-family:inherit;font-size:14.5px;transition:.12s}
+.opt:hover{border-color:var(--gold);background:rgba(245,184,65,.06)}
+.opt b{color:var(--bright);display:block;margin-bottom:2px;font-size:15px}
+.opt small{color:var(--muted);font-size:12.5px}
+.slider-wrap{margin:6px 0 14px}
+.slider-wrap input[type=range]{width:100%;accent-color:var(--gold);height:5px}
+.slider-lab{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:8px}
+.slider-lab b{color:var(--gold);font-size:15px}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-size:14px;line-height:1.55;display:none}
+.feedback.show{display:block}
+.feedback.good{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#a7f3d0}
+.feedback.bad{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.3);color:#fecdd3}
+.feedback.mid{background:rgba(245,184,65,.09);border:1px solid rgba(245,184,65,.3);color:#fde3b0}
+.feedback b{color:var(--bright)}
+canvas{width:100%;height:auto;display:block;border-radius:10px;margin-top:6px}
+.result{text-align:center;padding:14px 6px}
+.result .big{font-family:'JetBrains Mono',monospace;font-size:60px;font-weight:700;color:var(--gold);line-height:1}
+.result .grade{font-family:'Instrument Serif',serif;font-size:30px;color:var(--bright);margin:6px 0 2px}
+.result .rsum{color:var(--muted);font-size:15px;max-width:60ch;margin:14px auto 0;text-align:left;line-height:1.6}
+.result .rsum b{color:var(--bright)}
+.actions{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.hide{display:none!important}
+@media(max-width:560px){.arena-title{font-size:30px}}
+</style></head><body><div class="wrap">
+<div class="top">
+  <div class="brand"><div class="mark">&#127916;</div><div class="bname">Economics &amp; Film<small>Interactive Arena</small></div></div>
+  <span class="chip" id="chChip">Chapter 7 · Financial Panics</span>
+</div>
+<div id="stage"></div>
+</div>
+<script>
+
+/* ---------- generic arena engine ---------- */
+var CFG = null;
+var G = { round:0, score:0, state:null, metric:[], done:false };
+function $(s,r){return (r||document).querySelector(s);}
+function boot(cfg){ CFG=cfg; document.getElementById('chChip').textContent=cfg.chapter; renderIntro(); }
+function renderIntro(){
+  var s=document.getElementById('stage');
+  s.innerHTML='<div class="eyebrow">'+CFG.chapter+'</div>'+
+    '<h1 class="arena-title">'+CFG.name+'</h1>'+
+    '<div class="film">'+CFG.film+'</div>'+
+    '<p class="lead">'+CFG.intro+'</p>'+
+    '<div class="card"><div class="eyebrow" style="margin-bottom:8px">How to play</div>'+
+    '<div style="font-size:14.5px;color:var(--text);line-height:1.6">'+CFG.howto+'</div>'+
+    '<div class="actions" style="justify-content:flex-start;margin-top:18px"><button class="btn gold" id="startBtn">Start playing &#8594;</button>'+
+    (CFG.arenaBack?'<button class="btn ghost" id="backBtn">Back to course</button>':'')+'</div></div>';
+  $('#startBtn').onclick=startGame;
+  if($('#backBtn'))$('#backBtn').onclick=function(){try{window.close();}catch(e){}};
+}
+function startGame(){ G={round:0,score:0,state:JSON.parse(JSON.stringify(CFG.initState)),metric:[],done:false}; renderRound(); }
+function renderRound(){
+  if(G.round>=CFG.rounds){ return renderResult(); }
+  var r=CFG.round(G.state,G.round);
+  var s=document.getElementById('stage');
+  var statsHtml=r.stats?r.stats.map(function(st){return '<div class="stat '+(st.c||'')+'"><div class="sv">'+st.v+'</div><div class="sl">'+st.l+'</div></div>';}).join(''):'';
+  var body='<div class="roundbar"><span>Round '+(G.round+1)+' / '+CFG.rounds+'</span><span class="track"><span class="fill" style="width:'+((G.round)/CFG.rounds*100)+'%"></span></span><span>Score '+Math.round(G.score/Math.max(1,G.round)*100)+'%</span></div>';
+  body+=statsHtml?'<div class="scoreboard">'+statsHtml+'</div>':'';
+  body+=CFG.showChart?'<canvas id="mChart" height="150"></canvas>':'';
+  body+='<div class="card"><div class="scenario">'+r.scenario+'</div>'+(r.sub?'<div class="subtle">'+r.sub+'</div>':'');
+  if(r.slider){
+    body+='<div class="slider-wrap"><div class="slider-lab"><span>'+r.slider.left+'</span><b id="slVal">'+r.slider.init+r.slider.unit+'</b><span>'+r.slider.right+'</span></div>'+
+      '<input type="range" id="sl" min="'+r.slider.min+'" max="'+r.slider.max+'" step="'+r.slider.step+'" value="'+r.slider.init+'"></div>'+
+      '<button class="btn gold" id="commitBtn">Commit decision</button>';
+  } else {
+    body+='<div class="options">'+r.options.map(function(o,i){return '<button class="opt" data-k="'+o.key+'"><b>'+o.label+'</b>'+(o.hint?'<small>'+o.hint+'</small>':'')+'</button>';}).join('')+'</div>';
+  }
+  body+='<div class="feedback" id="fb"></div><div class="actions hide" id="nextWrap"><button class="btn gold" id="nextBtn">Next &#8594;</button></div></div>';
+  s.innerHTML=body;
+  if(CFG.showChart) drawChart();
+  if(r.slider){
+    var sl=$('#sl'); sl.oninput=function(){ $('#slVal').textContent=(r.slider.fmt?r.slider.fmt(+sl.value):sl.value)+r.slider.unit; };
+    $('#commitBtn').onclick=function(){ choose(+sl.value,r); };
+  } else {
+    Array.prototype.forEach.call(document.querySelectorAll('.opt'),function(b){ b.onclick=function(){ choose(b.getAttribute('data-k'),r); }; });
+  }
+}
+function choose(val,r){
+  var res=CFG.resolve(G.state,val,G.round);
+  G.state=res.state; G.score+=res.score; if(typeof res.metric==='number') G.metric.push(res.metric);
+  Array.prototype.forEach.call(document.querySelectorAll('.opt'),function(b){b.disabled=true;b.style.opacity=.55;});
+  if($('#commitBtn')){$('#commitBtn').disabled=true;$('#commitBtn').style.opacity=.55;}
+  if($('#sl'))$('#sl').disabled=true;
+  var fb=$('#fb'); fb.className='feedback show '+(res.tone||'mid'); fb.innerHTML=res.feedback;
+  if(CFG.showChart) drawChart();
+  $('#nextWrap').classList.remove('hide');
+  $('#nextBtn').onclick=function(){ G.round++; renderRound(); };
+}
+function drawChart(){
+  var cv=$('#mChart'); if(!cv)return; var ctx=cv.getContext('2d');
+  var W=cv.width=cv.clientWidth*2, H=cv.height=300; ctx.setTransform(2,0,0,2,0,0); var w=cv.clientWidth,h=150;
+  ctx.clearRect(0,0,w,h);
+  var data=G.metric, pL=40,pR=10,pT=12,pB=22;
+  var maxV=CFG.chartMax||Math.max.apply(null,data.concat([1])), minV=CFG.chartMin||0;
+  ctx.strokeStyle='rgba(255,255,255,.06)';ctx.fillStyle='var(--subtle)';ctx.font='9px JetBrains Mono';
+  for(var gy=0;gy<=3;gy++){var yy=pT+(h-pT-pB)*gy/3;ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(w-pR,yy);ctx.stroke();}
+  ctx.fillStyle='rgba(217,213,238,.5)';ctx.font='9px Inter';ctx.fillText(CFG.chartLabel||'',pL,h-6);
+  if(data.length){
+    function X(i){return pL+(data.length<=1?0:i/(CFG.rounds-1)*(w-pL-pR));}
+    function Y(v){return h-pB-((v-minV)/(maxV-minV||1))*(h-pT-pB);}
+    ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim();ctx.lineWidth=2.4;ctx.beginPath();
+    data.forEach(function(v,i){var px=X(i),py=Y(v);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.stroke();
+    data.forEach(function(v,i){ctx.fillStyle=ctx.strokeStyle;ctx.beginPath();ctx.arc(X(i),Y(v),3,0,7);ctx.fill();});
+  }
+}
+function renderResult(){
+  G.done=true;
+  var pct=Math.round(G.score/CFG.rounds*100);
+  var grade = pct>=90?'Best Picture':pct>=80?'Critical Acclaim':pct>=70?'Solid Cut':pct>=60?'Needs a Rewrite':'Back to the Editing Room';
+  var s=document.getElementById('stage');
+  s.innerHTML='<div class="card result"><div class="eyebrow">Arena complete · '+CFG.name+'</div>'+
+    '<div class="big">'+pct+'%</div><div class="grade">'+grade+'</div>'+
+    '<div class="rsum">'+CFG.outro(pct,G.state)+'</div>'+
+    '<div class="actions"><button class="btn gold" id="againBtn">Play again</button>'+
+    '<button class="btn ghost" id="doneBtn">Submit &amp; return to course</button></div>'+
+    '<div class="subtle" style="margin-top:14px">Your score is recorded for the arena component of your grade. Only your first two attempts count.</div></div>';
+  $('#againBtn').onclick=startGame;
+  $('#doneBtn').onclick=submitScore.bind(null,pct);
+}
+/* Backend hook — the LMS shell wires arena results via this bridge.
+   Standalone (opened directly) it just posts a message the parent can catch. */
+function submitScore(pct){
+  var payload={type:'econfilm-arena-result',slug:CFG.slug,score:pct/100,played_at:new Date().toISOString()};
+  try{ if(window.opener) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+  var s=document.getElementById('stage');
+  var b=document.createElement('div'); b.className='feedback show good'; b.style.marginTop='14px';
+  b.innerHTML='<b>Score submitted.</b> You scored '+pct+'% in the '+CFG.name+'. You can close this tab and return to the course.';
+  s.appendChild(b);
+}
+
+boot({
+ slug:'bank-run', name:'Bank Run', chapter:'Chapter 7 · Financial Panics', film:'It&#39;s a Wonderful Life · Silber',
+ intro:'It&#39;s your wedding day, and a rumor has emptied onto your doorstep as a mob of depositors. The Bailey Building &amp; Loan doesn&#39;t keep their money in a drawer — it&#39;s in Joe&#39;s house and a hundred others. Survive the panic without draining the vault.',
+ howto:'Each round a wave of depositors demands cash. Your reserve is limited, and the more frightened the crowd (low confidence), the bigger the next wave. Calm them, stall them, or — once federal tools arrive — guarantee their deposits. Survive with your reserve intact and confidence restored.',
+ rounds:6, showChart:true, chartLabel:'Depositor confidence', chartMax:100, chartMin:0,
+ initState:{reserve:100, confidence:35},
+ round:function(st,i){
+   var wave=Math.round(18 + (100-st.confidence)*0.35);
+   st._wave=wave;
+   var federal = i>=3;
+   var opts=[
+     {key:'pay',label:'Pay every withdrawal in full',hint:'Honors demands — but drains ~'+wave+' from the vault.'},
+     {key:'plead',label:'Plead with the crowd (pay a little)',hint:'George&#39;s move: calm them, pay small amounts.'},
+     {key:'suspend',label:'Suspend withdrawals for the day',hint:'Stops the drain — but spooks people.'}
+   ];
+   if(federal) opts.push({key:'federal',label:'Announce federal deposit guarantee',hint:'Silber&#39;s fix: a credible backstop that ends the reason to run.'});
+   return { stats:[
+       {v:Math.round(st.reserve), l:'Cash reserve', c:st.reserve>50?'gr':(st.reserve>20?'g':'r')},
+       {v:Math.round(st.confidence)+'%', l:'Confidence', c:st.confidence>60?'gr':(st.confidence>35?'g':'r')},
+       {v:wave, l:'Withdrawals demanded', c:'r'}
+     ],
+     scenario:'Round '+(i+1)+'. <b>'+wave+'</b> in withdrawals are demanded at the window. Confidence is <b>'+Math.round(st.confidence)+'%</b>. How do you respond?',
+     sub:federal?'Federal deposit insurance is now available — a credible guarantee changes what depositors expect everyone else to do.':'It&#39;s still just you and the crowd. No federal backstop yet.',
+     options:opts };
+ },
+ resolve:function(st,k,i){
+   var w=st._wave, rs, tone, msg;
+   if(k==='pay'){ st.reserve-=w; st.confidence=Math.min(100,st.confidence+8);
+     if(st.reserve<0){ st.reserve=0; st.confidence=0; rs=0; tone='bad'; msg='<b>The vault ran dry.</b> Paying every demand in a panic is how a solvent bank dies — you can never satisfy everyone at once.'; }
+     else { rs=0.5; tone='mid'; msg='You honored the demands and calmed some nerves, but the vault took a heavy hit. Paying your way out of a run is a race you usually lose.'; } }
+   else if(k==='plead'){ st.reserve-=Math.round(w*0.35); st.confidence=Math.min(100,st.confidence+14); rs=0.75; tone='good'; msg='<b>George&#39;s gambit.</b> A personal appeal and small payments keep the vault alive and nudge confidence up — but it&#39;s fragile, and it only works round to round.'; }
+   else if(k==='suspend'){ st.reserve-=2; st.confidence=Math.max(0,st.confidence-10); rs=0.35; tone='mid'; msg='You stopped the bleeding for today, but suspending withdrawals confirms people&#39;s fears — confidence slips, and tomorrow&#39;s wave is bigger.'; }
+   else { st.confidence=Math.min(100,st.confidence+40); st.reserve-=Math.round(w*0.1); rs=1; tone='good'; msg='<b>Silber&#39;s answer.</b> A credible federal guarantee removes the <em>reason</em> to run: if your deposit is safe no matter what, you don&#39;t sprint to the window. Deposits even start flowing back. This is why the 1933 Bank Holiday and the FDIC worked.'; }
+   return { state:st, score:rs, metric:st.confidence, tone:tone, feedback:msg };
+ },
+ outro:function(p,st){
+   if(st.reserve<=0) return 'The Building &amp; Loan failed. A bank run is a <b>self-fulfilling prophecy</b> — the fear that others will withdraw is what makes withdrawing rational. Personal heroics can delay it, but the durable cure is institutional: a lender of last resort and deposit insurance that break the panic equilibrium.';
+   if(st.confidence>=70 && p>=75) return 'You held the line. The deepest lesson is Silber&#39;s: you don&#39;t beat a run by paying it off, you beat it by <b>changing what depositors expect everyone else to do</b>. A credible guarantee (the 1933 Bank Holiday, the FDIC) converts the bad equilibrium — everyone runs — into the good one — everyone stays.';
+   return 'You survived, barely. Notice how personal appeals only ever bought you one more round — the panic never truly ended until confidence was restored. That&#39;s exactly why America stopped relying on George Baileys and built deposit insurance instead.';
+ }
+});
+</script></body></html>
