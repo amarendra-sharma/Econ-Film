@@ -525,7 +525,7 @@ var State = { user:null, profile:null, role:'student', courses:[], currentCourse
 /* ---- Arena results bridge ----
    The Economics & Film arenas are standalone HTML files opened in a new tab.
    On finish, each posts {type:'econfilm-arena-result', slug, score, played_at}
-   back to this window (its opener). We record the attempt to sa_arena_results
+   back to this window (its opener). We record the attempt to ef_arena_results
    using the signed-in student's session and current course, so arena scores
    flow into progress, badges, and the gradebook — exactly like StrategyArena. */
 window.addEventListener('message', function(ev){
@@ -1167,7 +1167,7 @@ function emailStudents(subject, body){
   sb.from('ef_enrollments').select('ef_profiles(email)').eq('course_id',State.teachCourseId).eq('status','active').then(function(r){
     var rows=r.data?r.data:[];
     var emails=[];
-    rows.forEach(function(x){ if(x.sa_profiles && x.sa_profiles.email){ emails.push(x.sa_profiles.email); } });
+    rows.forEach(function(x){ if(x.ef_profiles && x.ef_profiles.email){ emails.push(x.ef_profiles.email); } });
     if(emails.length===0){ alert('No enrolled students with email addresses yet.'); return; }
     var c=findCourse(State.teachCourseId);
     var subj = subject || ('Announcement: '+(c?c.title:'your course'));
@@ -1213,7 +1213,7 @@ function renderRoster(host){
 }
 function loadRoster(){
   Promise.all([
-    sb.from('ef_enrollments').select('id,student_id,status,enrolled_at,sa_profiles(email,full_name)').eq('course_id',State.teachCourseId),
+    sb.from('ef_enrollments').select('id,student_id,status,enrolled_at,ef_profiles(email,full_name)').eq('course_id',State.teachCourseId),
     sb.from('ef_accommodations').select('student_id,time_multiplier,extra_attempts,note').eq('course_id',State.teachCourseId)
   ]).then(function(rr){
     var res={data:rr[0].data}; 
@@ -1223,7 +1223,7 @@ function loadRoster(){
     if(rows.length===0){ $('rosterBody').innerHTML='<div class="card empty">No students enrolled yet.</div>'; return; }
     var html='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Accommodation</th><th>Enrolled</th><th></th></tr></thead><tbody>';
     rows.forEach(function(r){
-      var p=r.sa_profiles?r.sa_profiles:{};
+      var p=r.ef_profiles?r.ef_profiles:{};
       var st=r.status==='active'?'<span class="tag green">active</span>':(r.status==='dropped'?'<span class="tag rose">dropped</span>':'<span class="tag dim">'+esc(r.status)+'</span>');
       var ac=accomBy[r.student_id];
       var acLabel='—';
@@ -2352,7 +2352,7 @@ function renderAnalytics(host){
   Promise.all([
     saFetchAllPaged(function(){
       return sb.from('ef_attempts')
-        .select('is_correct,sa_assessment_items(concept_tag,chapter)')
+        .select('is_correct,ef_assessment_items(concept_tag,chapter)')
         .eq('course_id',State.teachCourseId).not('graded_at','is',null)
         .order('id',{ascending:true});
     }),
@@ -2363,7 +2363,7 @@ function renderAnalytics(host){
     // concept mastery
     var byTag={};
     att.forEach(function(a){
-      var it=a.sa_assessment_items; if(!it){ return; }
+      var it=a.ef_assessment_items; if(!it){ return; }
       var tag=it.concept_tag?it.concept_tag:'(untagged)';
       if(!byTag[tag]){ byTag[tag]={correct:0,total:0}; }
       byTag[tag].total++; if(a.is_correct){ byTag[tag].correct++; }
@@ -2542,7 +2542,7 @@ function openSubmissions(asgId, title, points){
   panel.innerHTML=loadingCard();
   Promise.all([
     sb.from('ef_submissions').select('*').eq('assignment_id',asgId),
-    sb.from('ef_enrollments').select('student_id,sa_profiles(email,full_name)').eq('course_id',State.teachCourseId).eq('status','active')
+    sb.from('ef_enrollments').select('student_id,ef_profiles(email,full_name)').eq('course_id',State.teachCourseId).eq('status','active')
   ]).then(function(res){
     var subs=res[0].data?res[0].data:[];
     var enr=res[1].data?res[1].data:[];
@@ -2550,7 +2550,7 @@ function openSubmissions(asgId, title, points){
     if(enr.length===0){ panel.innerHTML='<div class="card empty">No enrolled students yet.</div>'; return; }
     var html='<table class="data-table"><caption class="sr-only">Submissions for '+esc(title)+'</caption><thead><tr><th scope="col">Student</th><th scope="col">Submission</th><th scope="col">Score (/'+points+')</th><th scope="col">Feedback</th><th scope="col"></th></tr></thead><tbody>';
     enr.forEach(function(e){
-      var p=e.sa_profiles?e.sa_profiles:{};
+      var p=e.ef_profiles?e.ef_profiles:{};
       var s=subBy[e.student_id];
       var who=esc(p.full_name||p.email||e.student_id);
       var submitted = s ? ('<div style="white-space:pre-wrap;font-size:12.5px;max-width:240px;">'+esc(s.text_response||'')+'</div>'+(s.link_url?'<a href="'+esc(s.link_url)+'" target="_blank" rel="noopener">Open link</a>':'')+'<div style="font-size:11px;color:var(--text-subtle);">'+(s.submitted_at?new Date(s.submitted_at).toLocaleString():'')+'</div>') : '<span style="color:var(--text-subtle);">Not submitted</span>';
@@ -3049,7 +3049,7 @@ function loadPendingWritten(){
   // ATTEMPT-FIRST: find every ungraded attempt in this course, then keep the
   // ones whose item is free_response. Robust to exam-metadata mismatches.
   // Read through a security-definer function so this works regardless of the row
-  // policies on sa_attempts. That direct read returns nothing for some courses
+  // policies on ef_attempts. That direct read returns nothing for some courses
   // even when you own them, which is why this tab looked empty and the AI
   // grading panel never appeared. Falls back to the old read if 83 is not in.
   sb.rpc('ef_instructor_pending_written',{ p_course_id: State.teachCourseId, p_include_graded: GradingShowGraded, p_include_practice: GradingShowPractice }).then(function(rp){
@@ -3860,7 +3860,7 @@ function loadCourseWaiver(c){
 function loadSubs(c){
   // build from roster joined to subscriptions
   Promise.all([
-    sb.from('ef_enrollments').select('student_id,sa_profiles(email,full_name)').eq('course_id',State.teachCourseId).eq('status','active'),
+    sb.from('ef_enrollments').select('student_id,ef_profiles(email,full_name)').eq('course_id',State.teachCourseId).eq('status','active'),
     sb.from('ef_subscriptions').select('*').eq('course_id',State.teachCourseId),
     sb.from('ef_fee_waivers').select('student_id').eq('course_id',State.teachCourseId).not('student_id','is',null)
   ]).then(function(r){
@@ -3872,7 +3872,7 @@ function loadSubs(c){
     if(roster.length===0){ $('subBody').innerHTML='<div class="card empty">No active students to manage yet.</div>'; return; }
     var html='<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Student</th><th scope="col">Status</th><th scope="col">Source</th><th scope="col">Expires</th><th scope="col">Set access</th><th scope="col">Fee</th></tr></thead><tbody>';
     roster.forEach(function(e){
-      var p=e.sa_profiles?e.sa_profiles:{};
+      var p=e.ef_profiles?e.ef_profiles:{};
       var s=subByStudent[e.student_id];
       var status=s?s.status:'none';
       var isWaived=!!waivedSet[e.student_id];
@@ -4170,13 +4170,13 @@ function ensureProfileAndCourse() {
   // profile row already upserted in onSignedIn (without role, so admin/instructor
   // roles are never clobbered). Resolve the student's course from ACTIVE enrollments
   // only -- a DROPPED enrollment must not drive progress, grades, or the exam list.
-  return sb.from('ef_enrollments').select('course_id, status, sa_courses(owner_id)').eq('student_id', uid).eq('status', 'active').then(function(enr) {
+  return sb.from('ef_enrollments').select('course_id, status, ef_courses(owner_id)').eq('student_id', uid).eq('status', 'active').then(function(enr) {
     var rows = enr.data ? enr.data : [];
     // Prefer a self-study course (one the student owns); else any active enrollment.
     var selfRow = null, anyRow = null, profRow = null, i;
     for (i = 0; i < rows.length; i++) {
       anyRow = rows[i];
-      var oc = rows[i].sa_courses ? rows[i].sa_courses.owner_id : null;
+      var oc = rows[i].ef_courses ? rows[i].ef_courses.owner_id : null;
       if (oc === uid) { selfRow = rows[i]; }
       else if (oc) { if (!profRow) { profRow = rows[i]; } }   // a professor's course
     }
@@ -4402,14 +4402,14 @@ function openJoinCourse() {
 function loadMyCourses() {
   if (!$('homeCourses')) { return; }
   var uid = State.user.id;
-  sb.from('ef_enrollments').select('status, sa_courses(id,title,term,owner_id,requires_payment)').eq('student_id', uid).eq('status','active').then(function(res){
+  sb.from('ef_enrollments').select('status, ef_courses(id,title,term,owner_id,requires_payment)').eq('student_id', uid).eq('status','active').then(function(res){
     var rows = res.data ? res.data : [];
     // only professor courses (not the student's own self-study)
-    var prof = rows.filter(function(r){ return r.sa_courses && r.sa_courses.owner_id !== uid; });
+    var prof = rows.filter(function(r){ return r.ef_courses && r.ef_courses.owner_id !== uid; });
     if (prof.length === 0) { $('homeCourses').innerHTML = ''; return; }
     var html = '<h3 style="font-size:20px;margin:26px 0 12px;">My courses</h3><div class="grid grid-3">';
     prof.forEach(function(r){
-      var c = r.sa_courses;
+      var c = r.ef_courses;
       html += '<div class="card"><div class="c-eyebrow">'+esc(c.term||'Course')+'</div><div class="c-title">'+esc(c.title)+'</div>' +
         '<div class="c-meta">'+(c.requires_payment?'Paid access':'Free')+'</div></div>';
     });
@@ -4581,7 +4581,7 @@ function startGradedQuizConfirmed(chapter, closesAt) {
             course_id: courseId,
             camera_mode: 'off',               // no webcam for quizzes
             proctored: true,
-            noPersist: true,                  // no sa_exams row -> skip DB persist
+            noPersist: true,                  // no ef_exams row -> skip DB persist
             sessionLabel: 'quiz'              // banner reads "Proctored quiz in progress"
           };
           MNProctor.onAutoSubmit(function(){ if (QuizState && !QuizState.submitting) { submitGradedQuiz(); } });
@@ -4665,7 +4665,7 @@ function submitGradedQuiz() {
     var passed = frac >= QUIZ_PASS;
     var attemptsUsed = QuizState.attemptsUsed + 1;
     var keepFrac = (QuizState.bestPrior !== null && QuizState.bestPrior > frac) ? QuizState.bestPrior : frac;
-    // Write score + attempts to sa_chapter_progress (best score kept). Reading is
+    // Write score + attempts to ef_chapter_progress (best score kept). Reading is
     // also implied done by completing a graded quiz on the chapter.
     var uid = State.user.id;
     // Record which attempts belong to THIS graded quiz so review shows only these
@@ -5342,10 +5342,10 @@ function loadMyExams() {
   if (!State.user) { host.innerHTML = '<div class="card empty">Sign in to see your exams.</div>'; return; }
   host.innerHTML = loadingCard();
   var uid = State.user.id;
-  sb.from('ef_enrollments').select('course_id, sa_courses(title)').eq('student_id', uid).eq('status','active').then(function(enr) {
+  sb.from('ef_enrollments').select('course_id, ef_courses(title)').eq('student_id', uid).eq('status','active').then(function(enr) {
     var rows = enr.data ? enr.data : [];
     var courseIds = rows.map(function(r){ return r.course_id; });
-    var titleById = {}; rows.forEach(function(r){ titleById[r.course_id] = r.sa_courses ? r.sa_courses.title : 'Course'; });
+    var titleById = {}; rows.forEach(function(r){ titleById[r.course_id] = r.ef_courses ? r.ef_courses.title : 'Course'; });
     if (courseIds.length === 0) { host.innerHTML = '<div class="card empty">You are not enrolled in a course with exams yet. Join a course from Home.</div>'; return; }
     Promise.all([
       sb.from('ef_exams').select('id,course_id,kind,title,total_points,time_limit_minutes,instructions,item_ids,is_published,max_attempts,shuffle_questions,attempt_scoring,opens_at,closes_at,proctored,camera_mode,random_per_student,random_recipe').in('course_id', courseIds).eq('is_published', true).order('created_at',{ascending:true}),
@@ -5819,7 +5819,7 @@ function loadProgress() {
   var uid = State.user.id;
   // attempts (graded), most recent first
   sb.from('ef_attempts')
-    .select('item_id, is_correct, points_earned, graded_at, sa_assessment_items(chapter)')
+    .select('item_id, is_correct, points_earned, graded_at, ef_assessment_items(chapter)')
     .eq('student_id', uid).not('graded_at','is',null)
     .order('graded_at', { ascending: false }).limit(25)
     .then(function(res) {
@@ -5832,7 +5832,7 @@ function loadProgress() {
         statCard(pts, 'points earned');
       var tb = $('attemptsTbl').querySelector('tbody'); tb.innerHTML = '';
       rows.forEach(function(r) {
-        var ch = (r.sa_assessment_items && r.sa_assessment_items.chapter) ? r.sa_assessment_items.chapter : '—';
+        var ch = (r.ef_assessment_items && r.ef_assessment_items.chapter) ? r.ef_assessment_items.chapter : '—';
         var res2 = r.is_correct ? '<span class="tag-ok">✓ correct</span>' : '<span class="tag-no">✗ wrong</span>';
         var when = r.graded_at ? new Date(r.graded_at).toLocaleString() : '';
         tb.innerHTML += '<tr><td class="mono">' + esc(r.item_id) + '</td><td>' + esc(ch) + '</td><td>' + res2 +
@@ -6163,13 +6163,13 @@ function runDiagnostics() {
   // 2) read reference (should succeed)
   sb.from('ef_chapters').select('number', { count: 'exact' }).then(function(r) {
     if (r.error) { p('2. Read chapters — FAIL: ' + esc(r.error.message), 'fail'); }
-    else { p('2. Read sa_chapters — ' + (r.count) + ' rows  ✓', 'pass'); }
+    else { p('2. Read ef_chapters — ' + (r.count) + ' rows  ✓', 'pass'); }
 
     // 3) read items (should succeed, no answers present)
     return sb.from('ef_assessment_items').select('id', { count: 'exact' });
   }).then(function(r) {
     if (r.error) { p('3. Read items — FAIL: ' + esc(r.error.message), 'fail'); }
-    else { p('3. Read sa_assessment_items — ' + (r.count) + ' rows  ✓', 'pass'); }
+    else { p('3. Read ef_assessment_items — ' + (r.count) + ' rows  ✓', 'pass'); }
 
     // 4) THE VAULT TEST — must return 0 rows (RLS denies client reads)
     return sb.from('ef_assessment_item_keys').select('item_id');
@@ -6181,7 +6181,7 @@ function runDiagnostics() {
     } else if (n === 0) {
       p('4. VAULT TEST — answer-key query returned 0 rows  ✓ LOCKED', 'pass');
     } else {
-      p('4. VAULT TEST — LEAK! got ' + n + ' key rows. Check RLS on sa_assessment_item_keys.', 'fail');
+      p('4. VAULT TEST — LEAK! got ' + n + ' key rows. Check RLS on ef_assessment_item_keys.', 'fail');
     }
 
     // 5) Edge Function round-trip: issue + grade a known item
