@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>POW Exchange — Economics &amp; Film Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0C20;--bg-deep:#0A0818;--panel:#14112b;--surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.16);--text:#D9D5EE;--bright:#F4F1FB;--muted:rgba(217,213,238,.64);--subtle:rgba(217,213,238,.42);
+--gold:#F5B841;--gold2:#E0972A;--violet:#9B7BFF;--violet2:#7C5CFF;--green:#34D399;--rose:#FB7185;--sky:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 12% 8%,rgba(124,92,255,.16),transparent 42%),radial-gradient(circle at 88% 92%,rgba(245,184,65,.08),transparent 50%),var(--bg-deep)}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400;color:var(--bright);letter-spacing:.3px;line-height:1.1}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:860px;margin:0 auto;padding:22px 22px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(245,184,65,.35)}
+.bname{font-family:'Instrument Serif',serif;font-size:19px;color:var(--bright);line-height:1}
+.bname small{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 11px;border-radius:999px;border:1px solid var(--border2);color:var(--muted)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.arena-title{font-size:clamp(30px,6vw,46px);margin:8px 0 6px}
+.film{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);margin-bottom:14px}
+.lead{color:var(--muted);font-size:15.5px;max-width:64ch;margin-bottom:6px}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:20px 22px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;border:none;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:600;transition:.13s}
+.btn:active{transform:translateY(1px)}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#241a05}
+.btn.gold:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--bright)}
+.scoreboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:4px 0 6px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px}
+.stat .sv{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--bright);font-weight:600}
+.stat .sl{font-size:11px;color:var(--muted);margin-top:2px}
+.stat.g .sv{color:var(--gold)} .stat.v .sv{color:var(--violet)} .stat.gr .sv{color:var(--green)} .stat.r .sv{color:var(--rose)}
+.roundbar{display:flex;align-items:center;gap:10px;margin:2px 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.roundbar .track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.roundbar .fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--violet));border-radius:4px;transition:width .3s}
+.scenario{font-size:16px;color:var(--bright);line-height:1.55;margin-bottom:8px}
+.scenario b{color:var(--gold)}
+.subtle{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.options{display:grid;gap:11px;grid-template-columns:1fr}
+.opt{text-align:left;padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--border2);color:var(--text);cursor:pointer;font-family:inherit;font-size:14.5px;transition:.12s}
+.opt:hover{border-color:var(--gold);background:rgba(245,184,65,.06)}
+.opt b{color:var(--bright);display:block;margin-bottom:2px;font-size:15px}
+.opt small{color:var(--muted);font-size:12.5px}
+.slider-wrap{margin:6px 0 14px}
+.slider-wrap input[type=range]{width:100%;accent-color:var(--gold);height:5px}
+.slider-lab{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:8px}
+.slider-lab b{color:var(--gold);font-size:15px}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-size:14px;line-height:1.55;display:none}
+.feedback.show{display:block}
+.feedback.good{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#a7f3d0}
+.feedback.bad{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.3);color:#fecdd3}
+.feedback.mid{background:rgba(245,184,65,.09);border:1px solid rgba(245,184,65,.3);color:#fde3b0}
+.feedback b{color:var(--bright)}
+canvas{width:100%;height:auto;display:block;border-radius:10px;margin-top:6px}
+.result{text-align:center;padding:14px 6px}
+.result .big{font-family:'JetBrains Mono',monospace;font-size:60px;font-weight:700;color:var(--gold);line-height:1}
+.result .grade{font-family:'Instrument Serif',serif;font-size:30px;color:var(--bright);margin:6px 0 2px}
+.result .rsum{color:var(--muted);font-size:15px;max-width:60ch;margin:14px auto 0;text-align:left;line-height:1.6}
+.result .rsum b{color:var(--bright)}
+.actions{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.hide{display:none!important}
+@media(max-width:560px){.arena-title{font-size:30px}}
+</style></head><body><div class="wrap">
+<div class="top">
+  <div class="brand"><div class="mark">&#127916;</div><div class="bname">Economics &amp; Film<small>Interactive Arena</small></div></div>
+  <span class="chip" id="chChip">Chapter 5 · Monetary Systems</span>
+</div>
+<div id="stage"></div>
+</div>
+<script>
+
+/* ---------- generic arena engine ---------- */
+var CFG = null;
+var G = { round:0, score:0, state:null, metric:[], done:false };
+function $(s,r){return (r||document).querySelector(s);}
+function boot(cfg){ CFG=cfg; document.getElementById('chChip').textContent=cfg.chapter; renderIntro(); }
+function renderIntro(){
+  var s=document.getElementById('stage');
+  s.innerHTML='<div class="eyebrow">'+CFG.chapter+'</div>'+
+    '<h1 class="arena-title">'+CFG.name+'</h1>'+
+    '<div class="film">'+CFG.film+'</div>'+
+    '<p class="lead">'+CFG.intro+'</p>'+
+    '<div class="card"><div class="eyebrow" style="margin-bottom:8px">How to play</div>'+
+    '<div style="font-size:14.5px;color:var(--text);line-height:1.6">'+CFG.howto+'</div>'+
+    '<div class="actions" style="justify-content:flex-start;margin-top:18px"><button class="btn gold" id="startBtn">Start playing &#8594;</button>'+
+    (CFG.arenaBack?'<button class="btn ghost" id="backBtn">Back to course</button>':'')+'</div></div>';
+  $('#startBtn').onclick=startGame;
+  if($('#backBtn'))$('#backBtn').onclick=function(){try{window.close();}catch(e){}};
+}
+function startGame(){ G={round:0,score:0,state:JSON.parse(JSON.stringify(CFG.initState)),metric:[],done:false}; renderRound(); }
+function renderRound(){
+  if(G.round>=CFG.rounds){ return renderResult(); }
+  var r=CFG.round(G.state,G.round);
+  var s=document.getElementById('stage');
+  var statsHtml=r.stats?r.stats.map(function(st){return '<div class="stat '+(st.c||'')+'"><div class="sv">'+st.v+'</div><div class="sl">'+st.l+'</div></div>';}).join(''):'';
+  var body='<div class="roundbar"><span>Round '+(G.round+1)+' / '+CFG.rounds+'</span><span class="track"><span class="fill" style="width:'+((G.round)/CFG.rounds*100)+'%"></span></span><span>Score '+Math.round(G.score/Math.max(1,G.round)*100)+'%</span></div>';
+  body+=statsHtml?'<div class="scoreboard">'+statsHtml+'</div>':'';
+  body+=CFG.showChart?'<canvas id="mChart" height="150"></canvas>':'';
+  body+='<div class="card"><div class="scenario">'+r.scenario+'</div>'+(r.sub?'<div class="subtle">'+r.sub+'</div>':'');
+  if(r.slider){
+    body+='<div class="slider-wrap"><div class="slider-lab"><span>'+r.slider.left+'</span><b id="slVal">'+r.slider.init+r.slider.unit+'</b><span>'+r.slider.right+'</span></div>'+
+      '<input type="range" id="sl" min="'+r.slider.min+'" max="'+r.slider.max+'" step="'+r.slider.step+'" value="'+r.slider.init+'"></div>'+
+      '<button class="btn gold" id="commitBtn">Commit decision</button>';
+  } else {
+    body+='<div class="options">'+r.options.map(function(o,i){return '<button class="opt" data-k="'+o.key+'"><b>'+o.label+'</b>'+(o.hint?'<small>'+o.hint+'</small>':'')+'</button>';}).join('')+'</div>';
+  }
+  body+='<div class="feedback" id="fb"></div><div class="actions hide" id="nextWrap"><button class="btn gold" id="nextBtn">Next &#8594;</button></div></div>';
+  s.innerHTML=body;
+  if(CFG.showChart) drawChart();
+  if(r.slider){
+    var sl=$('#sl'); sl.oninput=function(){ $('#slVal').textContent=(r.slider.fmt?r.slider.fmt(+sl.value):sl.value)+r.slider.unit; };
+    $('#commitBtn').onclick=function(){ choose(+sl.value,r); };
+  } else {
+    Array.prototype.forEach.call(document.querySelectorAll('.opt'),function(b){ b.onclick=function(){ choose(b.getAttribute('data-k'),r); }; });
+  }
+}
+function choose(val,r){
+  var res=CFG.resolve(G.state,val,G.round);
+  G.state=res.state; G.score+=res.score; if(typeof res.metric==='number') G.metric.push(res.metric);
+  Array.prototype.forEach.call(document.querySelectorAll('.opt'),function(b){b.disabled=true;b.style.opacity=.55;});
+  if($('#commitBtn')){$('#commitBtn').disabled=true;$('#commitBtn').style.opacity=.55;}
+  if($('#sl'))$('#sl').disabled=true;
+  var fb=$('#fb'); fb.className='feedback show '+(res.tone||'mid'); fb.innerHTML=res.feedback;
+  if(CFG.showChart) drawChart();
+  $('#nextWrap').classList.remove('hide');
+  $('#nextBtn').onclick=function(){ G.round++; renderRound(); };
+}
+function drawChart(){
+  var cv=$('#mChart'); if(!cv)return; var ctx=cv.getContext('2d');
+  var W=cv.width=cv.clientWidth*2, H=cv.height=300; ctx.setTransform(2,0,0,2,0,0); var w=cv.clientWidth,h=150;
+  ctx.clearRect(0,0,w,h);
+  var data=G.metric, pL=40,pR=10,pT=12,pB=22;
+  var maxV=CFG.chartMax||Math.max.apply(null,data.concat([1])), minV=CFG.chartMin||0;
+  ctx.strokeStyle='rgba(255,255,255,.06)';ctx.fillStyle='var(--subtle)';ctx.font='9px JetBrains Mono';
+  for(var gy=0;gy<=3;gy++){var yy=pT+(h-pT-pB)*gy/3;ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(w-pR,yy);ctx.stroke();}
+  ctx.fillStyle='rgba(217,213,238,.5)';ctx.font='9px Inter';ctx.fillText(CFG.chartLabel||'',pL,h-6);
+  if(data.length){
+    function X(i){return pL+(data.length<=1?0:i/(CFG.rounds-1)*(w-pL-pR));}
+    function Y(v){return h-pB-((v-minV)/(maxV-minV||1))*(h-pT-pB);}
+    ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim();ctx.lineWidth=2.4;ctx.beginPath();
+    data.forEach(function(v,i){var px=X(i),py=Y(v);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.stroke();
+    data.forEach(function(v,i){ctx.fillStyle=ctx.strokeStyle;ctx.beginPath();ctx.arc(X(i),Y(v),3,0,7);ctx.fill();});
+  }
+}
+function renderResult(){
+  G.done=true;
+  var pct=Math.round(G.score/CFG.rounds*100);
+  var grade = pct>=90?'Best Picture':pct>=80?'Critical Acclaim':pct>=70?'Solid Cut':pct>=60?'Needs a Rewrite':'Back to the Editing Room';
+  var s=document.getElementById('stage');
+  s.innerHTML='<div class="card result"><div class="eyebrow">Arena complete · '+CFG.name+'</div>'+
+    '<div class="big">'+pct+'%</div><div class="grade">'+grade+'</div>'+
+    '<div class="rsum">'+CFG.outro(pct,G.state)+'</div>'+
+    '<div class="actions"><button class="btn gold" id="againBtn">Play again</button>'+
+    '<button class="btn ghost" id="doneBtn">Submit &amp; return to course</button></div>'+
+    '<div class="subtle" style="margin-top:14px">Your score is recorded for the arena component of your grade. Only your first two attempts count.</div></div>';
+  $('#againBtn').onclick=startGame;
+  $('#doneBtn').onclick=submitScore.bind(null,pct);
+}
+/* Backend hook — the LMS shell wires arena results via this bridge.
+   Standalone (opened directly) it just posts a message the parent can catch. */
+function submitScore(pct){
+  var payload={type:'econfilm-arena-result',slug:CFG.slug,score:pct/100,played_at:new Date().toISOString()};
+  try{ if(window.opener) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+  var s=document.getElementById('stage');
+  var b=document.createElement('div'); b.className='feedback show good'; b.style.marginTop='14px';
+  b.innerHTML='<b>Score submitted.</b> You scored '+pct+'% in the '+CFG.name+'. You can close this tab and return to the course.';
+  s.appendChild(b);
+}
+
+boot({
+ slug:'pow', name:'POW Exchange', chapter:'Chapter 5 · Monetary Systems', film:'Stalag 17 · Radford',
+ intro:'In the camp, cigarettes are money. Parcels arrive and prices soar; droughts hit and prices crash. You are Sefton — the trader everyone resents and everyone needs. Read the monetary weather and keep your wealth.',
+ howto:'Each round brings a shock to the cigarette supply. Choose the move a savvy trader makes — spend before inflation, hoard before deflation, and always spend your worst money first (Gresham&#39;s Law). Correct calls score full marks.',
+ rounds:6, showChart:false,
+ initState:{ i:0, scenes:[
+   {scenario:'Word spreads: a <b>huge Red Cross shipment</b> arrives tomorrow. Cigarettes are about to flood the camp.', sub:'What do you do with your cigarette stash today?',
+    options:[{key:'spend',label:'Spend cigarettes on goods now',hint:'Buy before prices jump.'},{key:'hoard',label:'Hoard your cigarettes',hint:'Wait and see.'},{key:'lend',label:'Lend cigarettes at interest',hint:'Earn a return.'}],
+    correct:'spend', why:'<b>Right.</b> A flood of cigarette-money means every price rises tomorrow — pure inflation, no extra goods. Spending today, before the shipment lands, preserves your purchasing power.'},
+   {scenario:'No deliveries for weeks. Cigarettes are growing <b>scarce</b> across the camp.', sub:'Prices are falling. What&#39;s your play?',
+    options:[{key:'spend',label:'Spend cigarettes fast',hint:'Get rid of them.'},{key:'hoard',label:'Hoard cigarettes',hint:'They&#39;re gaining value.'},{key:'burn',label:'Smoke them yourself',hint:'Enjoy the moment.'}],
+    correct:'hoard', why:'<b>Right.</b> Scarcity is deflation: each cigarette buys more tomorrow than today. Holding cash that&#39;s rising in value is the smart move — the mirror image of round one.'},
+   {scenario:'You hold both cheap <b>machine-rolled</b> cigarettes and prized <b>hand-rolled</b> ones. A trader will take either at face value.', sub:'Which do you spend?',
+    options:[{key:'spendbad',label:'Spend the machine-rolled (inferior) ones',hint:'Pass on the weaker money.'},{key:'spendgood',label:'Spend the prized hand-rolled ones',hint:'Use your best.'},{key:'mix',label:'Spend a mix of both',hint:'Split it.'}],
+    correct:'spendbad', why:'<b>Gresham&#39;s Law.</b> When two monies trade at the same value, spend the bad and keep the good. Everyone reasons this way, so the prized cigarettes vanish from circulation into private stashes.'},
+   {scenario:'The camp shop issued paper receipts backed by a cigarette reserve. A <b>rumor</b> says the reserve is nearly empty.', sub:'You hold several receipts. Act?',
+    options:[{key:'redeem',label:'Redeem your receipts for cigarettes now',hint:'Beat the crowd.'},{key:'wait',label:'Wait — it&#39;s just a rumor',hint:'Stay calm.'},{key:'buy',label:'Buy more receipts cheaply',hint:'Bet on the shop.'}],
+    correct:'redeem', why:'<b>Right.</b> A paper currency backed by a limited reserve is vulnerable to a run. If everyone redeems, the reserve empties — so the first to redeem wins. Radford&#39;s camp bank collapsed exactly this way.'},
+   {scenario:'A rival trader offers to sell you a debt: he&#39;ll repay <b>20 cigarettes next week</b> for 15 today — just as a big parcel delivery is rumored.', sub:'Take the loan deal (lend him 15 now)?',
+    options:[{key:'decline',label:'Decline — inflation will erode the repayment',hint:'Think about tomorrow&#39;s prices.'},{key:'accept',label:'Accept — 20 beats 15',hint:'A third more!'},{key:'renegotiate',label:'Demand repayment in goods, not cigarettes',hint:'Index the loan.'}],
+    correct:'renegotiate', why:'<b>Sharp.</b> If a parcel flood is coming, 20 cigarettes next week may buy less than 15 today — inflation eats the lender. Indexing the loan to <em>goods</em> protects you. (Declining also avoids the loss.)'},
+   {scenario:'Guards whisper that <b>liberation is days away</b>. After liberation, cigarettes revert to being just cigarettes.', sub:'Your final move with a large cigarette fortune?',
+    options:[{key:'spend',label:'Spend it all on goods and favors now',hint:'Value is about to vanish.'},{key:'hoard',label:'Hoard it for after the war',hint:'Save for later.'},{key:'lend',label:'Lend it out at high interest',hint:'One last deal.'}],
+    correct:'spend', why:'<b>Right.</b> Cigarette-money only has value while everyone accepts it. Once the camp dissolves, that shared acceptance evaporates — so convert money into real goods before it turns back into mere tobacco.'}
+ ]},
+ round:function(st,i){ var s=st.scenes[i]; return { scenario:s.scenario, sub:s.sub, options:s.options }; },
+ resolve:function(st,k,i){ var s=st.scenes[i]; var ok=(k===s.correct); return { state:st, score:ok?1:0.2, tone:ok?'good':'bad', feedback:(ok?'':'<b>Not the trader&#39;s move.</b> ')+s.why }; },
+ outro:function(p){ return 'You&#39;ve learned what money really is: not the paper (or tobacco) but whatever everyone will accept. You watched the <b>quantity theory</b> move prices as the cigarette supply swung, felt <b>Gresham&#39;s Law</b> pull the good money out of circulation, and saw a paper currency break in a run. Radford&#39;s POW camp is a whole monetary economy in miniature — and now you can read it.'; }
+});
+</script></body></html>
