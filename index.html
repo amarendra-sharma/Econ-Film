@@ -4030,7 +4030,7 @@ function loadStaff(){
 
 /* ---- Access gating: Ch1-2 + Prisoner's Dilemma arena are free; rest needs a sub ---- */
 var FREE_CHAPTERS = { 0:true, 1:true, 2:true };
-var FREE_ARENAS = { 'commons':true };
+var FREE_ARENAS = { 'commons':true, 'coase':true };
 function resolveAccess() {
   // Cache on State.hasAccess. Staff always have access. Otherwise true if the
   // student has an active, non-expired subscription OR a super-admin fee waiver
