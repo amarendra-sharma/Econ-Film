@@ -184,6 +184,23 @@
 
   footer{padding:40px 0 60px;text-align:center;color:var(--subtle);font-size:12.5px;border-top:1px solid var(--border);margin-top:30px}
 
+
+  /* ---------- About the author ---------- */
+  .author-wrap{margin:60px auto 0;max-width:760px}
+  .author-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:16px}
+  .author-card{display:flex;gap:26px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:26px 28px;flex-wrap:wrap}
+  .author-photo-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .author-photo{width:118px;height:118px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+  .author-photo-ph{width:118px;height:118px;border-radius:50%;border:2px dashed var(--border-2);background:var(--bg-panel);display:grid;place-items:center;text-align:center;color:var(--subtle);font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.5;padding:8px}
+  .author-upload{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);background:none;border:1px solid rgba(245,184,65,.35);border-radius:8px;padding:5px 11px;cursor:pointer}
+  .author-upload:hover{background:var(--gold-soft)}
+  .author-body{flex:1;min-width:240px}
+  .author-name{font-family:'Instrument Serif',serif;font-size:29px;color:var(--bright);margin-bottom:9px;line-height:1.1}
+  .author-bio{font-family:var(--read);font-size:16.5px;line-height:1.62;color:#E4E0F2;outline:none;border-radius:8px}
+  .author-bio[contenteditable="true"]:focus{box-shadow:0 0 0 2px rgba(245,184,65,.35);padding:2px 6px;margin:-2px -6px}
+  .author-hint{font-size:11px;color:var(--subtle);margin-top:12px;font-family:'JetBrains Mono',monospace;line-height:1.6}
+  @media(max-width:560px){.author-card{justify-content:center;text-align:center}.author-body{text-align:left}}
+
   @media(max-width:640px){
     .prose{font-size:17.5px}
     .matrix{grid-template-columns:88px 1fr 1fr}
@@ -196,7 +213,7 @@
 <div class="topbar">
   <div class="brand" onclick="go('')">
     <div class="brand-mark">&#127916;</div>
-    <div class="brand-name">Economics &amp; Film<small>ECON 383D · The Textbook</small></div>
+    <div class="brand-name">Economics &amp; Film<small>A Digital Textbook</small></div>
   </div>
   <div class="tb-right">
     <button class="btn ghost" onclick="go('')">&#9776; Contents</button>
@@ -209,24 +226,62 @@
   <!-- CONTENTS -->
   <section id="contents"><div class="wrap">
     <div class="cover">
-      <div class="eyebrow">Binghamton University · Spring 2026</div>
+      <div class="eyebrow">A Digital Textbook</div>
       <h1>Economics&nbsp;&amp;&nbsp;<em>Film</em></h1>
-      <p class="sub">Thirteen films, thirteen economic ideas, and the classic papers behind them. A companion reader for Dr. Sharma's <em>Economics in Film</em>. Read the chapter before the screening — you'll know what to look for.</p>
-      <div class="credit">Prof. Amarendra Sharma · Department of Economics</div>
+      <p class="sub">Thirteen films, thirteen economic ideas, and the classic papers behind them. A reader to use alongside any economics-and-film course. Read the chapter before the screening — you'll know what to look for.</p>
+      <div class="credit">By Amarendra Sharma, Ph.D.</div>
     </div>
     <div class="reel-rule"></div>
     <div class="toc-grid" id="tocGrid"></div>
+
+    <div class="author-wrap">
+      <div class="author-eyebrow">About the Author</div>
+      <div class="author-card">
+        <div class="author-photo-col">
+          <img class="author-photo" id="authorPhoto" alt="Amarendra Sharma, Ph.D." style="display:none">
+          <div class="author-photo-ph" id="authorPhotoPh">Add photo<br>author-photo.jpg</div>
+          <button class="author-upload" id="authorUploadBtn" type="button">Upload photo</button>
+          <input type="file" id="authorPhotoInput" accept="image/*" hidden>
+        </div>
+        <div class="author-body">
+          <div class="author-name">Amarendra Sharma, Ph.D.</div>
+          <!-- EDIT AUTHOR BIO: revise the text below (or click it to edit in your browser). -->
+          <div class="author-bio" id="authorBio" contenteditable="true" spellcheck="false">Amarendra Sharma, Ph.D., is an economist and educator with more than two decades of experience teaching economics. He designs interactive digital courseware that lets students play, simulate, and experiment with economic models rather than only read about them. <em>Economics &amp; Film</em> grew from his conviction that the fastest way to grasp an idea is to watch it unfold on screen &mdash; and then reach for the paper that explains why.</div>
+          <div class="author-hint">Editable &mdash; click the bio to revise it, or drop an <b>author-photo.jpg</b> beside this file to set the photo.</div>
+        </div>
+      </div>
+    </div>
   </div></section>
 
   <!-- CHAPTERS host -->
   <div id="chapterHost"></div>
+  <div id="lockHost"></div>
 </main>
 
 <footer><div class="wrap">
-  <span class="mono">Economics &amp; Film · a digital textbook · built to accompany the course readings on Brightspace.</span>
+  <span class="mono">Economics &amp; Film · a digital textbook by Amarendra Sharma, Ph.D.</span>
 </div></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ============================ ACCESS GATE ============================ */
+var EF_SUPABASE_URL = 'https://qgelvmefyexyzpwqupev.supabase.co';
+var EF_SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnZWx2bWVmeWV4eXpwd3F1cGV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDY5ODAsImV4cCI6MjA5NjAyMjk4MH0.AR55GBLefKHfs9ncWWzEFks_VISPjJtbW8SezyjM3lc';
+var FREE_CH = {0:true, 1:true, 2:true};
+var HAS_ACCESS = false;
+function chapterGated(n){ return !FREE_CH[n] && !HAS_ACCESS; }
+function checkAccess(){
+  try{
+    if(!window.supabase){ return; }
+    var sb = window.supabase.createClient(EF_SUPABASE_URL, EF_SUPABASE_ANON);
+    sb.auth.getSession().then(function(res){
+      var user = res && res.data && res.data.session ? res.data.session.user : null;
+      if(!user){ return; }
+      sb.from("ef_enrollments").select("id").eq("student_id", user.id).eq("status","active").limit(1)
+        .then(function(r){ if(r && r.data && r.data.length){ HAS_ACCESS = true; route(); } });
+    });
+  }catch(e){}
+}
 /* ============================ CHAPTER META ============================ */
 var CH = [
   {n:0, title:"How Economists Watch Movies", film:"— course primer —", year:"", run:"", read:"Course method &amp; the economics paper", slug:"", free:true},
@@ -270,6 +325,15 @@ function relCh(d){
 function curChapter(){
   var m=(location.hash||'').match(/chapter-(\d+)/); return m?parseInt(m[1],10):null;
 }
+function lockScreenHTML(n){
+  var c=CH[n]||{};
+  return '<div class="chead"><div class="ceyebrow">Chapter '+n+' &middot; '+(c.title||'')+'</div>'+
+    '<h1>&#128274; This chapter is for enrolled students</h1></div>'+
+    '<div class="prose"><div class="keyidea"><div class="kt">Locked</div>'+
+    '<p style="font-family:Inter,sans-serif;">Chapters&nbsp;0&ndash;2 are free to preview. The rest of the textbook unlocks once you are signed in to the course. Head back, sign in, and open the textbook from there.</p></div>'+
+    '<div class="tryit"><a id="lockBackBtn"><span class="ti">&#8594;</span><span><span class="tt">Go to the course &amp; sign in</span><br>'+
+    '<span class="td">Then reopen the textbook to read every chapter.</span></span></a></div></div>';
+}
 function route(){
   var n=curChapter();
   var contents=document.getElementById('contents');
@@ -284,6 +348,13 @@ function route(){
   contents.style.display='none';
   document.getElementById('prevBtnTop').style.visibility='';
   document.getElementById('nextBtnTop').style.visibility='';
+  var lockHost=document.getElementById('lockHost');
+  if(chapterGated(n)){
+    if(lockHost) lockHost.innerHTML=lockScreenHTML(n);
+    var lb=document.getElementById('lockBackBtn'); if(lb) lb.onclick=function(){ location.href='./'; };
+    window.scrollTo(0,0); updateProgress(); return;
+  }
+  if(lockHost) lockHost.innerHTML='';
   var art=document.getElementById('chapter-'+n);
   if(art){ art.classList.add('active'); renderFigures(art); }
   window.scrollTo(0,0); updateProgress();
@@ -551,7 +622,30 @@ function renderFigures(scope){
 /* ============================ BOOT ============================ */
 buildTOC();
 /* chapters get injected below this script tag in the DOM; decorate + route after load */
-window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); route(); });
+function initAuthor(){
+  var img=document.getElementById('authorPhoto'), ph=document.getElementById('authorPhotoPh');
+  function showImg(src){ img.src=src; img.style.display='block'; ph.style.display='none'; }
+  // 1) a photo the author previously uploaded in this browser
+  var saved=null; try{ saved=localStorage.getItem('ef_author_photo'); }catch(e){}
+  if(saved){ showImg(saved); }
+  else {
+    // 2) a file named author-photo.jpg beside this page (published photo)
+    var probe=new Image();
+    probe.onload=function(){ showImg('author-photo.jpg'); };
+    probe.onerror=function(){ /* keep placeholder */ };
+    probe.src='author-photo.jpg';
+  }
+  var btn=document.getElementById('authorUploadBtn'), inp=document.getElementById('authorPhotoInput');
+  if(btn&&inp){ btn.onclick=function(){ inp.click(); };
+    inp.onchange=function(){ var file=inp.files&&inp.files[0]; if(!file)return; var r=new FileReader();
+      r.onload=function(){ showImg(r.result); try{ localStorage.setItem('ef_author_photo', r.result); }catch(e){} };
+      r.readAsDataURL(file); }; }
+  // editable bio: restore this browser's saved draft, and save on edit
+  var bio=document.getElementById('authorBio');
+  if(bio){ var b=null; try{ b=localStorage.getItem('ef_author_bio'); }catch(e){} if(b){ bio.innerHTML=b; }
+    bio.addEventListener('blur',function(){ try{ localStorage.setItem('ef_author_bio', bio.innerHTML); }catch(e){} }); }
+}
+window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initAuthor(); route(); checkAccess(); });
 </script>
 <article class="chapter" id="chapter-0" data-ch="0">
   <div class="chead">
@@ -565,19 +659,19 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); route
   <div class="prose">
     <div class="coldopen">A physicist, a psychologist, and an economist walk out of the same two-hour film. The physicist noticed the space station spun at the wrong speed. The psychologist watched a marriage quietly fall apart. The economist? She spent the whole film asking one question — <em>who wanted what, and what were they willing to give up to get it?</em></div>
 
-    <p class="drop">That question is the entire course in miniature. Economics is not, at its heart, about money. It is about <strong>choice under scarcity</strong>: how people decide when they cannot have everything, how those decisions collide, and what happens to all of us as a result. Money is just the most convenient place to watch the drama unfold. A film, it turns out, is another.</p>
+    <p class="drop">That question is the whole enterprise in miniature. Economics is not, at its heart, about money. It is about <strong>choice under scarcity</strong>: how people decide when they cannot have everything, how those decisions collide, and what happens to all of us as a result. Money is just the most convenient place to watch the drama unfold. A film, it turns out, is another.</p>
 
-    <p>Over the next thirteen chapters you will watch thirteen movies — a Pixar romance set on a garbage planet, a Cold War satire, a 1930s dust-bowl migration, a Wall Street morality play — and behind each one you will find a piece of the professional economics literature: a Nobel lecture, a paper that reshaped a field, an argument economists still have at conferences. The films are the hook. The papers are the substance. This course lives in the space between them.</p>
+    <p>Over the next thirteen chapters you will watch thirteen movies — a Pixar romance set on a garbage planet, a Cold War satire, a 1930s dust-bowl migration, a Wall Street morality play — and behind each one you will find a piece of the professional economics literature: a Nobel lecture, a paper that reshaped a field, an argument economists still have at conferences. The films are the hook. The papers are the substance. This book lives in the space between them.</p>
 
     <div class="beat"><span class="bn">Why film</span><h2>The movie is a laboratory you can't build</h2><span class="bl"></span></div>
     <p>Economists face a frustrating problem: they cannot run experiments the way a chemist can. You cannot put a whole economy in a test tube, take the gold standard away from one copy and leave it in another, and watch what happens. So economists reach for the next best things — history, data, mathematical models, and, when they are lucky, a vivid story that makes an abstract force visible.</p>
 
     <p>A good film does something a supply-and-demand diagram cannot: it makes you <em>feel</em> the incentive. When you watch a bank run in <em>It's a Wonderful Life</em>, you understand in your gut why a depositor sprints to the teller window even though the sprint is exactly what dooms the bank. That gut understanding is the beginning of economic reasoning. The paper then gives you the machinery to explain it precisely.</p>
 
-    <div class="keyidea"><div class="kt">The core move of this course</div><p>For every film, ask: <strong>What is the economic problem here?</strong> Then reach for the assigned reading, which names that problem, models it, and tells you what economists have learned about it. The film supplies the intuition; the paper supplies the rigor.</p></div>
+    <div class="keyidea"><div class="kt">The core move of this book</div><p>For every film, ask: <strong>What is the economic problem here?</strong> Then reach for the assigned reading, which names that problem, models it, and tells you what economists have learned about it. The film supplies the intuition; the paper supplies the rigor.</p></div>
 
     <div class="beat"><span class="bn">The toolkit</span><h2>Five ideas you'll use again and again</h2><span class="bl"></span></div>
-    <p>You do not need advanced mathematics for this course — you need a handful of concepts and the discipline to apply them honestly. Five will carry you a long way:</p>
+    <p>You do not need advanced mathematics for this book — you need a handful of concepts and the discipline to apply them honestly. Five will carry you a long way:</p>
 
     <div class="terms">
       <div class="th">The recurring toolkit</div>
@@ -588,34 +682,34 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); route
       <div class="term"><dt>Strategic interaction</dt><dd>When your best move depends on my move and mine on yours, we're in a <em>game</em> — and the outcome can be bad for everyone even when everyone plays smart.</dd></div>
     </div>
 
-    <p>Every film in this course is a stress test of one or more of these ideas. WALL·E is externalities and the commons. Dr. Strangelove is strategic interaction. The Big Short is information and incentives gone rotten. Keep the toolkit in your pocket; you will reach for it constantly.</p>
+    <p>Every film in this book is a stress test of one or more of these ideas. WALL·E is externalities and the commons. Dr. Strangelove is strategic interaction. The Big Short is information and incentives gone rotten. Keep the toolkit in your pocket; you will reach for it constantly.</p>
 
     <div class="beat"><span class="bn">Watch like an economist</span><h2>Read the article <em>before</em> the screening</h2><span class="bl"></span></div>
     <p>This is the single most important piece of advice in the chapter, so it gets its own paragraph. <strong>Read the assigned article before you watch the film.</strong> The reason is simple: once you know what an economist is looking for, you see it everywhere on screen. Watch <em>Intolerable Cruelty</em> after reading Akerlof and every scene becomes a study in who is hiding what. Watch it cold and it is merely a screwball comedy about divorce lawyers.</p>
 
     <p>As you watch, keep a running list of moments where the economics is <em>right</em>, where it is <em>dramatized</em> (bent for the sake of story), and where it is simply <em>wrong</em>. That list is the raw material for your paper. Directors are not economists; part of your job is to referee the difference, generously but honestly.</p>
 
-    <aside class="side v"><div class="st">&#9998; The assignment that runs the course</div><p>Your grade rests mostly on <strong>seven short papers</strong> — each 500 to 1,000 words, one per pair of topics, the lowest dropped. A paper discusses the <em>economic content</em> of a film in light of the reading and our class discussion. It is <strong>not</strong> a movie review. "The acting was wooden" earns nothing; "the film gets the mechanics of a bank run right but wrongly implies deposit insurance would have saved the Bailey Building &amp; Loan in 1932" is the whole game.</p></aside>
+    <aside class="side v"><div class="st">&#9998; The paper: the heart of the work</div><p>Most instructors who teach with this book assign <strong>short analytical papers</strong> — typically 500 to 1,000 words each. A paper discusses the <em>economic content</em> of a film in light of the assigned reading (and any class discussion). It is <strong>not</strong> a movie review. "The acting was wooden" earns nothing; "the film gets the mechanics of a bank run right but wrongly implies deposit insurance would have saved the Bailey Building &amp; Loan in 1932" is the whole game.</p></aside>
 
     <div class="beat"><span class="bn">Craft</span><h2>What a strong paper actually does</h2><span class="bl"></span></div>
-    <p>The best papers in this course share a shape. They open by naming the economic problem the film dramatizes. They explain the relevant model or argument from the reading in the student's own words — briefly, correctly, with the key term used precisely. They then point to specific scenes as evidence, and they take a position: does the film illuminate the economics, distort it, or quietly assume something the economist would challenge? They close with a claim worth making.</p>
+    <p>The best papers share a shape. They open by naming the economic problem the film dramatizes. They explain the relevant model or argument from the reading in the student's own words — briefly, correctly, with the key term used precisely. They then point to specific scenes as evidence, and they take a position: does the film illuminate the economics, distort it, or quietly assume something the economist would challenge? They close with a claim worth making.</p>
 
     <p>Weak papers, by contrast, retell the plot, praise the cinematography, or summarize the article without ever connecting it to a frame of film. Avoid all three. Your reader has seen the movie and read the paper; your job is to say something about the <em>relationship</em> between them that they hadn't quite noticed.</p>
 
     <div class="terms">
-      <div class="th">Paper mechanics (from the syllabus)</div>
+      <div class="th">Paper mechanics (typical)</div>
       <div class="term"><dt>Length</dt><dd>500–1,000 words. Tight and argued beats long and loose.</dd></div>
-      <div class="term"><dt>Format</dt><dd>Double-spaced, 12-point, your choice of font. Upload on Brightspace.</dd></div>
+      <div class="term"><dt>Format</dt><dd>Double-spaced, 12-point, your choice of font. Submit however your instructor directs.</dd></div>
       <div class="term"><dt>Citations</dt><dd>Chicago style. Cite the article whenever you lean on it. Spelling and grammar count.</dd></div>
-      <div class="term"><dt>Deadlines</dt><dd>Hard. Late papers are not accepted — no extensions, no accommodations on the due dates. Plan your calendar now.</dd></div>
-      <div class="term"><dt>Integrity</dt><dd>Your analysis must be yours. Cite sources; unauthorized generative-AI use is a violation of the University's Academic Honesty Code.</dd></div>
+      <div class="term"><dt>Deadlines</dt><dd>Follow your instructor's deadlines — many treat late work strictly, so plan your calendar.</dd></div>
+      <div class="term"><dt>Integrity</dt><dd>Your analysis must be yours. Cite your sources, and follow your institution's academic-honesty and AI-use policies.</dd></div>
     </div>
 
-    <div class="pullquote"><blockquote>The film gives you the intuition. The paper gives you the proof. Your essay lives in between.</blockquote><cite>The method of this course</cite></div>
+    <div class="pullquote"><blockquote>The film gives you the intuition. The paper gives you the proof. Your essay lives in between.</blockquote><cite>The method of this book</cite></div>
 
-    <p>One last thing before the lights go down. Economics has a reputation for cynicism — the "dismal science," always reducing human beings to calculating machines. You will feel that tension in this course, never more than when we reach crime, capital punishment, and the social responsibility of business. Hold onto the discomfort. The most interesting papers you will write are the ones where the economic logic and your moral intuition pull in different directions, and you have to decide, carefully, what to make of the gap.</p>
+    <p>One last thing before the lights go down. Economics has a reputation for cynicism — the "dismal science," always reducing human beings to calculating machines. You will feel that tension in these chapters, never more than when we reach crime, capital punishment, and the social responsibility of business. Hold onto the discomfort. The most interesting papers you will write are the ones where the economic logic and your moral intuition pull in different directions, and you have to decide, carefully, what to make of the gap.</p>
 
-    <p>Now — Chapter 1. A little robot is alone on an abandoned Earth, compacting the trash we left behind. The question that opens the whole course is waiting in the rubble: <em>how did it come to this, and could anything have stopped it?</em></p>
+    <p>Now — Chapter 1. A little robot is alone on an abandoned Earth, compacting the trash we left behind. The question that opens the whole book is waiting in the rubble: <em>how did it come to this, and could anything have stopped it?</em></p>
   </div>
 </article>
 
