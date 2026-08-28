@@ -72,13 +72,51 @@ canvas{width:100%;height:auto;display:block;border-radius:10px;margin-top:6px}
 </div>
 <div id="stage"></div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* ---------- generic arena engine ---------- */
 var CFG = null;
 var G = { round:0, score:0, state:null, metric:[], done:false };
+/* ============================ ACCESS GATE ============================ */
+var EF_SUPABASE_URL = 'https://qgelvmefyexyzpwqupev.supabase.co';
+var EF_SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnZWx2bWVmeWV4eXpwd3F1cGV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDY5ODAsImV4cCI6MjA5NjAyMjk4MH0.AR55GBLefKHfs9ncWWzEFks_VISPjJtbW8SezyjM3lc';
+var FREE_ARENAS = {'commons':true, 'coase':true};
+var HAS_ACCESS = false;
+var SHOWING_LOCK = false;
+var EF_PORTAL = 'https://econfilm.macronations.com/';
+function arenaGated(){ return CFG && !FREE_ARENAS[CFG.slug] && !HAS_ACCESS; }
+function renderLock(){
+  SHOWING_LOCK = true;
+  var s=document.getElementById('stage');
+  s.innerHTML='<div class="eyebrow">'+CFG.chapter+'</div>'+
+    '<h1 class="arena-title">'+CFG.name+'</h1>'+
+    '<div class="film">'+CFG.film+'</div>'+
+    '<div class="card" style="text-align:center;max-width:560px;margin:24px auto">'+
+    '<div style="font-size:44px;line-height:1;margin-bottom:6px">&#128274;</div>'+
+    '<div class="eyebrow" style="margin-bottom:8px">Enrolled students only</div>'+
+    '<p class="lead" style="margin:0 auto 4px">This arena is part of the full Economics &amp; Film course. Sign in and enroll to play it. The <em>Commons</em> and <em>Coase</em> arenas are free to preview.</p>'+
+    '<div class="actions" style="justify-content:center;margin-top:18px">'+
+    '<button class="btn gold" id="lockBtn">Sign in &amp; enroll &#8594;</button>'+
+    '<button class="btn ghost" id="lockBackBtn">Back to course</button>'+
+    '</div></div>';
+  var lb=document.getElementById('lockBtn'); if(lb) lb.onclick=function(){ window.location.href=EF_PORTAL; };
+  var bb=document.getElementById('lockBackBtn'); if(bb) bb.onclick=function(){ try{window.close();}catch(e){} window.location.href=EF_PORTAL; };
+}
+function checkAccess(){
+  try{
+    if(!window.supabase){ return; }
+    var sb = window.supabase.createClient(EF_SUPABASE_URL, EF_SUPABASE_ANON);
+    sb.auth.getSession().then(function(res){
+      var user = res && res.data && res.data.session ? res.data.session.user : null;
+      if(!user){ return; }
+      sb.from("ef_enrollments").select("id").eq("student_id", user.id).eq("status","active").limit(1)
+        .then(function(r){ if(r && r.data && r.data.length){ HAS_ACCESS = true; if(SHOWING_LOCK){ SHOWING_LOCK=false; renderIntro(); } } });
+    });
+  }catch(e){}
+}
 function $(s,r){return (r||document).querySelector(s);}
-function boot(cfg){ CFG=cfg; document.getElementById('chChip').textContent=cfg.chapter; renderIntro(); }
+function boot(cfg){ CFG=cfg; document.getElementById('chChip').textContent=cfg.chapter; if(arenaGated()){ renderLock(); } else { renderIntro(); } checkAccess(); }
 function renderIntro(){
   var s=document.getElementById('stage');
   s.innerHTML='<div class="eyebrow">'+CFG.chapter+'</div>'+
