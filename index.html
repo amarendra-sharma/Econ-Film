@@ -4466,7 +4466,7 @@ function fillPracticeChapters() {
    SAProgress.recordQuiz so it flows to the gradebook and My Progress.
    Attempt-limited and "best score kept" (a retake only helps).
    ==================================================================== */
-var QUIZ_LEN = 5;            // items per chapter quiz
+var QUIZ_LEN = 12;          // items per chapter quiz (a full dozen, from the hard bank)
 var QUIZ_PASS = 0.70;       // 70% to pass
 var QUIZ_MAX_ATTEMPTS = 1;  // graded quiz: a single attempt per chapter
 var QuizState = null;
@@ -4551,9 +4551,13 @@ function startGradedQuizConfirmed(chapter, closesAt) {
   });
   function drawAndStart(used, bestPrior){
     // 2) draw QUIZ_LEN auto-gradable items from the chapter bank.
-    sb.from('ef_assessment_items').select('id,item_type').eq('chapter', chapter).eq('is_active', true).in('item_type', ['parameterized_numeric','multiple_choice']).then(function(res){
-      var pool = res.data ? res.data : [];
-      if (pool.length === 0) { area.innerHTML = errCard('No graded quiz items for this chapter yet.'); return; }
+    sb.from('ef_assessment_items').select('id,item_type,difficulty').eq('chapter', chapter).eq('is_active', true).in('item_type', ['parameterized_numeric','multiple_choice']).then(function(res){
+      var all = res.data ? res.data : [];
+      if (all.length === 0) { area.innerHTML = errCard('No graded quiz items for this chapter yet.'); return; }
+      // Prefer the HARD, reading-based graded-quiz bank (difficulty 3, multiple choice).
+      // Fall back to the full auto-gradable pool only when the hard bank is too small.
+      var hard = all.filter(function(x){ return Number(x.difficulty) >= 3 && x.item_type === 'multiple_choice'; });
+      var pool = (hard.length >= QUIZ_LEN) ? hard : all;
       // shuffle, take QUIZ_LEN
       for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
       var picks = pool.slice(0, Math.min(QUIZ_LEN, pool.length));
