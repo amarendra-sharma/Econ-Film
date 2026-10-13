@@ -274,6 +274,12 @@
   .gfig .tick{font-family:'JetBrains Mono',monospace;font-size:10.5px;fill:var(--subtle)}
   @media(max-width:560px){.eqn{flex-direction:column;gap:6px;align-items:stretch}.eqn .tag{text-align:right}}
 
+
+  /* ---- film watch link in chapter filmcards ---- */
+  .filmcard a.watch-link{ color:var(--gold); text-decoration:none; font-family:'JetBrains Mono',monospace;
+    font-size:12.5px; border:1px solid rgba(245,184,65,.45); padding:3px 11px; border-radius:999px;
+    display:inline-block; transition:.15s; white-space:nowrap; }
+  .filmcard a.watch-link:hover{ background:var(--gold-soft); border-color:var(--gold); color:var(--bright); }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
@@ -735,7 +741,63 @@ function typesetMath(){
 if(document.readyState==='complete'){ typesetMath(); }
 else { window.addEventListener('load', typesetMath); }
 
-window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initAuthor(); route(); checkAccess(); });
+
+/* ============================ FILM WATCH LINKS ============================ */
+/* Each chapter filmcard has a default "Where to watch" (JustWatch) link. The
+   region is the student's own choice (set in the Screening Room, shared via
+   localStorage), falling back to the course default, then 'us'. If a film is
+   marked included (or given a preferred link) in ef_film_links, that chapter's
+   anchor is upgraded instead. Fail-open: on any error the default link stays. */
+var FILM_TITLES = {1:'WALL·E',2:'A Civil Action',3:'Dr. Strangelove',4:'Intolerable Cruelty',5:'Stalag 17',6:'The Wizard of Oz',7:"It's a Wonderful Life",8:'The Grapes of Wrath',9:'Wall Street',10:'The Big Short',11:'Blow',12:'Dead Man Walking',13:'Norma Rae'};
+var EF_COURSE_REGION = 'us';
+function efFilmRegion(){ var s=''; try{ s=localStorage.getItem('ef_film_region')||''; }catch(e){} return s || EF_COURSE_REGION || 'us'; }
+function applyRegionToWatchLinks(){
+  var reg = efFilmRegion();
+  for(var ch in FILM_TITLES){
+    var a = document.querySelector('a.watch-link[data-ch="'+ch+'"]');
+    if(a && !a.getAttribute('data-included')){
+      a.href = 'https://www.justwatch.com/' + reg + '/search?q=' + encodeURIComponent(FILM_TITLES[ch]);
+    }
+  }
+}
+function loadFilmLinks(){
+  applyRegionToWatchLinks();   // apply the device's saved region immediately
+  try{
+    if(!window.supabase){ return; }
+    var sb = window.supabase.createClient(EF_SUPABASE_URL, EF_SUPABASE_ANON);
+    sb.auth.getSession().then(function(res){
+      var user = res && res.data && res.data.session ? res.data.session.user : null;
+      if(!user){ return; }
+      sb.from("ef_enrollments").select("course_id").eq("student_id", user.id).eq("status","active").limit(1)
+        .then(function(r){
+          if(!r || r.error || !r.data || !r.data.length){ return; }
+          var cid = r.data[0].course_id;
+          Promise.all([
+            sb.from("ef_film_links").select("chapter,access_model,watch_url").eq("course_id", cid),
+            sb.from("ef_courses").select("films_region").eq("id", cid).maybeSingle()
+          ]).then(function(resp){
+            var cr = (resp[1] && resp[1].data && !resp[1].error) ? resp[1].data.films_region : null;
+            if(cr){ EF_COURSE_REGION = cr; }
+            var fr = resp[0];
+            if(fr && !fr.error && fr.data){
+              fr.data.forEach(function(x){
+                if(!x.watch_url){ return; }
+                var a = document.querySelector('a.watch-link[data-ch="'+x.chapter+'"]');
+                if(a){
+                  a.href = x.watch_url;
+                  a.innerHTML = (x.access_model==='included') ? '&#9654; Watch the film (included)' : '&#9654; Watch the film';
+                  a.setAttribute('data-included','1');   // don't let region-apply overwrite it
+                }
+              });
+            }
+            applyRegionToWatchLinks();   // re-apply with the course default now known
+          });
+        });
+    });
+  }catch(e){}
+}
+
+window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initAuthor(); route(); checkAccess(); loadFilmLinks(); });
 </script>
 <article class="chapter" id="chapter-0" data-ch="0">
   <div class="chead">
@@ -841,6 +903,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>WALL·E</em> · 2008 · 98 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Hardin (1968) · Ostrom et al. (1999)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="1" href="https://www.justwatch.com/us/search?q=WALL%C2%B7E" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -948,6 +1011,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>A Civil Action</em> · 1998 · 115 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Coase (1960)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="2" href="https://www.justwatch.com/us/search?q=A%20Civil%20Action" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1048,6 +1112,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Dr. Strangelove</em> · 1964 · 93 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Aumann, Nobel Lecture (2005)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="3" href="https://www.justwatch.com/us/search?q=Dr.%20Strangelove" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1151,6 +1216,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Intolerable Cruelty</em> · 2003 · 100 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Akerlof (1970)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="4" href="https://www.justwatch.com/us/search?q=Intolerable%20Cruelty" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1239,6 +1305,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Stalag 17</em> · 1953 · 120 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Radford (1945)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="5" href="https://www.justwatch.com/us/search?q=Stalag%2017" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1321,6 +1388,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>The Wizard of Oz</em> · 1939 · 101 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Rockoff (1990)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="6" href="https://www.justwatch.com/us/search?q=The%20Wizard%20of%20Oz" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1407,6 +1475,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>It's a Wonderful Life</em> · 1946 · 129 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Silber (2009)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="7" href="https://www.justwatch.com/us/search?q=It%27s%20a%20Wonderful%20Life" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1492,6 +1561,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>The Grapes of Wrath</em> · 1940 · 120 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Bernanke · Romer (1993)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="8" href="https://www.justwatch.com/us/search?q=The%20Grapes%20of%20Wrath" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1577,6 +1647,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Wall Street</em> · 1987 · 124 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Friedman (1970) · Reinhardt, Stavins &amp; Vietor (2008)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="9" href="https://www.justwatch.com/us/search?q=Wall%20Street" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1656,6 +1727,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>The Big Short</em> · 2015 · 130 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Bernanke · Mazar &amp; Ariely (2006)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="10" href="https://www.justwatch.com/us/search?q=The%20Big%20Short" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1741,6 +1813,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Blow</em> · 2001 · 124 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Becker (1968) · Friedman (1990)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="11" href="https://www.justwatch.com/us/search?q=Blow" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1827,6 +1900,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Dead Man Walking</em> · 1995 · 122 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Mocan &amp; Gittings · Levitt (2004)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="12" href="https://www.justwatch.com/us/search?q=Dead%20Man%20Walking" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">
@@ -1919,6 +1993,7 @@ window.addEventListener('DOMContentLoaded',function(){ decorateChapters(); initA
     <div class="filmcard">
       <div><div class="fc-i">Film</div><div class="fc-v"><em>Norma Rae</em> · 1979 · 113 min</div></div>
       <div><div class="fc-i">Reading</div><div class="fc-v">Whaples (1990)</div></div>
+      <div><div class="fc-i">Watch</div><div class="fc-v"><a class="watch-link" data-ch="13" href="https://www.justwatch.com/us/search?q=Norma%20Rae" target="_blank" rel="noopener">&#9654; Where to watch</a></div></div>
     </div>
   </div>
   <div class="prose">

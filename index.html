@@ -42,6 +42,9 @@
   .field input, .field select, .field textarea { width:100%; padding:11px 13px; border-radius:10px; background:rgba(255,255,255,.04); border:1px solid var(--border-strong); color:var(--text-bright); font-size:14.5px; font-family:inherit; }
   .field textarea { min-height:120px; resize:vertical; line-height:1.6; }
   .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(245,184,65,.18); }
+  .film-admin input, .film-admin select { width:100%; padding:8px 10px; border-radius:8px; background:rgba(255,255,255,.04); border:1px solid var(--border-strong); color:var(--text-bright); font-size:13px; font-family:inherit; }
+  .film-admin input:focus, .film-admin select:focus { outline:none; border-color:var(--violet); }
+  .film-card .btn { text-align:center; justify-content:center; }
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 17px; border-radius:10px; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; transition:transform .12s, filter .12s; }
   .btn:active { transform:translateY(1px); }
   .btn-primary { background:linear-gradient(135deg,var(--violet-deep),var(--violet)); color:#241a05; }
@@ -275,6 +278,7 @@
       <div class="nav-item active" data-view="home"><span class="ico">&#8962;</span> Home</div>
       <div class="nav-item" data-view="myannounce"><span class="ico">&#128226;</span> Announcements</div>
       <div class="nav-item" data-view="mymaterials"><span class="ico">&#127916;</span> Materials</div>
+      <div class="nav-item" data-view="screening"><span class="ico">&#127909;</span> Screening Room</div>
       <div class="nav-item" data-view="chapters"><span class="ico">&#128214;</span> Textbook</div>
       <div class="nav-item" data-view="arenas"><span class="ico">&#127918;</span> Arenas</div>
       <div class="nav-item" data-view="practice"><span class="ico">&#9997;</span> Practice</div>
@@ -292,6 +296,7 @@
       <div class="nav-item" data-view="courses"><span class="ico">&#128218;</span> Courses</div>
       <div class="nav-item" data-view="roster"><span class="ico">&#128101;</span> Roster</div>
       <div class="nav-item" data-view="materials"><span class="ico">&#127916;</span> Materials</div>
+      <div class="nav-item" data-view="films"><span class="ico">&#127909;</span> Films</div>
       <div class="nav-item" data-view="announce"><span class="ico">&#128226;</span> Announcements</div>
       <div class="nav-item" data-view="gradebook"><span class="ico">&#128202;</span> Gradebook</div>
       <div class="nav-item" data-view="analytics"><span class="ico">&#128293;</span> Analytics</div>
@@ -343,6 +348,13 @@
       <h1 class="page-title" id="myMatTitle">Materials</h1>
       <div class="page-sub">Lecture videos and slides shared by your instructors.</div>
       <div id="myMatBody" style="margin-top:16px;"></div>
+    </section>
+
+    <!-- SCREENING ROOM -->
+    <section id="view-screening" class="hidden" aria-labelledby="screenTitle">
+      <h1 class="page-title" id="screenTitle">Screening Room</h1>
+      <div class="page-sub">Watch the thirteen films behind the course. Where a film is included with your course, you'll see a Watch button; otherwise follow the link to stream or rent it from a licensed provider.</div>
+      <div id="screenBody" style="margin-top:16px;"></div>
     </section>
 
     <!-- CHAPTERS -->
@@ -974,7 +986,7 @@ $('coursePick').addEventListener('change', function(){ State.teachCourseId=$('co
 /* ====================================================================
    NAV
    ==================================================================== */
-var STUDENT_VIEWS = ['home','myannounce','mymaterials','chapters','arenas','practice','myexams','myassignments','mygrades','progress'];
+var STUDENT_VIEWS = ['home','myannounce','mymaterials','screening','chapters','arenas','practice','myexams','myassignments','mygrades','progress'];
 var VIEW_META = {
   home:['Home','Your Economics & Film workspace.',false],
   myannounce:['Announcements','The latest announcements from your instructors.',false],
@@ -1010,7 +1022,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.nav-item'), function(it
   });
 });
 function isStudentView(v){ for(var i=0;i<STUDENT_VIEWS.length;i++){ if(STUDENT_VIEWS[i]===v){ return true; } } return false; }
-var INSTRUCTOR_VIEWS = ['dashboard','courses','roster','materials','announce','gradebook','analytics','exams','assignments','grading'];
+var INSTRUCTOR_VIEWS = ['dashboard','courses','roster','materials','films','announce','gradebook','analytics','exams','assignments','grading'];
 var ADMIN_VIEWS = ['platform','people','subscriptions','diagnostics'];
 // Which teaching screens a TA may open, and the permission each one needs.
 // Anything not listed here stays owner/instructor only - a TA never reaches
@@ -1094,6 +1106,7 @@ function switchView(view){
     if(view==='home'){ loadHome(); }
     if(view==='myannounce'){ loadMyAnnounce(); }
     if(view==='mymaterials'){ loadMyMaterials(); }
+    if(view==='screening'){ loadScreening(); }
     if(view==='myexams'){ loadMyExams(); }
     if(view==='myassignments'){ loadMyAssignments(); }
     if(view==='mygrades'){ loadMyGrades(); }
@@ -1109,6 +1122,7 @@ function rerenderCurrentView(){
   else if(currentView==='courses'){ renderCourses(host); }
   else if(currentView==='roster'){ renderRoster(host); }
   else if(currentView==='materials'){ renderMaterials(host); }
+  else if(currentView==='films'){ renderFilms(host); }
   else if(currentView==='announce'){ renderAnnounce(host); }
   else if(currentView==='gradebook'){ renderGradebook(host); }
   else if(currentView==='analytics'){ renderAnalytics(host); }
@@ -6552,6 +6566,184 @@ sb.auth.onAuthStateChange(function(event, session){
     }
   }
 });
+/* ====================================================================
+   SCREENING ROOM — the course films, with watch links
+   --------------------------------------------------------------------
+   Two access models per film (stored in ef_film_links, keyed by chapter):
+     'subscribe' (default) -> a legal "find where to watch" link (JustWatch,
+                              which lists every stream/rent/buy option in the
+                              viewer's region).
+     'included'            -> the course provides access; show a Watch button
+                              pointing to the instructor's link (library /
+                              licensed stream / bundle covered by the fee).
+   Students see this on the Screening Room page and on each textbook chapter.
+   If ef_film_links is not installed yet, everything degrades gracefully to
+   the "find where to watch" links.
+   ==================================================================== */
+var FILMS = [
+  { ch:1,  title:'WALL·E',             year:2008, run:98,  slug:'commons',       reading:'Hardin (1968); Ostrom et al. (1999)' },
+  { ch:2,  title:'A Civil Action',          year:1998, run:115, slug:'coase',         reading:'Coase (1960)' },
+  { ch:3,  title:'Dr. Strangelove',         year:1964, run:93,  slug:'deterrence',    reading:'Aumann, Nobel Lecture (2005)' },
+  { ch:4,  title:'Intolerable Cruelty',     year:2003, run:100, slug:'lemons',        reading:'Akerlof (1970)' },
+  { ch:5,  title:'Stalag 17',               year:1953, run:120, slug:'pow',           reading:'Radford (1945)' },
+  { ch:6,  title:'The Wizard of Oz',        year:1939, run:101, slug:'gold-standard', reading:'Rockoff (1990)' },
+  { ch:7,  title:"It's a Wonderful Life",   year:1946, run:129, slug:'bank-run',      reading:'Silber (2009)' },
+  { ch:8,  title:'The Grapes of Wrath',     year:1940, run:120, slug:'depression',    reading:'Romer (1993); Bernanke' },
+  { ch:9,  title:'Wall Street',             year:1987, run:124, slug:'csr',           reading:'Friedman (1970); Reinhardt et al. (2008)' },
+  { ch:10, title:'The Big Short',           year:2015, run:130, slug:'subprime',      reading:'Bernanke; Mazar & Ariely (2006)' },
+  { ch:11, title:'Blow',                    year:2001, run:124, slug:'crime',         reading:'Becker (1968); Friedman (1990)' },
+  { ch:12, title:'Dead Man Walking',        year:1995, run:122, slug:'capital',       reading:'Mocan & Gittings; Levitt (2004)' },
+  { ch:13, title:'Norma Rae',               year:1979, run:113, slug:'unions',        reading:'Whaples (1990)' }
+];
+// JustWatch "where to watch" regions (country codes used in the URL path).
+var FILM_REGIONS = [
+  {c:'us',n:'United States'},{c:'ca',n:'Canada'},{c:'gb',n:'United Kingdom'},{c:'ie',n:'Ireland'},
+  {c:'au',n:'Australia'},{c:'nz',n:'New Zealand'},{c:'in',n:'India'},{c:'za',n:'South Africa'},
+  {c:'de',n:'Germany'},{c:'fr',n:'France'},{c:'es',n:'Spain'},{c:'it',n:'Italy'},{c:'nl',n:'Netherlands'},
+  {c:'be',n:'Belgium'},{c:'ch',n:'Switzerland'},{c:'at',n:'Austria'},{c:'pt',n:'Portugal'},
+  {c:'se',n:'Sweden'},{c:'no',n:'Norway'},{c:'dk',n:'Denmark'},{c:'fi',n:'Finland'},{c:'pl',n:'Poland'},
+  {c:'br',n:'Brazil'},{c:'mx',n:'Mexico'},{c:'ar',n:'Argentina'},{c:'jp',n:'Japan'},{c:'kr',n:'South Korea'},
+  {c:'sg',n:'Singapore'},{c:'ph',n:'Philippines'},{c:'ae',n:'United Arab Emirates'}
+];
+var FILM_COURSE_REGION = 'us';  // course default, loaded from ef_courses.films_region
+function filmRegionName(code){ for(var i=0;i<FILM_REGIONS.length;i++){ if(FILM_REGIONS[i].c===code){ return FILM_REGIONS[i].n; } } return (code||'us').toUpperCase(); }
+function savedFilmRegion(){ try{ return localStorage.getItem('ef_film_region')||''; }catch(e){ return ''; } }
+function setSavedFilmRegion(c){ try{ localStorage.setItem('ef_film_region', c); }catch(e){} }
+function currentFilmRegion(){ return savedFilmRegion() || FILM_COURSE_REGION || 'us'; }
+function jwUrl(title){ return 'https://www.justwatch.com/' + currentFilmRegion() + '/search?q=' + encodeURIComponent(title); }
+function filmWatchCourseId(){ return State.payCourseId || State.selfCourseId || State.teachCourseId || State.currentCourseId || null; }
+
+var _screenFilmMap = {};
+function loadScreening(){
+  var host = $('screenBody'); if(!host){ return; }
+  host.innerHTML = loadingCard();
+  var cid = filmWatchCourseId();
+  var finish = function(rows, regionRow){
+    if(regionRow && regionRow.films_region){ FILM_COURSE_REGION = regionRow.films_region; }
+    _screenFilmMap = {}; (rows||[]).forEach(function(x){ _screenFilmMap[x.chapter] = x; });
+    renderScreening();
+  };
+  if(!cid){ finish([], null); return; }
+  Promise.all([
+    sb.from('ef_film_links').select('chapter,access_model,watch_url,note').eq('course_id', cid),
+    sb.from('ef_courses').select('films_region').eq('id', cid).maybeSingle()
+  ]).then(function(res){
+    var rows = (res[0] && res[0].data && !res[0].error) ? res[0].data : [];
+    var reg  = (res[1] && res[1].data && !res[1].error) ? res[1].data : null;
+    finish(rows, reg);
+  });
+}
+function renderScreening(){
+  var host = $('screenBody'); if(!host){ return; }
+  var map = _screenFilmMap;
+  var anyIncluded = false;
+  for(var k in map){ if(map[k] && map[k].access_model==='included' && map[k].watch_url){ anyIncluded = true; break; } }
+  // region picker
+  var opts = '';
+  var cur = currentFilmRegion();
+  FILM_REGIONS.forEach(function(r){ opts += '<option value="'+r.c+'"'+(r.c===cur?' selected':'')+'>'+esc(r.n)+'</option>'; });
+  var html = '<div class="card" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">'+
+    '<span style="font-size:13px;color:var(--text-muted);">Show where to watch in:</span>'+
+    '<select id="filmRegionSel" class="sel" style="width:auto;min-width:180px;">'+opts+'</select>'+
+    '<span style="font-size:12px;color:var(--text-subtle);">Sets which providers appear. We remember your choice on this device.</span></div>';
+  if(anyIncluded){
+    html += '<div class="card" style="border-left:3px solid var(--gold);margin-bottom:14px;"><div style="font-size:14px;color:var(--text-bright);"><b>Some films are included with your course.</b></div><div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Look for the <b>Watch — included</b> button. For the rest, use <b>Find where to watch</b> to stream or rent from a licensed provider.</div></div>';
+  }
+  html += '<div class="grid grid-3">';
+  FILMS.forEach(function(f){
+    var ov = map[f.ch] || {};
+    var included = (ov.access_model === 'included') && ov.watch_url;
+    html += '<div class="card film-card">'+
+      '<div style="font-size:11px;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.08em;">Chapter '+f.ch+'</div>'+
+      '<h3 style="margin:4px 0 2px;font-size:19px;">'+esc(f.title)+'</h3>'+
+      '<div style="font-size:12.5px;color:var(--text-muted);">'+f.year+' · '+f.run+' min</div>'+
+      '<div style="font-size:12px;color:var(--text-subtle);margin:6px 0 12px;">Reading: '+esc(f.reading)+'</div>';
+    if(included){
+      html += '<a class="btn btn-primary" style="width:100%;" href="'+esc(ov.watch_url)+'" target="_blank" rel="noopener">&#9654; Watch — included</a>'+
+              '<a class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" href="'+jwUrl(f.title)+'" target="_blank" rel="noopener">Other ways to watch</a>';
+    } else if(ov.watch_url){
+      html += '<a class="btn btn-primary" style="width:100%;" href="'+esc(ov.watch_url)+'" target="_blank" rel="noopener">&#9654; Watch</a>'+
+              '<a class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" href="'+jwUrl(f.title)+'" target="_blank" rel="noopener">Other ways to watch</a>';
+    } else {
+      html += '<a class="btn btn-primary" style="width:100%;" href="'+jwUrl(f.title)+'" target="_blank" rel="noopener">&#9654; Find where to watch</a>';
+    }
+    if(ov.note){ html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+esc(ov.note)+'</div>'; }
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div style="font-size:12px;color:var(--text-subtle);margin-top:16px;line-height:1.6;">&ldquo;Find where to watch&rdquo; opens JustWatch, which lists every legal way to stream, rent, or buy the film in the region above. Many of these titles are also free through a university library (Kanopy or Swank Digital Campus) — check with your library.</div>';
+  host.innerHTML = html;
+  var sel = $('filmRegionSel');
+  if(sel){ sel.addEventListener('change', function(){ setSavedFilmRegion(sel.value); renderScreening(); }); }
+}
+
+function renderFilms(host){
+  if(!needCourse(host)){ return; }
+  host.innerHTML = loadingCard();
+  var cid = State.teachCourseId;
+  sb.from('ef_film_links').select('chapter,access_model,watch_url,note').eq('course_id', cid).then(function(r){
+    if(r.error){
+      host.innerHTML = '<div class="card empty">The films feature isn’t set up yet. Run <b>econfilm-films.sql</b> in the Supabase SQL editor, then reopen this tab.</div>';
+      return;
+    }
+    var map = {}; (r.data||[]).forEach(function(x){ map[x.chapter] = x; });
+    var html = '<div class="card" style="margin-bottom:16px;"><h3 style="font-size:16px;margin:0 0 6px;">Film access</h3>'+
+      '<p style="font-size:12.5px;color:var(--text-muted);margin:0;line-height:1.6;">Choose how students get each film. <b>Self-subscribe</b> shows a &ldquo;Find where to watch&rdquo; link (JustWatch — every legal stream/rent/buy option). <b>Included with course</b> shows a Watch button pointing to a link you provide — a university-library stream (Kanopy/Swank), a licensed platform, or a bundle covered by the course fee. Paste that link in the box. The note is optional (e.g. &ldquo;Free via library — Kanopy&rdquo;).</p></div>';
+    var course = (State.courses||[]).filter(function(c){ return c.id===cid; })[0] || {};
+    var creg = course.films_region || 'us';
+    var ropts = ''; FILM_REGIONS.forEach(function(rr){ ropts += '<option value="'+rr.c+'"'+(rr.c===creg?' selected':'')+'>'+esc(rr.n)+'</option>'; });
+    html += '<div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><span style="font-size:13px;color:var(--text-muted);">Default &ldquo;where to watch&rdquo; region for this course:</span><select id="filmCourseRegion" class="sel" style="width:auto;min-width:180px;">'+ropts+'</select><span style="font-size:12px;color:var(--text-subtle);">Students can override it for themselves in the Screening Room. Saved with the button below.</span></div>';
+    html += '<div class="film-admin tbl-wrap"><table class="tbl"><thead><tr><th>Ch</th><th>Film</th><th>Access</th><th>Included / preferred link</th><th>Note</th></tr></thead><tbody>';
+    FILMS.forEach(function(f){
+      var ov = map[f.ch] || {}; var am = ov.access_model || 'subscribe';
+      html += '<tr>'+
+        '<td style="white-space:nowrap;">'+f.ch+'</td>'+
+        '<td><b>'+esc(f.title)+'</b><div style="font-size:11px;color:var(--text-subtle);">'+f.year+' · '+f.run+' min</div></td>'+
+        '<td style="min-width:150px;"><select data-fch="'+f.ch+'" data-ff="access">'+
+          '<option value="subscribe"'+(am==='subscribe'?' selected':'')+'>Self-subscribe</option>'+
+          '<option value="included"'+(am==='included'?' selected':'')+'>Included with course</option>'+
+          '</select></td>'+
+        '<td style="min-width:230px;"><input data-fch="'+f.ch+'" data-ff="url" placeholder="https://…  (library / licensed link)" value="'+esc(ov.watch_url||'')+'"></td>'+
+        '<td style="min-width:150px;"><input data-fch="'+f.ch+'" data-ff="note" placeholder="optional" value="'+esc(ov.note||'')+'"></td>'+
+        '</tr>';
+    });
+    html += '</tbody></table></div>';
+    html += '<div style="margin-top:14px;display:flex;gap:12px;align-items:center;"><button class="btn btn-primary" id="saveFilmsBtn">Save film access</button><span id="filmsSaveMsg" style="font-size:13px;color:var(--text-muted);"></span></div>';
+    html += '<div style="font-size:12px;color:var(--text-subtle);margin-top:10px;line-height:1.6;">Students see these on the <b>Screening Room</b> page and on each textbook chapter. A film left &ldquo;Self-subscribe&rdquo; with no link still gives students a legal where-to-watch link automatically — you only need to add links for films included with the course.</div>';
+    host.innerHTML = html;
+    $('saveFilmsBtn').addEventListener('click', function(){ saveFilms(cid, host); });
+  });
+}
+
+function saveFilms(cid, host){
+  var rows = [];
+  FILMS.forEach(function(f){
+    var sel  = host.querySelector('select[data-fch="'+f.ch+'"][data-ff="access"]');
+    var url   = host.querySelector('input[data-fch="'+f.ch+'"][data-ff="url"]');
+    var note  = host.querySelector('input[data-fch="'+f.ch+'"][data-ff="note"]');
+    rows.push({
+      course_id: cid, chapter: f.ch,
+      access_model: sel ? sel.value : 'subscribe',
+      watch_url: (url && url.value.trim()) ? url.value.trim() : null,
+      note: (note && note.value.trim()) ? note.value.trim() : null,
+      updated_by: State.user ? State.user.id : null,
+      updated_at: new Date().toISOString()
+    });
+  });
+  var regSel = host.querySelector('#filmCourseRegion');
+  var reg = regSel ? regSel.value : null;
+  var msg = $('filmsSaveMsg'); var btn = $('saveFilmsBtn');
+  if(msg){ msg.textContent = 'Saving…'; } if(btn){ btn.disabled = true; }
+  var writes = [ sb.from('ef_film_links').upsert(rows, { onConflict:'course_id,chapter' }) ];
+  if(reg){ writes.push(sb.from('ef_courses').update({ films_region: reg }).eq('id', cid)); }
+  Promise.all(writes).then(function(res){
+    if(btn){ btn.disabled = false; }
+    var err = null; res.forEach(function(x){ if(x && x.error && !err){ err = x.error; } });
+    if(reg){ FILM_COURSE_REGION = reg; (State.courses||[]).forEach(function(c){ if(c.id===cid){ c.films_region = reg; } }); }
+    if(msg){ msg.textContent = err ? ('Error: '+err.message) : ('Saved ✓  (' + rows.length + ' films' + (reg ? (', region ' + reg.toUpperCase()) : '') + ')'); }
+  });
+}
+
 try { console.log('%cEconomics & Film build: ' + SA_BUILD + ' | tree renderer present: ' + (typeof renderTreeFigure !== 'undefined') + ' | matrix renderer present: ' + (typeof renderMatrixFigure !== 'undefined'), 'color:#7c6df2;font-weight:bold'); } catch(e){}
 </script>
 </body>
